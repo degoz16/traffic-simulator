@@ -7,7 +7,7 @@ public class Road {
     private Node to = null;
     private List<Lane> lanes;
 
-    public Road(int lanesNum) {
+    public Road(int lanesNumForward, int lanesNumBack) {
 
     }
 
