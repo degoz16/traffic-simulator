@@ -1,0 +1,7 @@
+{
+    -fx-background-image: url("../ButtonsImages/speedUp.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 24 24;
+    -fx-background-position: center center;
+    -fx-background-color: transparent;
+}

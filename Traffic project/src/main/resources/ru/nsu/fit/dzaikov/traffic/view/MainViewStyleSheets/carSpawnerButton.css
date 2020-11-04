@@ -1,0 +1,6 @@
+{
+    -fx-background-image: url("../ButtonsImages/car.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 24 24;
+    -fx-background-position: center center;
+}

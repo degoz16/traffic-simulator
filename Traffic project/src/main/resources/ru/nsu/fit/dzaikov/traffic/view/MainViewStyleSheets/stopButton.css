@@ -1,0 +1,6 @@
+{
+    -fx-background-image: url("../ButtonsImages/stop.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 18 18;
+    -fx-background-position: center center;
+}
