@@ -13,7 +13,7 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Polygon?>
 
-<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.dzaikov.traffic.controller.MainController">
   <children>
     <MenuBar prefHeight="3.0" prefWidth="634.0" VBox.vgrow="NEVER">
       <menus>
@@ -82,21 +82,21 @@
             </Polygon>
             <AnchorPane cache="true" layoutX="18.0" layoutY="303.0" minWidth="134.0" prefHeight="73.0" prefWidth="134.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="18.0">
                <children>
-                  <Button fx:id="simulationStartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: trancparent;" stylesheets="@MainViewStyleSheets/startButton.css" />
-                  <Button fx:id="simulationPauseButton" layoutX="54.0" layoutY="12.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: trancparent;" stylesheets="@MainViewStyleSheets/pauseButton.css" />
-                  <Button fx:id="simulationStopButton" layoutX="91.0" layoutY="12.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: trancparent;" stylesheets="@MainViewStyleSheets/stopButton.css" />
-                  <Button fx:id="simulationSpeenDown" layoutX="76.0" layoutY="45.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="23.0" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/simulationSpeedUp.css" />
-                  <Button fx:id="simulationSpeedDown" layoutX="29.0" layoutY="45.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="23.0" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/simulationSpeedDown.css" />
+                  <Button fx:id="simulationStartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#startSimulation" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/startButton.css" />
+                  <Button fx:id="simulationPauseButton" layoutX="54.0" layoutY="12.0" mnemonicParsing="false" onAction="#pauseSimulation" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/pauseButton.css" />
+                  <Button fx:id="simulationStopButton" layoutX="91.0" layoutY="12.0" mnemonicParsing="false" onAction="#stopSimulation" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/stopButton.css" />
+                  <Button fx:id="simulationSpeenDown" layoutX="76.0" layoutY="45.0" mnemonicParsing="false" onAction="#speedUpSimulation" prefHeight="15.0" prefWidth="23.0" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/simulationSpeedUp.css" />
+                  <Button fx:id="simulationSpeedDown" layoutX="29.0" layoutY="45.0" mnemonicParsing="false" onAction="#speedDownSimulation" prefHeight="15.0" prefWidth="23.0" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/simulationSpeedDown.css" />
                </children>
             </AnchorPane>
             <AnchorPane layoutX="444.0" layoutY="310.0" prefHeight="71.0" prefWidth="180.0" AnchorPane.bottomAnchor="-6.0" AnchorPane.leftAnchor="425.0">
                <children>
-                  <Button fx:id="roadButton" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" style="-fx-background-radius: 18; -fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/roadButton.css" />
-                  <Button fx:id="signButton" layoutX="36.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" style="-fx-background-radius: 18; -fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/trafficsignButton.css" />
-                  <Button fx:id="buildingsButton" layoutX="72.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" style="-fx-background-radius: 18; -fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/buildingButton.css" />
-                  <Button fx:id="trafficLightButton" layoutX="108.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" style="-fx-background-radius: 18; -fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/trafficlight.css" />
-                  <Button fx:id="carSpawnerButton" layoutX="144.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="36.0" style="-fx-background-radius: 18; -fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/carSpawnerButton.css" AnchorPane.rightAnchor="0.0" />
-                  <Button layoutX="151.0" layoutY="36.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: trancparent;" stylesheets="@MainViewStyleSheets/statistic.css" />
+                  <Button layoutX="151.0" layoutY="36.0" mnemonicParsing="false" onAction="#showStatistic" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/statistic.css" />
+                  <Button fx:id="roadButton" mnemonicParsing="false" onAction="#roadButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/roadButton.css" />
+                  <Button fx:id="signButton" layoutX="36.0" mnemonicParsing="false" onAction="#trafficSignButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/trafficsignButton.css" />
+                  <Button fx:id="buildingsButton" layoutX="72.0" mnemonicParsing="false" onAction="#buildingButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/buildingButton.css" />
+                  <Button fx:id="trafficLightButton" layoutX="108.0" mnemonicParsing="false" onAction="#trafficLightButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/trafficlight.css" />
+                  <Button fx:id="carSpawnerButton" layoutX="144.0" mnemonicParsing="false" onAction="#carButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/carSpawnerButton.css" AnchorPane.rightAnchor="0.0" />
                </children>
             </AnchorPane>
       </children>
