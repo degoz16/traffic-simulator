@@ -1,6 +1,0 @@
-{
-    -fx-background-image: linear-gradient(transparent 50%, rgba(0, 0, 0, .1) 50%), linear-gradient(135deg, rgba(173,8,24,1) 33%, rgba(173,8,24,0.57) 62%, rgba(255,255,255,0.16) 89%, rgba(255,255,255,0) 100%);
-    -fx-background-repeat: stretch;
-    -fx-background-size: 4000 4000;
-    -fx-background-position: center center;
-}
