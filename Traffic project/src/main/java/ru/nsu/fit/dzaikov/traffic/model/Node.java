@@ -23,4 +23,12 @@ public class Node {
         addRoad(road);
         node.addRoad(road);
     }
+
+    public int getX(){
+        return x;
+    }
+
+    public int getY(){
+        return y;
+    }
 }
