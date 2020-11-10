@@ -7,6 +7,14 @@ public class TrafficMap {
     private List<Node> nodes = new ArrayList<>();
     private List<Road> roads = new ArrayList<>();
 
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
+    public List<Road> getRoads() {
+        return roads;
+    }
+
     public void addNode(Node node) {
         nodes.add(node);
     }

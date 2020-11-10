@@ -6,12 +6,37 @@ import java.util.List;
 public class Node {
     private final int x;
     private final int y;
+
+    private TrafficLight trafficLight = null;
+    private boolean isSpawner = false;
+
+    //На одинаковых индексах лежат противоположно направленные дороги
     private List<Road> roadsTo = new ArrayList<>();
     private List<Road> roadsFrom = new ArrayList<>();
 
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public TrafficLight getTrafficLight() {
+        return trafficLight;
+    }
+
+    public boolean isSpawner() {
+        return isSpawner;
+    }
+
+    public List<Road> getRoadsTo() {
+        return roadsTo;
+    }
+
+    public List<Road> getRoadsFrom() {
+        return roadsFrom;
+    }
+
+    public void setTrafficLight(TrafficLight trafficLight) {
+        this.trafficLight = trafficLight;
     }
 
     public void addRoadTo(Road road) {
