@@ -13,9 +13,11 @@ public class ObjectController {
         Node newNode = new Node(x, y);
         map.addNode(newNode);
         if (lastNode != null) {
-            Road newRoad = new Road(1, 1);
-            lastNode.connect(newRoad, newNode);
-            map.addRoad(newRoad);
+            Road newRoadTo = new Road(1);
+            Road newRoadFrom = new Road(1);
+            lastNode.connect(newRoadTo, newRoadFrom, newNode);
+            map.addRoad(newRoadTo);
+            map.addRoad(newRoadFrom);
         }
     }
 

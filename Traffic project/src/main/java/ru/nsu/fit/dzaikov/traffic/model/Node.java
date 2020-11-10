@@ -6,22 +6,31 @@ import java.util.List;
 public class Node {
     private final int x;
     private final int y;
-    private List<Road> roads = new ArrayList<>();
+    private List<Road> roadsTo = new ArrayList<>();
+    private List<Road> roadsFrom = new ArrayList<>();
 
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public void addRoad(Road road) {
-        roads.add(road);
+    public void addRoadTo(Road road) {
+        roadsTo.add(road);
     }
 
-    public void connect(Road road, Node node) {
-        road.setFrom(this);
-        road.setTo(node);
-        addRoad(road);
-        node.addRoad(road);
+    public void addRoadFrom(Road road) {
+        roadsFrom.add(road);
+    }
+
+    public void connect(Road roadTo, Road roadFrom, Node node) {
+        roadTo.setFrom(this);
+        roadTo.setTo(node);
+        roadFrom.setFrom(node);
+        roadFrom.setTo(this);
+        addRoadTo(roadTo);
+        addRoadFrom(roadFrom);
+        node.addRoadTo(roadFrom);
+        node.addRoadFrom(roadTo);
     }
 
     public int getX(){

@@ -9,12 +9,10 @@ public class Road {
     private final List<Lane> lanes;
     private int length = -1;
 
-    public Road(int lanesNumForward, int lanesNumBack) {
+    public Road(int lanesNum) {
         lanes = new ArrayList<>();
-        for (int i = 0; i < lanesNumForward; ++i)
-            lanes.add(new Lane(Lane.roadDirection.FORWARD));
-        for (int i = 0; i < lanesNumBack; ++i)
-            lanes.add(new Lane(Lane.roadDirection.BACK));
+        for (int i = 0; i < lanesNum; ++i)
+            lanes.add(new Lane());
     }
 
     public Node getFrom() {
