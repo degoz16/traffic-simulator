@@ -14,9 +14,18 @@ public class MapEngineJsonStruct {
         map.getNodes().forEach(node -> {
             List<Integer> roadsFrom = new ArrayList<>();
             List<Integer> roadsTo = new ArrayList<>();
-            node.getRoadsFrom().forEach(road -> roadsFrom.add(map.getRoads().indexOf(road)));
-            node.getRoadsTo().forEach(road -> roadsTo.add(map.getRoads().indexOf(road)));
-            nodes.add(new NodeJsonStruct(roadsFrom, roadsTo, node.isSpawner(), node.getTrafficLight()));
+            node.getRoadsIn().forEach(road -> roadsFrom.add(map.getRoads().indexOf(road)));
+            node.getRoadsOut().forEach(road -> roadsTo.add(map.getRoads().indexOf(road)));
+            nodes.add(new NodeJsonStruct(
+                    node.getX(),
+                    node.getY(),
+                    roadsFrom,
+                    roadsTo,
+                    node.isSpawner(),
+                    node.getTrafficLight()));
+        });
+        map.getRoads().forEach(road -> {
+
         });
     }
 
