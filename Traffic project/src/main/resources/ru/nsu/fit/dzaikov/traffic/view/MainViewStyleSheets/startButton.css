@@ -4,3 +4,28 @@
     -fx-background-size: 18 18;
     -fx-background-position: center center;
 }
+
+
+:hover {
+    -fx-background-image: url("../ButtonsImages/start.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 16 16;
+    -fx-background-position: center center;
+
+}
+
+:pressed {
+    -fx-background-image: url("../ButtonsImages/start.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 14 14;
+    -fx-background-position: center center;
+
+}
+
+:focused {
+    -fx-background-image: url("../ButtonsImages/start.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 14 14;
+    -fx-background-position: center center;
+
+}

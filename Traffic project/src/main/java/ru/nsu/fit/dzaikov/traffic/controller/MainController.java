@@ -2,6 +2,7 @@ package ru.nsu.fit.dzaikov.traffic.controller;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -15,8 +16,8 @@ import ru.nsu.fit.dzaikov.traffic.painted.*;
  */
 public class MainController {
 
-    public TrafficMap currMap;
-    public RoadBuilder roadBuilder;
+    private TrafficMap currMap;
+    private RoadBuilder roadBuilder;
 
     private EditOperation currOperation;
     private final int POINT_SIZE = 1;
