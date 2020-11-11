@@ -1,25 +1,31 @@
 package ru.nsu.fit.dzaikov.traffic.model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TrafficMap {
-    private List<Node> nodes = new ArrayList<>();
-    private List<Road> roads = new ArrayList<>();
+  private Map<String, Node> idToNode = new HashMap<>();
+  private Map<String, Road> idToRoad = new HashMap<>();
 
-    public List<Node> getNodes() {
-        return nodes;
-    }
+  public void addNode(String id, Node node) {
+    idToNode.put(id, node);
+  }
 
-    public List<Road> getRoads() {
-        return roads;
-    }
+  public void addRoad(String id, Road road) {
+    idToRoad.put(id, road);
+  }
 
-    public void addNode(Node node) {
-        nodes.add(node);
-    }
+  public List<Node> getNodes() {
+    return new ArrayList<>(idToNode.values());
+  }
 
-    public void addRoad(Road road) {
-        roads.add(road);
-    }
+  public List<Road> getRoads() {
+    return new ArrayList<>(idToRoad.values());
+  }
+
+  public Node findNode(String id) {
+    return idToNode.get(id);
+  }
 }

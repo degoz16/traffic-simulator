@@ -1,5 +1,6 @@
 package ru.nsu.fit.dzaikov.traffic.logic;
 
+import java.util.UUID;
 import ru.nsu.fit.dzaikov.traffic.model.Node;
 import ru.nsu.fit.dzaikov.traffic.model.Road;
 import ru.nsu.fit.dzaikov.traffic.model.TrafficMap;
@@ -8,43 +9,55 @@ public class RoadBuilder {
 
     private TrafficMap currMap;
     private Node currNode;
+    private String fromId;
+    private String toId;
+    private String roadId;
 
-    public RoadBuilder(TrafficMap map){
+    public RoadBuilder(TrafficMap map, int NODE_SIZE){
         currMap = map;
     }
 
-    public Road handleOperation(EditOperation op, int x, int y){
+    public Road handleOperation(EditOperation op, int x, int y, String id){
         switch (op) {
             case ROAD_CREATION_STEP_1 -> {
-                for (Node node : currMap.getNodes()) {
-                    if (Math.abs(node.getX() - x) < 10 && Math.abs(node.getY() - y) < 10) {
-                        currNode = node;
-                        return null;
-                    }
+
+                currNode = currMap.findNode(id);
+                if (currNode == null) {
+                    System.out.println("NINASHEL 1");
+                    currNode = new Node(x,y);
                 }
-                currNode = new Node(x, y);
+                fromId = id;
                 return null;
             }
             case ROAD_CREATION_STEP_2 -> {
                 Road currRoad = new Road(2);
                 currRoad.setFrom(currNode);
-                Node secondNode = null;
-                for (Node node : currMap.getNodes()) {
-                    if (Math.abs(node.getX() - x) < 10 && Math.abs(node.getY() - y) < 10) {
-                        secondNode = node;
-                        break;
-                    }
-                }
+                Node secondNode = currMap.findNode(id);
                 if (secondNode == null) {
+                    System.out.println("NINASHEL 2");
                     secondNode = new Node(x, y);
                 }
                 currRoad.setTo(secondNode);
-                currMap.addNode(currRoad.getFrom());
-                currMap.addNode(currRoad.getTo());
-                currMap.addRoad(currRoad);
+                currMap.addNode(fromId, currNode);
+                toId = id;
+                currMap.addNode(id, secondNode);
+                roadId = UUID.randomUUID().toString();
+                currMap.addRoad(roadId, currRoad);
                 return currRoad;
             }
         }
         return null;
+    }
+
+    public String getFromId() {
+        return fromId;
+    }
+
+    public String getToId() {
+        return toId;
+    }
+
+    public String getRoadId() {
+        return roadId;
     }
 }

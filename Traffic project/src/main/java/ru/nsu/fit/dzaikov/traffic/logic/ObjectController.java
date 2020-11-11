@@ -1,5 +1,6 @@
 package ru.nsu.fit.dzaikov.traffic.logic;
 
+import java.util.UUID;
 import ru.nsu.fit.dzaikov.traffic.model.Node;
 import ru.nsu.fit.dzaikov.traffic.model.Road;
 import ru.nsu.fit.dzaikov.traffic.model.TrafficMap;
@@ -11,13 +12,13 @@ public class ObjectController {
 
     public void addNodeOnEmpty(int x, int y) {
         Node newNode = new Node(x, y);
-        map.addNode(newNode);
+       // map.addNode(newNode);
         if (lastNode != null) {
             Road newRoadTo = new Road(1);
             Road newRoadFrom = new Road(1);
             lastNode.connect(newRoadTo, newRoadFrom, newNode);
-            map.addRoad(newRoadTo);
-            map.addRoad(newRoadFrom);
+            map.addRoad(UUID.randomUUID().toString(), newRoadTo);
+            map.addRoad(UUID.randomUUID().toString(), newRoadFrom);
         }
     }
 
