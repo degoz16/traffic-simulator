@@ -20,12 +20,12 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
-mainClassName = 'ru.nsu.fit.dzaikov.traffic.App'
+mainClassName = 'ru.nsu.fit.traffic.App'
 
 jar {
     manifest {
         attributes(
-                'Main-Class': 'ru.nsu.fit.dzaikov.traffic.Launcher'
+                'Main-Class': 'ru.nsu.fit.traffic.Launcher'
         )
     }
     from {

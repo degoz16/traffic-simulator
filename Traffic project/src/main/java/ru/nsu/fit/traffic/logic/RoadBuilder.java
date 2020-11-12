@@ -23,7 +23,6 @@ public class RoadBuilder {
 
                 currNode = currMap.findNode(id);
                 if (currNode == null) {
-                    System.out.println("NINASHEL 1");
                     currNode = new Node(x,y);
                 }
                 fromId = id;
@@ -34,7 +33,6 @@ public class RoadBuilder {
                 currRoad.setFrom(currNode);
                 Node secondNode = currMap.findNode(id);
                 if (secondNode == null) {
-                    System.out.println("NINASHEL 2");
                     secondNode = new Node(x, y);
                 }
                 currRoad.setTo(secondNode);
