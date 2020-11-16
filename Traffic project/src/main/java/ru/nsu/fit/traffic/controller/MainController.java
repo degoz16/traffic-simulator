@@ -1,11 +1,14 @@
 package ru.nsu.fit.traffic.controller;
 
 import java.util.UUID;
+
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.logic.EditOperation;
@@ -14,10 +17,14 @@ import ru.nsu.fit.traffic.model.Road;
 import ru.nsu.fit.traffic.model.TrafficMap;
 import ru.nsu.fit.traffic.painted.ObjectPainter;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 /**
  * Контроллер основной сцены, на которой располагаются все остальные.
  */
 public class MainController {
+//TODO: добавить ограничение для полей, чтобы можно было вводить только числа от 0 до 5
 
     private final int NODE_SIZE = 15;
     private final int LANE_SIZE = 15;
@@ -26,6 +33,12 @@ public class MainController {
     public ScrollPane mainScrollPane;
     @FXML
     public AnchorPane mainPane;
+    @FXML
+    public Pane numberOfLanesPane;
+    @FXML
+    public TextField backLanesTextField,
+            forwardLanesTextField;
+
     private TrafficMap currMap;
     private RoadBuilder roadBuilder;
     private EditOperation currOperation;
@@ -34,7 +47,7 @@ public class MainController {
     private boolean shapeChanged = false;
     private String lastPeekedShape = UUID.randomUUID().toString();
 
-    public void setPrimaryStage(Stage stage){
+    public void setPrimaryStage(Stage stage) {
         this.stage = stage;
     }
 
@@ -43,11 +56,13 @@ public class MainController {
      */
     @FXML
     public void initialize() {
+        numberOfLanesPane.setVisible(false);
         currMap = new TrafficMap();
         roadBuilder = new RoadBuilder(currMap, LANE_SIZE);
         painter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
 
         mainPane.onMouseClickedProperty().set((EventHandler<MouseEvent>) (MouseEvent t) -> {
+
             if (shapeChanged) {
                 shapeChanged = false;
             } else {
@@ -55,30 +70,38 @@ public class MainController {
             }
             if (currOperation == null)
                 return;
-            int x = (int)(t.getX() + mainScrollPane.getVvalue())/ POINT_SIZE;
-            int y = (int)(t.getY() + mainScrollPane.getHvalue())/ POINT_SIZE;
-            switch (currOperation){
-                case ROAD_CREATION_STEP_1 ->{
-                    roadBuilder.handleOperation(currOperation, x, y, lastPeekedShape);
-                    currOperation = EditOperation.ROAD_CREATION_STEP_2;
-                }
-                case ROAD_CREATION_STEP_2 ->{
-                    Road curr = roadBuilder.handleOperation(currOperation,
-                      x, y, lastPeekedShape);
 
-                    if (curr == null){
+            int x = (int) (t.getX() + mainScrollPane.getVvalue()) / POINT_SIZE;
+            int y = (int) (t.getY() + mainScrollPane.getHvalue()) / POINT_SIZE;
+
+            switch (currOperation) {
+                case ROAD_CREATION_STEP_1 -> {
+                    roadBuilder.handleOperation(currOperation, x, y, lastPeekedShape, -1, -1);
+                    currOperation = EditOperation.ROAD_CREATION_STEP_2;
+                    numberOfLanesPane.setVisible(false);
+                }
+                case ROAD_CREATION_STEP_2 -> {
+                    Road[] roadArr = roadBuilder.handleOperation(currOperation,
+                            x, y, lastPeekedShape,
+                            Integer.parseInt(backLanesTextField.getText()),
+                            Integer.parseInt(forwardLanesTextField.getText()));
+
+                    if (roadArr == null) {
                         return;
                     }
-                    Shape road = painter.paintRoad(roadBuilder.getRoadId(), curr);
-                    road.onMouseClickedProperty().set(lastPressedShape());
 
-                    Shape nodeTo = painter.paintNode(roadBuilder.getToId(), curr.getTo());
+                    for (Road curr: roadArr) {
+                        Shape road = painter.paintRoad(roadBuilder.getRoadId(), curr);
+                        road.onMouseClickedProperty().set(lastPressedShape());
+                        mainPane.getChildren().add(road);
+                    }
+
+                    Shape nodeTo = painter.paintNode(roadBuilder.getToId(), roadArr[0].getTo());
                     nodeTo.onMouseClickedProperty().set(lastPressedShape());
 
-                    Shape nodeFrom = painter.paintNode(roadBuilder.getFromId(), curr.getFrom());
+                    Shape nodeFrom = painter.paintNode(roadBuilder.getFromId(), roadArr[0].getFrom());
                     nodeFrom.onMouseClickedProperty().set(lastPressedShape());
 
-                    mainPane.getChildren().add(road);
                     mainPane.getChildren().add(nodeTo);
                     mainPane.getChildren().add(nodeFrom);
 
@@ -111,7 +134,7 @@ public class MainController {
             currOperation = EditOperation.NONE;
             return;
         }
-
+        numberOfLanesPane.setVisible(true);
         currOperation = EditOperation.ROAD_CREATION_STEP_1;
     }
 
@@ -151,7 +174,7 @@ public class MainController {
     }
 
     private EventHandler<MouseEvent> lastPressedShape() {
-        return ((EventHandler<MouseEvent>)(MouseEvent x) -> {
+        return ((EventHandler<MouseEvent>) (MouseEvent x) -> {
             shapeChanged = true;
             lastPeekedShape = x.getPickResult().getIntersectedNode().getId();
             System.out.println(lastPeekedShape);

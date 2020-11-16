@@ -11,8 +11,6 @@ public class ObjectPainter {
   private final int LANE_SIZE;
   private final int NODE_SIZE;
 
-
-
   public ObjectPainter(int LANE_SIZE, int NODE_SIZE) {
     this.LANE_SIZE = LANE_SIZE;
     this.NODE_SIZE = NODE_SIZE;
@@ -34,17 +32,28 @@ public class ObjectPainter {
     double vlen = Math.sqrt(vx * vx + vy * vy);
     double size = road.getLanes().size() * LANE_SIZE / vlen;
 
-    // длинна дороги
-    // todo: пока рисую посерединке, всё равно число полос константное
-    Shape curr =
-        new Polygon(
-            vx * size / 2 + pointFromX, vy * size / 2 + pointFromY,
-            -vx * size / 2 + pointFromX, -vy * size / 2 + pointFromY,
-            -vx * size / 2 + pointToX, -vy * size / 2 + pointToY,
-            vx * size / 2 + pointToX, vy * size / 2 + pointToY);
-    curr.setFill(Paint.valueOf("#aaaaaa"));
-    curr.setId(id);
-    return curr;
+    if (road.getDirection() == Road.roadDirection.FORWARD) {
+      Shape curr =
+              new Polygon(
+                      vx * size / 2 + pointFromX, vy * size / 2 + pointFromY,
+                      pointFromX, pointFromY,
+                      pointToX, pointToY,
+                      vx * size / 2 + pointToX, vy * size / 2 + pointToY);
+      curr.setFill(Paint.valueOf("#aaaaaa"));
+      curr.setId(id);
+      return curr;
+    }
+    else{
+      Shape curr =
+              new Polygon(
+                      pointFromX, pointFromY,
+                      -vx * size / 2 + pointFromX, -vy * size / 2 + pointFromY,
+                      -vx * size / 2 + pointToX, -vy * size / 2 + pointToY,
+                      pointToX, pointToY);
+      curr.setFill(Paint.valueOf("#bbbbbb"));
+      curr.setId(id);
+      return curr;
+    }
   }
 
   public Shape paintNode(String id, Node node) {

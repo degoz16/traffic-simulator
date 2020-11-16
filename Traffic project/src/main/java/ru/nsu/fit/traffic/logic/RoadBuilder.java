@@ -17,7 +17,7 @@ public class RoadBuilder {
         currMap = map;
     }
 
-    public Road handleOperation(EditOperation op, int x, int y, String id){
+    public Road[] handleOperation(EditOperation op, int x, int y, String id, int lanesBack, int lanesForward){
         switch (op) {
             case ROAD_CREATION_STEP_1 -> {
 
@@ -29,19 +29,25 @@ public class RoadBuilder {
                 return null;
             }
             case ROAD_CREATION_STEP_2 -> {
-                Road currRoad = new Road(2);
-                currRoad.setFrom(currNode);
+                Road forwardRoad = new Road(lanesForward, Road.roadDirection.FORWARD);
+                Road backRoad = new Road(lanesBack, Road.roadDirection.BACK);
+                forwardRoad.setFrom(currNode);
+                backRoad.setFrom(currNode);
+
                 Node secondNode = currMap.findNode(id);
                 if (secondNode == null) {
                     secondNode = new Node(x, y);
                 }
-                currRoad.setTo(secondNode);
+
+                backRoad.setTo(secondNode);
+                forwardRoad.setTo(secondNode);
+
                 currMap.addNode(fromId, currNode);
                 toId = id;
                 currMap.addNode(id, secondNode);
-                roadId = UUID.randomUUID().toString();
-                currMap.addRoad(roadId, currRoad);
-                return currRoad;
+                currMap.addRoad(UUID.randomUUID().toString(), backRoad);
+                currMap.addRoad(UUID.randomUUID().toString(), forwardRoad);
+                return new Road[]{forwardRoad, backRoad};
             }
         }
         return null;

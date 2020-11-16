@@ -6,11 +6,15 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.shape.Polygon?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.controller.MainController">
   <children>
@@ -57,7 +61,7 @@
       <children>
             <ScrollPane fx:id="mainScrollPane" prefHeight="375.0" prefWidth="646.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <AnchorPane fx:id="mainPane" prefHeight="2000.0" prefWidth="2000.0" stylesheets="@MainViewStyleSheets/background.css" />
+                  <AnchorPane fx:id="mainPane" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #b1bbbb;" stylesheets="@MainViewStyleSheets/background.css" />
                </content></ScrollPane>
             <Polygon fill="DODGERBLUE" layoutX="33.0" layoutY="334.0" points="-33.0, 41.0, 612.0, 41.0, 594.0, -30.0, -34.0, -30.0" strokeType="INSIDE" strokeWidth="50.0" AnchorPane.bottomAnchor="14.0">
                <stroke>
@@ -90,14 +94,34 @@
                   <Button fx:id="simulationSpeedDown" layoutX="29.0" layoutY="45.0" mnemonicParsing="false" onAction="#speedDownSimulation" prefHeight="15.0" prefWidth="23.0" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/simulationSpeedDown.css" />
                </children>
             </AnchorPane>
-            <AnchorPane layoutX="444.0" layoutY="310.0" prefHeight="71.0" prefWidth="180.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="425.0">
+            <AnchorPane layoutX="341.0" layoutY="310.0" prefHeight="73.0" prefWidth="264.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="341.0">
                <children>
-                  <Button layoutX="151.0" layoutY="36.0" mnemonicParsing="false" onAction="#showStatistic" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/statistic.css" />
-                  <Button fx:id="roadButton" mnemonicParsing="false" onAction="#roadButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/roadButton.css" />
-                  <Button fx:id="signButton" layoutX="36.0" mnemonicParsing="false" onAction="#trafficSignButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/trafficsignButton.css" />
-                  <Button fx:id="buildingsButton" layoutX="72.0" mnemonicParsing="false" onAction="#buildingButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/buildingButton.css" />
-                  <Button fx:id="trafficLightButton" layoutX="108.0" mnemonicParsing="false" onAction="#trafficLightButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/trafficlight.css" />
-                  <Button fx:id="carSpawnerButton" layoutX="144.0" mnemonicParsing="false" onAction="#carButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/carSpawnerButton.css" AnchorPane.rightAnchor="0.0" />
+                  <AnchorPane fx:id="numberOfLanesPane" layoutX="39.0" layoutY="169.0" prefHeight="64.0" prefWidth="96.0" style="-fx-background-color: #353535; -fx-background-radius: 0;" AnchorPane.rightAnchor="121.0" AnchorPane.topAnchor="-65.0">
+                     <children>
+                        <TextField fx:id="backLanesTextField" blendMode="HARD_LIGHT" layoutX="50.0" layoutY="26.0" prefHeight="35.0" prefWidth="35.0" promptText="2" style="-fx-background-color: #999999;" text="2" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="55.0">
+                           <font>
+                              <Font name="Verdana Bold" size="16.0" />
+                           </font>
+                        </TextField>
+                        <TextField fx:id="forwardLanesTextField" blendMode="HARD_LIGHT" layoutX="4.0" layoutY="30.0" prefHeight="35.0" prefWidth="35.0" promptText="2" style="-fx-background-color: #999999;" text="2" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0">
+                           <font>
+                              <Font name="Verdana Bold" size="16.0" />
+                           </font>
+                        </TextField>
+                        <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#111111" height="18.0" layoutY="2.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <Text fill="WHITE" layoutX="-7.0" layoutY="-1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of lanes" wrappingWidth="88.0" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="2.0">
+                           <font>
+                              <Font name="Arial Bold" size="11.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+                  <Button layoutX="227.0" layoutY="277.0" mnemonicParsing="false" onAction="#showStatistic" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/statistic.css" AnchorPane.bottomAnchor="8.0" />
+                  <Button fx:id="roadButton" layoutX="75.0" layoutY="241.0" mnemonicParsing="false" onAction="#roadButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/roadButton.css" AnchorPane.bottomAnchor="33.0" AnchorPane.rightAnchor="153.0" />
+                  <Button fx:id="signButton" layoutX="111.0" layoutY="241.0" mnemonicParsing="false" onAction="#trafficSignButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/trafficsignButton.css" AnchorPane.bottomAnchor="33.0" />
+                  <Button fx:id="buildingsButton" layoutX="147.0" layoutY="241.0" mnemonicParsing="false" onAction="#buildingButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/buildingButton.css" AnchorPane.bottomAnchor="33.0" />
+                  <Button fx:id="trafficLightButton" layoutX="183.0" layoutY="241.0" mnemonicParsing="false" onAction="#trafficLightButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/trafficlight.css" AnchorPane.bottomAnchor="33.0" />
+                  <Button fx:id="carSpawnerButton" layoutX="221.0" layoutY="241.0" mnemonicParsing="false" onAction="#carButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/carSpawnerButton.css" AnchorPane.bottomAnchor="33.0" AnchorPane.rightAnchor="7.0" />
                </children>
             </AnchorPane>
       </children>
