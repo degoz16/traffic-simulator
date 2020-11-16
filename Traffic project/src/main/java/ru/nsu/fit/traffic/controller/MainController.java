@@ -1,11 +1,14 @@
 package ru.nsu.fit.traffic.controller;
 
 import java.util.UUID;
+import java.util.function.UnaryOperator;
 
+import com.sun.javafx.property.adapter.PropertyDescriptor;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -24,7 +27,6 @@ import javax.swing.event.ChangeListener;
  * Контроллер основной сцены, на которой располагаются все остальные.
  */
 public class MainController {
-//TODO: добавить ограничение для полей, чтобы можно было вводить только числа от 0 до 5
 
     private final int NODE_SIZE = 15;
     private final int LANE_SIZE = 15;
@@ -60,6 +62,19 @@ public class MainController {
         currMap = new TrafficMap();
         roadBuilder = new RoadBuilder(currMap, LANE_SIZE);
         painter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
+
+        UnaryOperator<TextFormatter.Change> integerFilter = change -> {
+            String input = change.getText();
+            int text_size = change.getControlNewText().length();
+
+            if (input.matches("[0-5]*") && text_size <=1) {
+                return change;
+            }
+            return null;
+        };
+
+        backLanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
+        forwardLanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
 
         mainPane.onMouseClickedProperty().set((EventHandler<MouseEvent>) (MouseEvent t) -> {
 
@@ -140,7 +155,6 @@ public class MainController {
         numberOfLanesPane.setVisible(true);
         currOperation = EditOperation.ROAD_CREATION_STEP_1;
         //todo: там кнопка отжиается, когда мы настраиваем число полос
-        //todo: поставить фильтр только на инты [0..5] в число полос
     }
 
     @FXML
