@@ -76,11 +76,14 @@ public class MainController {
 
             switch (currOperation) {
                 case ROAD_CREATION_STEP_1 -> {
+                    //todo: нужно бы чекать, не ставим ли мы на дорогу
                     roadBuilder.handleOperation(currOperation, x, y, lastPeekedShape, -1, -1);
                     currOperation = EditOperation.ROAD_CREATION_STEP_2;
                     numberOfLanesPane.setVisible(false);
+
                 }
                 case ROAD_CREATION_STEP_2 -> {
+                    //todo: нужно бы чекать, не ставим ли мы на дорогу
                     Road[] roadArr = roadBuilder.handleOperation(currOperation,
                             x, y, lastPeekedShape,
                             Integer.parseInt(backLanesTextField.getText()),
@@ -95,7 +98,7 @@ public class MainController {
                         road.onMouseClickedProperty().set(lastPressedShape());
                         mainPane.getChildren().add(road);
                     }
-
+                    //todo: мы не удаляем Node на карте, если он уже существовал, мы их можем очень много друг на друга настакать
                     Shape nodeTo = painter.paintNode(roadBuilder.getToId(), roadArr[0].getTo());
                     nodeTo.onMouseClickedProperty().set(lastPressedShape());
 
@@ -136,6 +139,8 @@ public class MainController {
         }
         numberOfLanesPane.setVisible(true);
         currOperation = EditOperation.ROAD_CREATION_STEP_1;
+        //todo: там кнопка отжиается, когда мы настраиваем число полос
+        //todo: поставить фильтр только на инты [0..5] в число полос
     }
 
     @FXML

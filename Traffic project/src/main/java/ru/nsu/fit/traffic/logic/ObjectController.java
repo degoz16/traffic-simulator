@@ -14,8 +14,8 @@ public class ObjectController {
         Node newNode = new Node(x, y);
        // map.addNode(newNode);
         if (lastNode != null) {
-            Road newRoadTo = new Road(1, Road.roadDirection.FORWARD);
-            Road newRoadFrom = new Road(1, Road.roadDirection.BACK);
+            Road newRoadTo = new Road(1);
+            Road newRoadFrom = new Road(1);
             lastNode.connect(newRoadTo, newRoadFrom, newNode);
             map.addRoad(UUID.randomUUID().toString(), newRoadTo);
             map.addRoad(UUID.randomUUID().toString(), newRoadFrom);

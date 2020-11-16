@@ -8,7 +8,7 @@ import ru.nsu.fit.traffic.model.TrafficMap;
 public class RoadBuilder {
 
     private TrafficMap currMap;
-    private Node currNode;
+    private Node outNode;
     private String fromId;
     private String toId;
     private String roadId;
@@ -21,30 +21,35 @@ public class RoadBuilder {
         switch (op) {
             case ROAD_CREATION_STEP_1 -> {
 
-                currNode = currMap.findNode(id);
-                if (currNode == null) {
-                    currNode = new Node(x,y);
+                outNode = currMap.findNode(id);
+                if (outNode == null) {
+                    outNode = new Node(x,y);
                 }
                 fromId = id;
                 return null;
             }
             case ROAD_CREATION_STEP_2 -> {
-                Road forwardRoad = new Road(lanesForward, Road.roadDirection.FORWARD);
-                Road backRoad = new Road(lanesBack, Road.roadDirection.BACK);
-                forwardRoad.setFrom(currNode);
-                backRoad.setFrom(currNode);
+                Road forwardRoad = new Road(lanesForward);
+                Road backRoad = new Road(lanesBack);
 
-                Node secondNode = currMap.findNode(id);
-                if (secondNode == null) {
-                    secondNode = new Node(x, y);
+                forwardRoad.setFrom(outNode);
+                outNode.addRoadFrom(forwardRoad);
+                backRoad.setTo(outNode);
+                outNode.addRoadTo(backRoad);
+
+                Node inNode = currMap.findNode(id);
+                if (inNode == null) {
+                    inNode = new Node(x, y);
                 }
 
-                backRoad.setTo(secondNode);
-                forwardRoad.setTo(secondNode);
+                backRoad.setFrom(inNode);
+                forwardRoad.setTo(inNode);
+                inNode.addRoadFrom(backRoad);
+                inNode.addRoadTo(forwardRoad);
 
-                currMap.addNode(fromId, currNode);
+                currMap.addNode(fromId, outNode);
                 toId = id;
-                currMap.addNode(id, secondNode);
+                currMap.addNode(id, inNode);
                 currMap.addRoad(UUID.randomUUID().toString(), backRoad);
                 currMap.addRoad(UUID.randomUUID().toString(), forwardRoad);
                 return new Road[]{forwardRoad, backRoad};

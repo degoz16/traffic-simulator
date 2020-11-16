@@ -8,16 +8,9 @@ public class Road {
     private Node to = null;
     private final List<Lane> lanes;
     private int length = -1;
-    private final roadDirection dir;
 
-    public enum roadDirection{
-        FORWARD,
-        BACK
-    }
-
-    public Road(int lanesNum, roadDirection dir) {
+    public Road(int lanesNum) {
         lanes = new ArrayList<>();
-        this.dir = dir;
         for (int i = 0; i < lanesNum; ++i)
             lanes.add(new Lane());
     }
@@ -43,10 +36,6 @@ public class Road {
             return length = (int) Math.sqrt
                     (Math.pow(from.getX() - to.getX(), 2) + Math.pow(from.getY() - to.getY(), 2));
         } else return length;
-    }
-
-    public roadDirection getDirection(){
-        return dir;
     }
 
     public List<Lane> getLanes(){
