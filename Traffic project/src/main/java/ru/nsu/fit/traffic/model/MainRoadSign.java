@@ -20,4 +20,9 @@ public class MainRoadSign implements RoadSign{
     public void setSettings(Map<String, String> settings) {
 
     }
+
+    @Override
+    public RoadSign getCopySign() {
+        return new MainRoadSign();
+    }
 }

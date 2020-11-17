@@ -30,4 +30,9 @@ public class SpeedLimitSign implements RoadSign{
         }
     }
 
+    @Override
+    public RoadSign getCopySign() {
+        return new SpeedLimitSign(speedLimit);
+    }
+
 }

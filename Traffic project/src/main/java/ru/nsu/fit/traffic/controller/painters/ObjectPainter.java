@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.painted;
+package ru.nsu.fit.traffic.controller.painters;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
@@ -11,16 +11,16 @@ public class ObjectPainter {
     private final int LANE_SIZE;
     private final int NODE_SIZE;
 
-    public ObjectPainter(int LANE_SIZE, int NODE_SIZE) {
-        this.LANE_SIZE = LANE_SIZE;
-        this.NODE_SIZE = NODE_SIZE;
+    public ObjectPainter(int laneSize, int nodeSize) {
+        LANE_SIZE = laneSize;
+        NODE_SIZE = nodeSize;
     }
 
-    public Shape paintRoad(String id, Road road) {
-        int pointFromX = road.getFrom().getX();
-        int pointFromY = road.getFrom().getY();
-        int pointToX = road.getTo().getX();
-        int pointToY = road.getTo().getY();
+    public Shape paintRoad(Road road) {
+        double pointFromX = road.getFrom().getX();
+        double pointFromY = road.getFrom().getY();
+        double pointToX = road.getTo().getX();
+        double pointToY = road.getTo().getY();
 
         // формула прямой y = ax + b
         double a = (double) (pointFromY - pointToY) / (pointToX - pointFromX);
@@ -40,28 +40,23 @@ public class ObjectPainter {
         curr.setFill(Paint.valueOf("#aaaaaa"));
         curr.setStroke(Paint.valueOf("#ffffff"));
         curr.strokeWidthProperty().setValue(2);
-        curr.setId(id);
         return curr;
-
-
     }
 
-    public Shape paintNode(String id, Node node) {
-        int maxSize = -1;
-        for (Road r : node.getRoadsIn()) {
-            if (r.getLanes().size() > maxSize) {
-                maxSize = r.getLanes().size();
-            }
-        }
-        for (Road r : node.getRoadsOut()) {
-            if (r.getLanes().size() > maxSize) {
-                maxSize = r.getLanes().size();
-            }
-        }
+    public Shape paintNode(Node node) {
+        int maxSize = Math.max(
+                node.getRoadInStream()
+                        .map(road -> road.getLanesNum() + road.getBackRoad().getLanesNum())
+                        .max(Integer::compareTo)
+                        .orElse(0),
+                node.getRoadOutStream()
+                        .map(road -> road.getLanesNum() + road.getBackRoad().getLanesNum())
+                        .max(Integer::compareTo)
+                        .orElse(0));
+
         //todo: мне не нравятся наши ноды на карте, нужно подумать, как норм рисовать
-        Shape shape = new Circle(node.getX(), node.getY(), maxSize/2 * NODE_SIZE);
+        Shape shape = new Circle(node.getX(), node.getY(), maxSize / 2 * NODE_SIZE);
         shape.setFill(Paint.valueOf("#aaaaaa"));
-        shape.setId(id);
         return shape;
     }
 }

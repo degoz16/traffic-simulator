@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.logic;
+package ru.nsu.fit.traffic.model.logic;
 
 import java.util.UUID;
 import ru.nsu.fit.traffic.model.Node;
@@ -7,20 +7,19 @@ import ru.nsu.fit.traffic.model.TrafficMap;
 
 public class RoadBuilder {
 
-    private TrafficMap currMap;
+    /*private TrafficMap currMap;
     private Node outNode;
     private String fromId;
     private String toId;
     private String roadId;
 
-    public RoadBuilder(TrafficMap map, int NODE_SIZE){
+    public RoadBuilder(TrafficMap map, int NODE_SIZE) {
         currMap = map;
     }
 
     public Road[] handleOperation(EditOperation op, int x, int y, String id, int lanesBack, int lanesForward){
         switch (op) {
             case ROAD_CREATION_STEP_1 -> {
-
                 outNode = currMap.findNode(id);
                 if (outNode == null) {
                     outNode = new Node(x,y);
@@ -33,9 +32,9 @@ public class RoadBuilder {
                 Road backRoad = new Road(lanesBack);
 
                 forwardRoad.setFrom(outNode);
-                outNode.addRoadFrom(forwardRoad);
+                outNode.addRoadIn(forwardRoad);
                 backRoad.setTo(outNode);
-                outNode.addRoadTo(backRoad);
+                outNode.addRoadOut(backRoad);
 
                 Node inNode = currMap.findNode(id);
                 if (inNode == null) {
@@ -44,8 +43,8 @@ public class RoadBuilder {
 
                 backRoad.setFrom(inNode);
                 forwardRoad.setTo(inNode);
-                inNode.addRoadFrom(backRoad);
-                inNode.addRoadTo(forwardRoad);
+                inNode.addRoadIn(backRoad);
+                inNode.addRoadOut(forwardRoad);
 
                 currMap.addNode(fromId, outNode);
                 toId = id;
@@ -68,5 +67,5 @@ public class RoadBuilder {
 
     public String getRoadId() {
         return roadId;
-    }
+    }*/
 }

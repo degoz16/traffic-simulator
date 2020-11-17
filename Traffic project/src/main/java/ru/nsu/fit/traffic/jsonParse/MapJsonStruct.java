@@ -7,15 +7,15 @@ import java.util.List;
 import java.util.Map;
 
 public class MapJsonStruct {
-    private List<NodeJsonStruct> nodes;
-    private List<RoadJsonStruct> roads;
+    private List<NodeJsonStruct> nodes = new ArrayList<>();
+    private List<RoadJsonStruct> roads = new ArrayList<>();
 
     public MapJsonStruct(TrafficMap map) {
-        map.getNodes().forEach(node -> {
+        map.forEachNodes(node -> {
             List<Integer> roadsFrom = new ArrayList<>();
             List<Integer> roadsTo = new ArrayList<>();
-            node.getRoadsIn().forEach(road -> roadsFrom.add(map.getRoads().indexOf(road)));
-            node.getRoadsOut().forEach(road -> roadsTo.add(map.getRoads().indexOf(road)));
+            node.foreachRoadIn(road -> roadsFrom.add(map.indexOfRoad(road)));
+            node.foreachRoadOut(road -> roadsTo.add(map.indexOfRoad(road)));
             nodes.add(new NodeJsonStruct(
                     node.getX(),
                     node.getY(),
@@ -24,7 +24,7 @@ public class MapJsonStruct {
                     node.isSpawner(),
                     node.getTrafficLight()));
         });
-        map.getRoads().forEach(road -> {
+        map.forEachRoads(road -> {
             List<LaneJsonStruct> lanes = new ArrayList<>();
             road.getLanes().forEach(lane -> {
                 List<Map<String, String>> signs = new ArrayList<>();
@@ -33,8 +33,8 @@ public class MapJsonStruct {
                 lanes.add(laneJsonStruct);
             });
             RoadJsonStruct roadJsonStruct = new RoadJsonStruct(
-                    map.getNodes().indexOf(road.getFrom()),
-                    map.getNodes().indexOf(road.getTo()),
+                    map.indexOfNode(road.getFrom()),
+                    map.indexOfNode(road.getTo()),
                     lanes);
             roads.add(roadJsonStruct);
         });

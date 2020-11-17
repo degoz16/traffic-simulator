@@ -1,31 +1,42 @@
 package ru.nsu.fit.traffic.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.Consumer;
 
 public class TrafficMap {
-  private Map<String, Node> idToNode = new HashMap<>();
-  private Map<String, Road> idToRoad = new HashMap<>();
+  private List<Node> nodes = new ArrayList<>();
+  private List<Road> roads = new ArrayList<>();
 
-  public void addNode(String id, Node node) {
-    idToNode.put(id, node);
+  public void addNode(Node node) {
+    nodes.add(node);
   }
 
-  public void addRoad(String id, Road road) {
-    idToRoad.put(id, road);
+  public void addRoad(Road road) {
+    roads.add(road);
   }
 
-  public List<Node> getNodes() {
-    return new ArrayList<>(idToNode.values());
+  public void removeNode(Node node) {
+    nodes.remove(node);
   }
 
-  public List<Road> getRoads() {
-    return new ArrayList<>(idToRoad.values());
+  public void removeRoad(Road road) {
+    roads.remove(road);
   }
 
-  public Node findNode(String id) {
-    return idToNode.get(id);
+  public void forEachNodes(Consumer<Node> f) {
+    nodes.forEach(f);
+  }
+
+  public void forEachRoads(Consumer<Road> f) {
+    roads.forEach(f);
+  }
+
+  public int indexOfNode(Node node) {
+    return nodes.indexOf(node);
+  }
+
+  public int indexOfRoad(Road road) {
+    return roads.indexOf(road);
   }
 }

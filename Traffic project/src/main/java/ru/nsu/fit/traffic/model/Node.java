@@ -2,10 +2,12 @@ package ru.nsu.fit.traffic.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 public class Node {
-    private final int x;
-    private final int y;
+    private final double x;
+    private final double y;
 
     private TrafficLight trafficLight = null;
     private boolean isSpawner = false;
@@ -14,7 +16,7 @@ public class Node {
     private List<Road> roadsOut = new ArrayList<>();
     private List<Road> roadsIn = new ArrayList<>();
 
-    public Node(int x, int y) {
+    public Node(double x, double y) {
         this.x = x;
         this.y = y;
     }
@@ -27,42 +29,62 @@ public class Node {
         return isSpawner;
     }
 
-    public List<Road> getRoadsOut() {
-        return roadsOut;
+    public void foreachRoadOut(Consumer<Road> f) {
+        roadsOut.forEach(f);
     }
 
-    public List<Road> getRoadsIn() {
-        return roadsIn;
+    public Stream<Road> getRoadOutStream() {
+        return roadsOut.stream();
+    }
+
+    public void foreachRoadIn(Consumer<Road> f) {
+        roadsIn.forEach(f);
+    }
+
+    public Stream<Road> getRoadInStream() {
+        return roadsIn.stream();
     }
 
     public void setTrafficLight(TrafficLight trafficLight) {
         this.trafficLight = trafficLight;
     }
 
-    public void addRoadTo(Road road) {
+    public void addRoadOut(Road road) {
         roadsOut.add(road);
     }
 
-    public void addRoadFrom(Road road) {
+    public void addRoadIn(Road road) {
         roadsIn.add(road);
     }
 
+    public void removeRoadOut(Road road) {
+        roadsOut.remove(road);
+    }
+
+    public void removeRoadIn(Road road) {
+        roadsIn.remove(road);
+    }
+
     public void connect(Road roadTo, Road roadFrom, Node node) {
+        roadTo.setBackRoad(roadFrom);
+        roadFrom.setBackRoad(roadTo);
+
         roadTo.setFrom(this);
         roadTo.setTo(node);
         roadFrom.setFrom(node);
         roadFrom.setTo(this);
-        addRoadTo(roadTo);
-        addRoadFrom(roadFrom);
-        node.addRoadTo(roadFrom);
-        node.addRoadFrom(roadTo);
+
+        addRoadOut(roadTo);
+        addRoadIn(roadFrom);
+        node.addRoadOut(roadFrom);
+        node.addRoadIn(roadTo);
     }
 
-    public int getX(){
+    public double getX(){
         return x;
     }
 
-    public int getY(){
+    public double getY(){
         return y;
     }
 }
