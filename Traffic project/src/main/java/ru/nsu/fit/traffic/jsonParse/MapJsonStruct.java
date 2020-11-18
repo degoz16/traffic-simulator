@@ -26,7 +26,7 @@ public class MapJsonStruct {
         });
         map.forEachRoads(road -> {
             List<LaneJsonStruct> lanes = new ArrayList<>();
-            road.getLanes().forEach(lane -> {
+            road.forEachLane(lane -> {
                 List<Map<String, String>> signs = new ArrayList<>();
                 lane.getSigns().forEach(sign -> signs.add(sign.getSettings()));
                 LaneJsonStruct laneJsonStruct = new LaneJsonStruct(signs);

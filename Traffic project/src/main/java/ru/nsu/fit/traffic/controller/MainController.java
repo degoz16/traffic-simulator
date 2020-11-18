@@ -1,5 +1,6 @@
 package ru.nsu.fit.traffic.controller;
 
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 import javafx.application.Platform;
@@ -16,12 +17,9 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
-import ru.nsu.fit.traffic.model.ListenerAction;
-import ru.nsu.fit.traffic.model.Node;
-import ru.nsu.fit.traffic.model.UpdateListener;
+import ru.nsu.fit.traffic.model.*;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
-import ru.nsu.fit.traffic.model.TrafficMap;
 import ru.nsu.fit.traffic.controller.painters.ObjectPainter;
 
 /**
@@ -195,27 +193,34 @@ public class MainController {
         Platform.runLater(() -> {
             mainPane.getChildren().clear();
             currMap.forEachRoads(road -> {
-                Shape roadShape = objectPainter.paintRoad(road);
-                //Временный код
-                //TODO: переделать обработчики на полосы
-                roadShape.setOnMouseClicked(event -> {
-                    //Road roadRef = road;
-                    System.out.println("ROAD CLICK");
-                    switch (event.getButton()) {
-                        case PRIMARY -> {
-                            event.consume();
-                            switch (editOperationsManager.getCurrentOperation()) {
-                                case ROAD_CREATION -> {
-                                    Point2D parentCoords = roadShape.localToParent(event.getX(), event.getY());
-                                    editOperationsManager.buildRoadOnRoad(parentCoords.getX(), parentCoords.getY(), road);
-                                    updateMapView();
-                                }
-                            }
-                        }
-                    }
-                    //todo другие операции
-                });
-                mainPane.getChildren().add(roadShape);
+                List<List<Shape>> roadShape = objectPainter.paintRoad(road);
+                if (roadShape.size() != road.getLanesNum()) {
+                    System.err.println(roadShape.size() + "!=" + road.getLanesNum());
+                    throw new RuntimeException();
+                }
+                for (int i = 0; i < road.getLanesNum(); i++) {
+                    int finalI = i;
+                    roadShape.get(i).forEach(shape -> {
+                       shape.setOnMouseClicked(event -> {
+                           System.out.println("ROAD CLICK");
+                           Lane lane = road.getLane(finalI);
+                           switch (event.getButton()) {
+                               case PRIMARY -> {
+                                   event.consume();
+                                   switch (editOperationsManager.getCurrentOperation()) {
+                                       case ROAD_CREATION -> {
+                                           Point2D parentCoords = shape.localToParent(event.getX(), event.getY());
+                                           editOperationsManager.buildRoadOnRoad(parentCoords.getX(), parentCoords.getY(), road);
+                                           updateMapView();
+                                       }
+                                   }
+                               }
+                           }
+                           //todo другие операции
+                       });
+                       mainPane.getChildren().add(shape);
+                    });
+                }
             });
             currMap.forEachNodes(node -> {
                 Shape nodeShape = objectPainter.paintNode(node);

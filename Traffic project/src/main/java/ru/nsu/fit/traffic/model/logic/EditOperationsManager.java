@@ -95,6 +95,10 @@ public class EditOperationsManager {
         if (lanesNumLeft + lanesNumRight == 0) {
             return;
         }
+        if (lastNode == null) {
+            lastNode = node;
+            return;
+        }
         boolean checkOverlap = lastNode.getRoadOutStream().anyMatch(road -> road.getTo() == node);
         if (!checkOverlap) {
             Road newRoadTo = new Road(lanesNumLeft);

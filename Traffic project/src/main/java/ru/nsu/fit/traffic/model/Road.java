@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class Road {
     private Node from = null;
@@ -13,11 +14,15 @@ public class Road {
     public Road(int lanesNum) {
         lanes = new ArrayList<>();
         for (int i = 0; i < lanesNum; ++i)
-            lanes.add(new Lane(this));
+            lanes.add(new Lane());
     }
 
     public void setLanes(List<Lane> lanes) {
         this.lanes = lanes;
+    }
+
+    public void forEachLane(Consumer<Lane> f) {
+        lanes.forEach(f);
     }
 
     //Этот и аналогичные методы для Lane и RoadSign
@@ -30,7 +35,7 @@ public class Road {
     public Road getCopyRoad() {
         List<Lane> laneList = new ArrayList<>();
         Road copyRoad = new Road(0);
-        lanes.forEach(lane -> laneList.add(lane.getCopyLane(copyRoad)));
+        lanes.forEach(lane -> laneList.add(lane.getCopyLane()));
         copyRoad.setLanes(laneList);
         return copyRoad;
     }
@@ -71,8 +76,8 @@ public class Road {
         } else return length;
     }
 
-    public List<Lane> getLanes(){
-        return lanes;
+    public Lane getLane(int id){
+        return lanes.get(id);
     }
 
     public int getLanesNum() {

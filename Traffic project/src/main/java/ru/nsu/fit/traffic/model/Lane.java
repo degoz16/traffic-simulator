@@ -6,14 +6,13 @@ import java.util.List;
 public class Lane {
 
     private List<RoadSign> signs;
-    private Road road;
 
-    public Lane(Road road){
+    public Lane(){
         signs = new ArrayList<>();
     }
 
-    public Lane getCopyLane(Road road) {
-        Lane copyLane = new Lane(road);
+    public Lane getCopyLane() {
+        Lane copyLane = new Lane();
         signs.forEach(sign -> copyLane.addSign(sign.getCopySign()));
         return copyLane;
     }
