@@ -55,7 +55,7 @@ public class ObjectPainter {
                         .orElse(0));
 
         //todo: мне не нравятся наши ноды на карте, нужно подумать, как норм рисовать
-        Shape shape = new Circle(node.getX(), node.getY(), maxSize / 2 * NODE_SIZE);
+        Shape shape = new Circle(node.getX(), node.getY(), (double)maxSize / 2 * NODE_SIZE);
         shape.setFill(Paint.valueOf("#aaaaaa"));
         return shape;
     }

@@ -3,11 +3,14 @@ package ru.nsu.fit.traffic.controller;
 import java.util.function.UnaryOperator;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -57,6 +60,12 @@ public class MainController {
         this.stage = stage;
     }
 
+    private void stopOperation(){
+        numberOfLanesPane.setVisible(false);
+        editOperationsManager.resetLastNode();
+        editOperationsManager.setCurrentOperation(EditOperation.NONE);
+    }
+
     /**
      * инициализация.
      */
@@ -76,65 +85,39 @@ public class MainController {
         };
 
         backLanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
+        backLanesTextField.setText("1");
+        backLanesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            editOperationsManager.setLanesNumRight(Integer.parseInt(newValue));
+        });
+
         forwardLanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
+        forwardLanesTextField.setText("1");
+        forwardLanesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            editOperationsManager.setLanesNumLeft(Integer.parseInt(newValue));
+        });
 
         mainPane.setOnMouseClicked(event -> {
-            System.out.println("MAIN PANE CLICK");
-            switch (editOperationsManager.getCurrentOperation()) {
-                case ROAD_CREATION -> {
-                    editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
-                    updateMapView();
-                }
-            }
-/*            if (shapeChanged) {
-                shapeChanged = false;
-            } else {
-                lastPeekedShape = UUID.randomUUID().toString();
-            }
-            if (currOperation == null)
-                return;
-
-            int x = (int) (t.getX() + mainScrollPane.getVvalue()) / POINT_SIZE;
-            int y = (int) (t.getY() + mainScrollPane.getHvalue()) / POINT_SIZE;
-
-            switch (currOperation) {
-                case ROAD_CREATION_STEP_1 -> {
-                    //todo: нужно бы чекать, не ставим ли мы на дорогу
-                    roadBuilder.handleOperation(currOperation, x, y, lastPeekedShape, -1, -1);
-                    currOperation = EditOperation.ROAD_CREATION_STEP_2;
-                    numberOfLanesPane.setVisible(false);
-
-                }
-                case ROAD_CREATION_STEP_2 -> {
-                    //todo: нужно бы чекать, не ставим ли мы на дорогу
-                    Road[] roadArr = roadBuilder.handleOperation(currOperation,
-                            x, y, lastPeekedShape,
-                            Integer.parseInt(backLanesTextField.getText()),
-                            Integer.parseInt(forwardLanesTextField.getText()));
-
-                    if (roadArr == null) {
-                        return;
+            switch (event.getButton()) {
+                case PRIMARY -> {
+                    event.consume();
+                    System.out.println("MAIN PANE CLICK");
+                    switch (editOperationsManager.getCurrentOperation()) {
+                        case ROAD_CREATION -> {
+                            editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
+                            updateMapView();
+                        }
                     }
-
-                    for (Road curr: roadArr) {
-                        Shape road = painter.paintRoad(roadBuilder.getRoadId(), curr);
-                        road.onMouseClickedProperty().set(lastPressedShape());
-                        mainPane.getChildren().add(road);
-                    }
-                    //todo: мы не удаляем Node на карте, если он уже существовал, мы их можем очень много друг на друга настакать
-                    Shape nodeTo = painter.paintNode(roadBuilder.getToId(), roadArr[0].getTo());
-                    nodeTo.onMouseClickedProperty().set(lastPressedShape());
-
-                    Shape nodeFrom = painter.paintNode(roadBuilder.getFromId(), roadArr[0].getFrom());
-                    nodeFrom.onMouseClickedProperty().set(lastPressedShape());
-
-                    mainPane.getChildren().add(nodeTo);
-                    mainPane.getChildren().add(nodeFrom);
-
-                    stage.show();
-                    currOperation = EditOperation.NONE;
+                    //todo другие операции
                 }
-            }*/
+                case SECONDARY -> {
+                    stopOperation();
+                }
+                //todo другие функции
+            }
+
+                       //     Integer.parseInt(backLanesTextField.getText()),
+                       //     Integer.parseInt(forwardLanesTextField.getText()));
+
         });
     }
 
@@ -155,14 +138,18 @@ public class MainController {
 
     @FXML
     public void roadButtonClicked() {
-        /*if (currOperation == EditOperation.ROAD_CREATION_STEP_1 ||
-                currOperation == EditOperation.ROAD_CREATION_STEP_2) {
-            currOperation = EditOperation.NONE;
-            return;
+        switch (editOperationsManager.getCurrentOperation()) {
+            case NONE -> {
+                numberOfLanesPane.setVisible(true);
+                editOperationsManager.setCurrentOperation(EditOperation.ROAD_CREATION);
+            }
+            case ROAD_CREATION -> {
+                numberOfLanesPane.setVisible(false);
+                editOperationsManager.resetLastNode();
+                editOperationsManager.setCurrentOperation(EditOperation.NONE);
+            }
         }
-        numberOfLanesPane.setVisible(true);
-        currOperation = EditOperation.ROAD_CREATION_STEP_1;*/
-        editOperationsManager.setCurrentOperation(EditOperation.ROAD_CREATION);
+
         //todo: там кнопка отжиается, когда мы настраиваем число полос
     }
 
@@ -201,6 +188,9 @@ public class MainController {
         System.out.println("медленнее");
     }
 
+    /**
+     * Метод отрисовки текущего состояния карты
+     */
     private void updateMapView() {
         Platform.runLater(() -> {
             mainPane.getChildren().clear();
@@ -209,31 +199,41 @@ public class MainController {
                 //Временный код
                 //TODO: переделать обработчики на полосы
                 roadShape.setOnMouseClicked(event -> {
-                    event.consume();
                     //Road roadRef = road;
                     System.out.println("ROAD CLICK");
-                    switch (editOperationsManager.getCurrentOperation()) {
-                        case ROAD_CREATION -> {
-                            Point2D parentCoords = roadShape.localToParent(event.getX(), event.getY());
-                            editOperationsManager.buildRoadOnRoad(parentCoords.getX(), parentCoords.getY(), road);
-                            updateMapView();
+                    switch (event.getButton()) {
+                        case PRIMARY -> {
+                            event.consume();
+                            switch (editOperationsManager.getCurrentOperation()) {
+                                case ROAD_CREATION -> {
+                                    Point2D parentCoords = roadShape.localToParent(event.getX(), event.getY());
+                                    editOperationsManager.buildRoadOnRoad(parentCoords.getX(), parentCoords.getY(), road);
+                                    updateMapView();
+                                }
+                            }
                         }
                     }
+                    //todo другие операции
                 });
                 mainPane.getChildren().add(roadShape);
             });
             currMap.forEachNodes(node -> {
                 Shape nodeShape = objectPainter.paintNode(node);
                 nodeShape.setOnMouseClicked(event -> {
-                    event.consume();
                     System.out.println("NODE CLICK");
                     //Node nodeRef = node;
-                    switch (editOperationsManager.getCurrentOperation()) {
-                        case ROAD_CREATION -> {
-                            editOperationsManager.buildRoadOnNode(node);
-                            updateMapView();
+                    switch (event.getButton()) {
+                        case PRIMARY -> {
+                            event.consume();
+                            switch (editOperationsManager.getCurrentOperation()) {
+                                case ROAD_CREATION -> {
+                                    editOperationsManager.buildRoadOnNode(node);
+                                    updateMapView();
+                                }
+                            }
                         }
                     }
+                    //todo другие операции
                 });
                 mainPane.getChildren().add(nodeShape);
             });
