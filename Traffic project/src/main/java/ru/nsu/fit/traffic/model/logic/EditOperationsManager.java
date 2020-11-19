@@ -4,8 +4,6 @@ import ru.nsu.fit.traffic.model.Node;
 import ru.nsu.fit.traffic.model.Road;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public class EditOperationsManager {
     public EditOperationsManager(TrafficMap map) {
         this.map = map;

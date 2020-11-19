@@ -87,4 +87,12 @@ public class Node {
     public double getY(){
         return y;
     }
+
+    public int getRoadsOutNum(){
+        return roadsOut.size();
+    }
+
+    public int getRoadsInNum(){
+        return roadsIn.size();
+    }
 }

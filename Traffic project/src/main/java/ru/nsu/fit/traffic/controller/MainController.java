@@ -37,19 +37,15 @@ public class MainController {
     public TextField backLanesTextField,
             forwardLanesTextField,
     //Settings number of lanes on road menu
-            lanesTextField;
+    lanesTextField;
     @FXML
     public Pane roadSettingsPane;
 
     private Road lastRoadClicked;
-    private TrafficMap currMap = new TrafficMap();
-
-    //private RoadBuilder roadBuilder
-    private EditOperation currOperation;
-    private Stage stage;
-    private boolean shapeChanged = false;
-    //private String lastPeekedShape = UUID.randomUUID().toString();
-    private UpdateListener updateListener = (ListenerAction action) -> {
+    private final TrafficMap currMap = new TrafficMap();
+    //private Stage stage;
+    //private boolean shapeChanged = false;
+    private final UpdateListener updateListener = (ListenerAction action) -> {
         switch (action) {
             case MAP_UPDATE -> updateMapView();
         }
@@ -58,9 +54,9 @@ public class MainController {
     private final EditOperationsManager editOperationsManager = new EditOperationsManager(currMap);
     private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
 
-    public void setPrimaryStage(Stage stage) {
+    /*public void setPrimaryStage(Stage stage) {
         this.stage = stage;
-    }
+    }*/
 
     private void stopOperation() {
         numberOfLanesPane.setVisible(false);
@@ -89,21 +85,16 @@ public class MainController {
 
         backLanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
         backLanesTextField.setText("1");
-        backLanesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            editOperationsManager.setLanesNumRight(Integer.parseInt(newValue));
-        });
+        backLanesTextField.textProperty().addListener((observable, oldValue, newValue) ->
+                editOperationsManager.setLanesNumRight(Integer.parseInt(newValue)));
 
         lanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
-        backLanesTextField.setText("1");
-        backLanesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            editOperationsManager.setLanesNumRight(Integer.parseInt(newValue));
-        });
+        lanesTextField.setText("1");
 
         forwardLanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
         forwardLanesTextField.setText("1");
-        forwardLanesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
-            editOperationsManager.setLanesNumLeft(Integer.parseInt(newValue));
-        });
+        forwardLanesTextField.textProperty().addListener((observable, oldValue, newValue) ->
+                editOperationsManager.setLanesNumLeft(Integer.parseInt(newValue)));
 
         mainPane.setOnMouseClicked(event -> {
             switch (event.getButton()) {
@@ -118,14 +109,9 @@ public class MainController {
                     }
                     //todo другие операции
                 }
-                case SECONDARY -> {
-                    stopOperation();
-                }
+                case SECONDARY -> stopOperation();
                 //todo другие функции
             }
-
-            //     Integer.parseInt(backLanesTextField.getText()),
-            //     Integer.parseInt(forwardLanesTextField.getText()));
 
         });
     }
@@ -203,28 +189,36 @@ public class MainController {
 
     @FXML
     public void confirmRoadSettings() {
-        if (Integer.parseInt(lanesTextField.getText()) != 0) {
-            Node from = lastRoadClicked.getFrom();
-            Node to = lastRoadClicked.getTo();
-            Road curr = new Road(Integer.parseInt(lanesTextField.getText()));
-            curr.setBackRoad(lastRoadClicked.getBackRoad());
-            lastRoadClicked.getBackRoad().setBackRoad(curr);
-            curr.setTo(to);
-            curr.setFrom(from);
-            to.addRoadIn(curr);
-            from.addRoadOut(curr);
-            currMap.addRoad(curr);
+        int oldLanesNum = lastRoadClicked.getLanesNum();
+        int newLanesNum = Integer.parseInt(lanesTextField.getText());
+        if (newLanesNum > 0) {
+            for (int i = newLanesNum; i < oldLanesNum; i++) {
+                lastRoadClicked.removeLane(i);
+            }
+            updateMapView();
         }
-        deleteRoad();
+        else {
+            deleteRoad();
+        }
     }
 
     @FXML
-    public void deleteRoad(){
-        currMap.removeRoad(lastRoadClicked);
-        Node from = lastRoadClicked.getFrom();
-        Node to = lastRoadClicked.getTo();
-        from.removeRoadOut(lastRoadClicked);
-        to.removeRoadIn(lastRoadClicked);
+    public void deleteRoad() {
+        if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
+            if (lastRoadClicked.getFrom().getRoadsOutNum() <= 1) {
+                currMap.removeNode(lastRoadClicked.getFrom());
+            }
+            if (lastRoadClicked.getTo().getRoadsInNum() <= 1) {
+                currMap.removeNode(lastRoadClicked.getTo());
+            }
+            lastRoadClicked.getBackRoad().disconnect();
+            currMap.removeRoad(lastRoadClicked.getBackRoad());
+            lastRoadClicked.disconnect();
+            currMap.removeRoad(lastRoadClicked);
+        }
+        else {
+            lastRoadClicked.clearLanes();
+        }
         updateMapView();
     }
 
@@ -296,12 +290,4 @@ public class MainController {
             mainPane.getChildren().add(roadSettingsPane);
         });
     }
-
-/*    private EventHandler<MouseEvent> lastPressedShape() {
-        return ((EventHandler<MouseEvent>) (MouseEvent x) -> {
-            shapeChanged = true;
-            lastPeekedShape = x.getPickResult().getIntersectedNode().getId();
-            System.out.println(lastPeekedShape);
-        });
-    }*/
 }

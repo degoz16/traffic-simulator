@@ -83,4 +83,12 @@ public class Road {
     public int getLanesNum() {
         return lanes.size();
     }
+
+    public void removeLane(int id) {
+        lanes.remove(id);
+    }
+
+    public void clearLanes() {
+        lanes = new ArrayList<>();
+    }
 }
