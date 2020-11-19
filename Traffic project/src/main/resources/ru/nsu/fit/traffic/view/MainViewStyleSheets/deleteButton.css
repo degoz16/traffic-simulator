@@ -1,0 +1,31 @@
+{
+    -fx-background-image: url("../ButtonsImages/garbage.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 21 21;
+    -fx-background-position: center center;
+}
+
+
+:hover {
+    -fx-background-image: url("../ButtonsImages/garbage.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 22 22;
+    -fx-background-position: center center;
+
+}
+
+:pressed {
+  -fx-background-image: url("../ButtonsImages/garbage.png");
+  -fx-background-repeat: stretch;
+  -fx-background-size: 20 20;
+  -fx-background-position: center center;
+
+}
+
+:focused {
+  -fx-background-image: url("../ButtonsImages/garbage.png");
+  -fx-background-repeat: stretch;
+  -fx-background-size: 20 20;
+  -fx-background-position: center center;
+
+}

@@ -4,15 +4,11 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Point2D;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
@@ -27,28 +23,36 @@ import ru.nsu.fit.traffic.controller.painters.ObjectPainter;
  */
 public class MainController {
 
-    private final int NODE_SIZE = 15;
-    private final int LANE_SIZE = 15;
+    private final int NODE_SIZE = 10;
+    private final int LANE_SIZE = 10;
     private final int POINT_SIZE = 1;
+
     @FXML
     public ScrollPane mainScrollPane;
     @FXML
     public AnchorPane mainPane;
     @FXML
     public Pane numberOfLanesPane;
-    @FXML
+    @FXML       //Settings number of lanes on creation
     public TextField backLanesTextField,
-            forwardLanesTextField;
-    private TrafficMap currMap = new TrafficMap();;
-    //private RoadBuilder roadBuilder;
+            forwardLanesTextField,
+    //Settings number of lanes on road menu
+            lanesTextField;
+    @FXML
+    public Pane roadSettingsPane;
+
+    private Road lastRoadClicked;
+    private TrafficMap currMap = new TrafficMap();
+
+    //private RoadBuilder roadBuilder
     private EditOperation currOperation;
     private Stage stage;
     private boolean shapeChanged = false;
     //private String lastPeekedShape = UUID.randomUUID().toString();
     private UpdateListener updateListener = (ListenerAction action) -> {
-      switch (action) {
-          case MAP_UPDATE -> updateMapView();
-      }
+        switch (action) {
+            case MAP_UPDATE -> updateMapView();
+        }
     };
 
     private final EditOperationsManager editOperationsManager = new EditOperationsManager(currMap);
@@ -58,7 +62,7 @@ public class MainController {
         this.stage = stage;
     }
 
-    private void stopOperation(){
+    private void stopOperation() {
         numberOfLanesPane.setVisible(false);
         editOperationsManager.resetLastNode();
         editOperationsManager.setCurrentOperation(EditOperation.NONE);
@@ -70,19 +74,26 @@ public class MainController {
     @FXML
     public void initialize() {
         numberOfLanesPane.setVisible(false);
+        roadSettingsPane.setVisible(false);
         //roadBuilder = new RoadBuilder(currMap, LANE_SIZE);
 
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String input = change.getText();
             int text_size = change.getControlNewText().length();
 
-            if (input.matches("[0-5]*") && text_size <=1) {
+            if (input.matches("[0-5]*") && text_size <= 1) {
                 return change;
             }
             return null;
         };
 
         backLanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
+        backLanesTextField.setText("1");
+        backLanesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
+            editOperationsManager.setLanesNumRight(Integer.parseInt(newValue));
+        });
+
+        lanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
         backLanesTextField.setText("1");
         backLanesTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             editOperationsManager.setLanesNumRight(Integer.parseInt(newValue));
@@ -113,8 +124,8 @@ public class MainController {
                 //todo другие функции
             }
 
-                       //     Integer.parseInt(backLanesTextField.getText()),
-                       //     Integer.parseInt(forwardLanesTextField.getText()));
+            //     Integer.parseInt(backLanesTextField.getText()),
+            //     Integer.parseInt(forwardLanesTextField.getText()));
 
         });
     }
@@ -147,8 +158,6 @@ public class MainController {
                 editOperationsManager.setCurrentOperation(EditOperation.NONE);
             }
         }
-
-        //todo: там кнопка отжиается, когда мы настраиваем число полос
     }
 
     @FXML
@@ -186,12 +195,47 @@ public class MainController {
         System.out.println("медленнее");
     }
 
+
+    @FXML
+    public void closeRoadSettings() {
+        roadSettingsPane.setVisible(false);
+    }
+
+    @FXML
+    public void confirmRoadSettings() {
+        if (Integer.parseInt(lanesTextField.getText()) != 0) {
+            Node from = lastRoadClicked.getFrom();
+            Node to = lastRoadClicked.getTo();
+            Road curr = new Road(Integer.parseInt(lanesTextField.getText()));
+            curr.setBackRoad(lastRoadClicked.getBackRoad());
+            lastRoadClicked.getBackRoad().setBackRoad(curr);
+            curr.setTo(to);
+            curr.setFrom(from);
+            to.addRoadIn(curr);
+            from.addRoadOut(curr);
+            currMap.addRoad(curr);
+        }
+        deleteRoad();
+    }
+
+    @FXML
+    public void deleteRoad(){
+        currMap.removeRoad(lastRoadClicked);
+        Node from = lastRoadClicked.getFrom();
+        Node to = lastRoadClicked.getTo();
+        from.removeRoadOut(lastRoadClicked);
+        to.removeRoadIn(lastRoadClicked);
+        updateMapView();
+    }
+
+
     /**
      * Метод отрисовки текущего состояния карты
      */
     private void updateMapView() {
         Platform.runLater(() -> {
             mainPane.getChildren().clear();
+            roadSettingsPane.setVisible(false);
             currMap.forEachRoads(road -> {
                 List<List<Shape>> roadShape = objectPainter.paintRoad(road);
                 if (roadShape.size() != road.getLanesNum()) {
@@ -201,24 +245,31 @@ public class MainController {
                 for (int i = 0; i < road.getLanesNum(); i++) {
                     int finalI = i;
                     roadShape.get(i).forEach(shape -> {
-                       shape.setOnMouseClicked(event -> {
-                           System.out.println("ROAD CLICK");
-                           Lane lane = road.getLane(finalI);
-                           switch (event.getButton()) {
-                               case PRIMARY -> {
-                                   event.consume();
-                                   switch (editOperationsManager.getCurrentOperation()) {
-                                       case ROAD_CREATION -> {
-                                           Point2D parentCoords = shape.localToParent(event.getX(), event.getY());
-                                           editOperationsManager.buildRoadOnRoad(parentCoords.getX(), parentCoords.getY(), road);
-                                           updateMapView();
-                                       }
-                                   }
-                               }
-                           }
-                           //todo другие операции
-                       });
-                       mainPane.getChildren().add(shape);
+                        shape.setOnMouseClicked(event -> {
+                            System.out.println("ROAD CLICK");
+                            Lane lane = road.getLane(finalI);
+                            switch (event.getButton()) {
+                                case PRIMARY -> {
+                                    event.consume();
+                                    switch (editOperationsManager.getCurrentOperation()) {
+                                        case ROAD_CREATION -> {
+                                            Point2D parentCoords = shape.localToParent(event.getX(), event.getY());
+                                            editOperationsManager.buildRoadOnRoad(parentCoords.getX(), parentCoords.getY(), road);
+                                            updateMapView();
+                                        }
+                                        case NONE -> {
+                                            lastRoadClicked = road;
+                                            roadSettingsPane.setVisible(true);
+                                            roadSettingsPane.setLayoutX(event.getX());
+                                            roadSettingsPane.setLayoutY(event.getY());
+                                            lanesTextField.setText(String.valueOf(road.getLanesNum()));
+                                        }
+                                    }
+                                }
+                            }
+                            //todo другие операции
+                        });
+                        mainPane.getChildren().add(shape);
                     });
                 }
             });
@@ -242,7 +293,7 @@ public class MainController {
                 });
                 mainPane.getChildren().add(nodeShape);
             });
-
+            mainPane.getChildren().add(roadSettingsPane);
         });
     }
 

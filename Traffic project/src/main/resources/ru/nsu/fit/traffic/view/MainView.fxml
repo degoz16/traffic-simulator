@@ -61,8 +61,40 @@
       <children>
             <ScrollPane fx:id="mainScrollPane" prefHeight="375.0" prefWidth="646.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <AnchorPane fx:id="mainPane" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #b1bbbb;" stylesheets="@MainViewStyleSheets/background.css" />
-               </content></ScrollPane>
+                  <AnchorPane fx:id="mainPane" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #b1bbbb;" stylesheets="@MainViewStyleSheets/background.css">
+                     <children>
+                        <AnchorPane fx:id="roadSettingsPane" layoutX="117.0" layoutY="39.0" maxHeight="100.0" maxWidth="100.0" minHeight="82.0" minWidth="100.0" prefHeight="82.0" prefWidth="100.0" stylesheets="@MainViewStyleSheets/middle_grey.css" AnchorPane.bottomAnchor="1825.0">
+                           <children>
+                              <TextField fx:id="lanesTextField" layoutX="71.0" layoutY="48.0" maxHeight="32.0" prefHeight="25.0" prefWidth="23.0" promptText="2" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/light_grey.css" text="2" AnchorPane.bottomAnchor="35.0" AnchorPane.rightAnchor="4.0">
+                                 <font>
+                                    <Font name="Verdana Bold" size="11.0" />
+                                 </font>
+                              </TextField>
+                              <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#111111" height="18.0" layoutY="2.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Text fill="WHITE" layoutX="-7.0" layoutY="-1.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Road" wrappingWidth="36.0" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="2.0">
+                                 <font>
+                                    <Font name="Arial Bold" size="11.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="WHITE" layoutX="6.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Number of lanes" wrappingWidth="61.0" AnchorPane.bottomAnchor="35.0">
+                                 <font>
+                                    <Font name="Arial Bold" size="11.0" />
+                                 </font>
+                              </Text>
+                              <Text fill="WHITE" layoutX="6.0" layoutY="34.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delete road" wrappingWidth="60.0" AnchorPane.bottomAnchor="10.0">
+                                 <font>
+                                    <Font name="Arial Bold" size="11.0" />
+                                 </font>
+                              </Text>
+                              <Button layoutX="53.0" layoutY="3.0" minHeight="18.0" minWidth="18.0" mnemonicParsing="false" onMouseClicked="#closeRoadSettings" prefHeight="18.0" prefWidth="18.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/closeButton.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <Button layoutX="64.0" minHeight="18.0" minWidth="18.0" mnemonicParsing="false" onMouseClicked="#confirmRoadSettings" prefHeight="18.0" prefWidth="18.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/confirmButton.css" />
+                              <Button layoutX="74.0" layoutY="53.0" mnemonicParsing="false" onMouseClicked="#deleteRoad" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/deleteButton.css" text="Button" AnchorPane.rightAnchor="3.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+               </content>
+            </ScrollPane>
             <Polygon fill="DODGERBLUE" layoutX="33.0" layoutY="334.0" points="-33.0, 41.0, 612.0, 41.0, 594.0, -30.0, -34.0, -30.0" strokeType="INSIDE" strokeWidth="50.0" AnchorPane.bottomAnchor="14.0">
                <stroke>
                   <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0" startX="1.0">
@@ -96,14 +128,14 @@
             </AnchorPane>
             <AnchorPane layoutX="341.0" layoutY="310.0" prefHeight="73.0" prefWidth="264.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="341.0">
                <children>
-                  <AnchorPane fx:id="numberOfLanesPane" layoutX="39.0" layoutY="169.0" prefHeight="64.0" prefWidth="96.0" style="-fx-background-color: #353535; -fx-background-radius: 0;" AnchorPane.rightAnchor="121.0" AnchorPane.topAnchor="-65.0">
+                  <AnchorPane fx:id="numberOfLanesPane" layoutX="39.0" layoutY="169.0" prefHeight="64.0" prefWidth="96.0" style="-fx-background-radius: 0;" stylesheets="@MainViewStyleSheets/middle_grey.css" AnchorPane.rightAnchor="121.0" AnchorPane.topAnchor="-65.0">
                      <children>
-                        <TextField fx:id="backLanesTextField" blendMode="HARD_LIGHT" layoutX="50.0" layoutY="26.0" prefHeight="35.0" prefWidth="35.0" promptText="2" style="-fx-background-color: #999999;" text="2" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="55.0">
+                        <TextField fx:id="backLanesTextField" layoutX="50.0" layoutY="26.0" prefHeight="35.0" prefWidth="35.0" promptText="2" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/light_grey.css" text="2" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="55.0">
                            <font>
                               <Font name="Verdana Bold" size="16.0" />
                            </font>
                         </TextField>
-                        <TextField fx:id="forwardLanesTextField" blendMode="HARD_LIGHT" layoutX="4.0" layoutY="30.0" prefHeight="35.0" prefWidth="35.0" promptText="2" style="-fx-background-color: #999999;" text="2" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0">
+                        <TextField fx:id="forwardLanesTextField" layoutX="4.0" layoutY="30.0" prefHeight="35.0" prefWidth="35.0" promptText="2" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/light_grey.css" text="2" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="8.0">
                            <font>
                               <Font name="Verdana Bold" size="16.0" />
                            </font>

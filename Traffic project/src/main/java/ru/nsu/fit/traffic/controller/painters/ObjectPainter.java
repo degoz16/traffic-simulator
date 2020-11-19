@@ -1,11 +1,11 @@
 package ru.nsu.fit.traffic.controller.painters;
 
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Shape;
-import ru.nsu.fit.traffic.model.Lane;
 import ru.nsu.fit.traffic.model.Node;
 import ru.nsu.fit.traffic.model.Road;
 
@@ -15,6 +15,7 @@ import java.util.List;
 public class ObjectPainter {
     private final int LANE_SIZE;
     private final int NODE_SIZE;
+    private final Paint roadColor = Paint.valueOf("#9a9a9a");
 
     public ObjectPainter(int laneSize, int nodeSize) {
         LANE_SIZE = laneSize;
@@ -34,8 +35,8 @@ public class ObjectPainter {
         double vlen = Math.sqrt(Math.abs(vx * vx + vy * vy));
         List<List<Shape>> paintedRoad = new ArrayList<>();
 
-        vx *= LANE_SIZE / vlen / 2;
-        vy *= LANE_SIZE / vlen / 2;
+        vx *= LANE_SIZE / vlen;
+        vy *= LANE_SIZE / vlen;
 
         for (int i = 0; i < road.getLanesNum(); i++) {
             List<Shape> roadGroup = new ArrayList<>();
@@ -46,7 +47,7 @@ public class ObjectPainter {
                     pointToX + i * vx, pointToY + i * vy,
                     vx + pointToX + i * vx,
                     vy + pointToY + i * vy);
-            curr.setFill(Paint.valueOf("#aaaaaa"));
+            curr.setFill(roadColor);
             curr.strokeWidthProperty().setValue(2);
             curr.setStroke(curr.getFill());
 
@@ -54,7 +55,7 @@ public class ObjectPainter {
 
             Line line = new Line(pointFromX + i * vx, pointFromY + i * vy,
                     pointToX + i * vx, pointToY + i * vy);
-            line.setStroke(Paint.valueOf("#ffffff"));
+            line.setStroke(Color.WHITE);
             line.setStrokeWidth(1);
 
             if (i != 0) {
@@ -69,7 +70,7 @@ public class ObjectPainter {
                         vy + pointFromY + i * vy,
                         vx + pointToX + i * vx,
                         vy + pointToY + i * vy);
-                line.setStroke(Paint.valueOf("#ffffff"));
+                line.setStroke(Color.WHITE);
                 line.setStrokeWidth(1);
                 roadGroup.add(line);
             }
@@ -91,7 +92,7 @@ public class ObjectPainter {
                         .orElse(0));
 
         Shape shape = new Circle(node.getX(), node.getY(), (double)maxSize / 2 * NODE_SIZE);
-        shape.setFill(Paint.valueOf("#aaaaaa"));
+        shape.setFill(roadColor);
         return shape;
     }
 }
