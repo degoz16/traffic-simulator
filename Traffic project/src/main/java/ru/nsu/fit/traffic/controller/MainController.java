@@ -5,7 +5,6 @@ import java.util.function.UnaryOperator;
 
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -43,7 +42,7 @@ public class MainController {
 
     private Road lastRoadClicked;
     private final TrafficMap currMap = new TrafficMap();
-    //private Stage stage;
+    private Stage stage;
     //private boolean shapeChanged = false;
     private final UpdateListener updateListener = (ListenerAction action) -> {
         switch (action) {
@@ -54,9 +53,9 @@ public class MainController {
     private final EditOperationsManager editOperationsManager = new EditOperationsManager(currMap);
     private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
 
-    /*public void setPrimaryStage(Stage stage) {
+    public void setPrimaryStage(Stage stage) {
         this.stage = stage;
-    }*/
+    }
 
     private void stopOperation() {
         numberOfLanesPane.setVisible(false);
@@ -245,10 +244,10 @@ public class MainController {
                             switch (event.getButton()) {
                                 case PRIMARY -> {
                                     event.consume();
+                                    //Point2D parentCoords = shape.localToParent(event.getX(), event.getY());
                                     switch (editOperationsManager.getCurrentOperation()) {
                                         case ROAD_CREATION -> {
-                                            Point2D parentCoords = shape.localToParent(event.getX(), event.getY());
-                                            editOperationsManager.buildRoadOnRoad(parentCoords.getX(), parentCoords.getY(), road);
+                                            editOperationsManager.buildRoadOnRoad(event.getX(), event.getY(), road);
                                             updateMapView();
                                         }
                                         case NONE -> {
