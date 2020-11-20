@@ -191,12 +191,18 @@ public class MainController {
         int oldLanesNum = lastRoadClicked.getLanesNum();
         int newLanesNum = Integer.parseInt(lanesTextField.getText());
         if (newLanesNum > 0) {
-            for (int i = newLanesNum; i < oldLanesNum; i++) {
-                lastRoadClicked.removeLane(i);
+            if (newLanesNum < oldLanesNum) {
+                for (int i = newLanesNum; i < oldLanesNum; i++) {
+                    lastRoadClicked.removeLane(i);
+                }
+            }
+            else {
+                for (int i = oldLanesNum; i < newLanesNum; i++) {
+                    lastRoadClicked.addLane(i);
+                }
             }
             updateMapView();
-        }
-        else {
+        } else {
             deleteRoad();
         }
     }
@@ -214,8 +220,7 @@ public class MainController {
             currMap.removeRoad(lastRoadClicked.getBackRoad());
             lastRoadClicked.disconnect();
             currMap.removeRoad(lastRoadClicked);
-        }
-        else {
+        } else {
             lastRoadClicked.clearLanes();
         }
         updateMapView();

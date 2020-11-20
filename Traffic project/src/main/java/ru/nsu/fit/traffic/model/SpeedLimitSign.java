@@ -1,9 +1,12 @@
 package ru.nsu.fit.traffic.model;
 
+import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
+import ru.nsu.fit.traffic.model.trafficsign.SignType;
+
 import java.util.Map;
 import java.util.TreeMap;
 
-public class SpeedLimitSign implements RoadSign{
+public class SpeedLimitSign implements RoadSign {
     private int speedLimit = 0;
 
     public SpeedLimitSign(int speedLimit) {

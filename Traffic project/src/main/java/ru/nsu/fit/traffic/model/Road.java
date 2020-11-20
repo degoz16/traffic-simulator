@@ -28,8 +28,10 @@ public class Road {
     //Этот и аналогичные методы для Lane и RoadSign
     //нужны для случая вставки ноды в середину дороги
     //чтобы сохранить настройки дороги.
+
     /**
      * Возвращает копию дороги.
+     *
      * @return копия
      */
     public Road getCopyRoad() {
@@ -76,7 +78,7 @@ public class Road {
         } else return length;
     }
 
-    public Lane getLane(int id){
+    public Lane getLane(int id) {
         return lanes.get(id);
     }
 
@@ -86,6 +88,10 @@ public class Road {
 
     public void removeLane(int id) {
         lanes.remove(id);
+    }
+
+    public void addLane(int id) {
+        lanes.add(id, new Lane());
     }
 
     public void clearLanes() {

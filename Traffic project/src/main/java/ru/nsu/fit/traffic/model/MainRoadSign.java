@@ -1,9 +1,12 @@
 package ru.nsu.fit.traffic.model;
 
+import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
+import ru.nsu.fit.traffic.model.trafficsign.SignType;
+
 import java.util.Map;
 import java.util.TreeMap;
 
-public class MainRoadSign implements RoadSign{
+public class MainRoadSign implements RoadSign {
     @Override
     public SignType getSignType() {
         return SignType.MAIN_ROAD;

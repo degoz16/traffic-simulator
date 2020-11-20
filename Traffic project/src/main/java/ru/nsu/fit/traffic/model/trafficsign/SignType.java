@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.model;
+package ru.nsu.fit.traffic.model.trafficsign;
 
 public enum SignType {
     SPEED_LIMIT,
