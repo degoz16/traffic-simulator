@@ -1,0 +1,31 @@
+{
+    -fx-background-image: url("./MainRoad.png");
+    -fx-background-repeat: stretch;
+    -fx-background-color: transparent;
+    -fx-background-size: 26 26;
+    -fx-background-position: center center;
+}
+
+:hover{
+    -fx-background-image: url("./MainRoad.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 24 24;
+    -fx-background-color: transparent;
+    -fx-background-position: center center;
+}
+
+:pressed{
+    -fx-background-image: url("./MainRoad.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-color: transparent;
+    -fx-background-position: center center;
+}
+
+:focused{
+    -fx-background-image: url("./MainRoad.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-color: transparent;
+    -fx-background-position: center center;
+}

@@ -1,0 +1,27 @@
+{
+    -fx-background-image: url("./empty_speed_sign.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 24 24;
+    -fx-background-position: center center;
+}
+
+:hover{
+    -fx-background-image: url("./empty_speed_sign.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 22 22;
+    -fx-background-position: center center;
+}
+
+:pressed{
+    -fx-background-image: url("./empty_speed_sign.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-position: center center;
+}
+
+:focused{
+    -fx-background-image: url("./empty_speed_sign.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-position: center center;
+}

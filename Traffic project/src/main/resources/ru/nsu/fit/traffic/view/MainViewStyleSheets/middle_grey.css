@@ -4,3 +4,7 @@
     -fx-background-size: 300 300;
     -fx-background-position: center center;
 }
+
+.content{
+       -fx-background-color: transparent;
+}

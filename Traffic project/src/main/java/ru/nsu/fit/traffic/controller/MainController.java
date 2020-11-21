@@ -4,7 +4,10 @@ import java.util.List;
 import java.util.function.UnaryOperator;
 
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -31,12 +34,17 @@ public class MainController {
     @FXML
     public AnchorPane mainPane;
     @FXML
-    public Pane numberOfLanesPane;
+    public Pane numberOfLanesPane,
+                roadSignPane;
     @FXML       //Settings number of lanes on creation
     public TextField backLanesTextField,
             forwardLanesTextField,
     //Settings number of lanes on road menu
     lanesTextField;
+
+    @FXML
+    public ComboBox<Integer> speedComboBox;
+
     @FXML
     public Pane roadSettingsPane;
 
@@ -70,7 +78,9 @@ public class MainController {
     public void initialize() {
         numberOfLanesPane.setVisible(false);
         roadSettingsPane.setVisible(false);
+        roadSignPane.setVisible(false);
         //roadBuilder = new RoadBuilder(currMap, LANE_SIZE);
+        speedComboBox.setItems(FXCollections.observableArrayList(20,30,40,50,60,70,80,90,100,110,120));
 
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String input = change.getText();
@@ -132,6 +142,7 @@ public class MainController {
 
     @FXML
     public void roadButtonClicked() {
+        roadSignPane.setVisible(false);
         switch (editOperationsManager.getCurrentOperation()) {
             case NONE -> {
                 numberOfLanesPane.setVisible(true);
@@ -161,8 +172,11 @@ public class MainController {
     }
 
     @FXML
-    public void trafficSignButtonClicked() {
-        System.out.println("дорожный знак");
+    public void roadSignButtonClicked() {
+        roadSignPane.setVisible(true);
+        roadSettingsPane.setVisible(false);
+        numberOfLanesPane.setVisible(false);
+        editOperationsManager.setCurrentOperation(EditOperation.NONE);
     }
 
     @FXML
@@ -234,6 +248,8 @@ public class MainController {
         Platform.runLater(() -> {
             mainPane.getChildren().clear();
             roadSettingsPane.setVisible(false);
+            roadSignPane.setVisible(false);
+
             currMap.forEachRoads(road -> {
                 List<List<Shape>> roadShape = objectPainter.paintRoad(road);
                 if (roadShape.size() != road.getLanesNum()) {
