@@ -171,9 +171,9 @@
                               <URL value="@TrafficSign/white_circle.css" />
                            </stylesheets>
                         </Button>
-                        <Button layoutX="39.0" layoutY="20.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="23.0" stylesheets="@TrafficSign/main_road.css" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="22.0" />
+                        <Button layoutX="39.0" layoutY="20.0" mnemonicParsing="false" onAction="#setMainRoad" prefHeight="25.0" prefWidth="23.0" stylesheets="@TrafficSign/main_road.css" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="22.0" />
                         <ComboBox fx:id="speedComboBox" layoutX="36.0" layoutY="22.0" prefHeight="25.0" prefWidth="60.0" promptText="60" style="-fx-background-color: transparent;" />
-                        <Button layoutX="16.0" layoutY="30.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: transparent;" stylesheets="@TrafficSign/red_ring.css" AnchorPane.leftAnchor="39.0" AnchorPane.topAnchor="22.0" />
+                        <Button layoutX="16.0" layoutY="30.0" mnemonicParsing="false" onAction="#setSpeedSign" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: transparent;" stylesheets="@TrafficSign/red_ring.css" AnchorPane.leftAnchor="39.0" AnchorPane.topAnchor="22.0" />
                      </children>
                   </AnchorPane>
                </children>

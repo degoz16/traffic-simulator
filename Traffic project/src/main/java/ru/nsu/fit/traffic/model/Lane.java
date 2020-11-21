@@ -1,6 +1,7 @@
 package ru.nsu.fit.traffic.model;
 
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
+import ru.nsu.fit.traffic.model.trafficsign.SignType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ public class Lane {
 
     private List<RoadSign> signs;
 
-    public Lane(){
+    public Lane() {
         signs = new ArrayList<>();
     }
 
@@ -24,6 +25,8 @@ public class Lane {
     }
 
     public void addSign(RoadSign sign) {
+        //Не больше одного знака определенного типа
+        signs.removeIf(s -> s.getSignType() == sign.getSignType());
         signs.add(sign);
     }
 

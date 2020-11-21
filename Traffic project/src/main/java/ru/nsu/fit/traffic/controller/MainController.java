@@ -5,7 +5,6 @@ import java.util.function.UnaryOperator;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
@@ -16,9 +15,12 @@ import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.model.*;
-import ru.nsu.fit.traffic.model.logic.EditOperation;
-import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
+import ru.nsu.fit.traffic.model.logic.*;
 import ru.nsu.fit.traffic.controller.painters.ObjectPainter;
+import ru.nsu.fit.traffic.model.trafficsign.MainRoadSign;
+import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
+import ru.nsu.fit.traffic.model.trafficsign.SignType;
+import ru.nsu.fit.traffic.model.trafficsign.SpeedLimitSign;
 
 /**
  * Контроллер основной сцены, на которой располагаются все остальные.
@@ -35,7 +37,7 @@ public class MainController {
     public AnchorPane mainPane;
     @FXML
     public Pane numberOfLanesPane,
-                roadSignPane;
+            roadSignPane;
     @FXML       //Settings number of lanes on creation
     public TextField backLanesTextField,
             forwardLanesTextField,
@@ -51,6 +53,8 @@ public class MainController {
     private Road lastRoadClicked;
     private final TrafficMap currMap = new TrafficMap();
     private Stage stage;
+    private RoadSign currSign;
+
     //private boolean shapeChanged = false;
     private final UpdateListener updateListener = (ListenerAction action) -> {
         switch (action) {
@@ -80,7 +84,8 @@ public class MainController {
         roadSettingsPane.setVisible(false);
         roadSignPane.setVisible(false);
         //roadBuilder = new RoadBuilder(currMap, LANE_SIZE);
-        speedComboBox.setItems(FXCollections.observableArrayList(20,30,40,50,60,70,80,90,100,110,120));
+        speedComboBox.setItems(FXCollections.observableArrayList(20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120));
+        speedComboBox.setValue(60);
 
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String input = change.getText();
@@ -115,6 +120,10 @@ public class MainController {
                             editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
                             updateMapView();
                         }
+                        case SIGN_CREATION -> {
+                            editOperationsManager.setCurrentOperation(EditOperation.NONE);
+                            roadSignPane.setVisible(false);
+                        }
                     }
                     //todo другие операции
                 }
@@ -144,14 +153,14 @@ public class MainController {
     public void roadButtonClicked() {
         roadSignPane.setVisible(false);
         switch (editOperationsManager.getCurrentOperation()) {
-            case NONE -> {
-                numberOfLanesPane.setVisible(true);
-                editOperationsManager.setCurrentOperation(EditOperation.ROAD_CREATION);
-            }
             case ROAD_CREATION -> {
                 numberOfLanesPane.setVisible(false);
                 editOperationsManager.resetLastNode();
                 editOperationsManager.setCurrentOperation(EditOperation.NONE);
+            }
+            default -> {
+                numberOfLanesPane.setVisible(true);
+                editOperationsManager.setCurrentOperation(EditOperation.ROAD_CREATION);
             }
         }
     }
@@ -173,10 +182,18 @@ public class MainController {
 
     @FXML
     public void roadSignButtonClicked() {
-        roadSignPane.setVisible(true);
-        roadSettingsPane.setVisible(false);
-        numberOfLanesPane.setVisible(false);
-        editOperationsManager.setCurrentOperation(EditOperation.NONE);
+        switch (editOperationsManager.getCurrentOperation()) {
+            case SIGN_CREATION:
+                roadSignPane.setVisible(false);
+                editOperationsManager.setCurrentOperation(EditOperation.NONE);
+                break;
+            default:
+                roadSignPane.setVisible(true);
+                roadSettingsPane.setVisible(false);
+                numberOfLanesPane.setVisible(false);
+                editOperationsManager.setCurrentOperation(EditOperation.SIGN_CREATION);
+                break;
+        }
     }
 
     @FXML
@@ -209,8 +226,7 @@ public class MainController {
                 for (int i = newLanesNum; i < oldLanesNum; i++) {
                     lastRoadClicked.removeLane(i);
                 }
-            }
-            else {
+            } else {
                 for (int i = oldLanesNum; i < newLanesNum; i++) {
                     lastRoadClicked.addLane(i);
                 }
@@ -241,6 +257,16 @@ public class MainController {
     }
 
 
+    @FXML
+    public void setSpeedSign() {
+        currSign = new SpeedLimitSign(speedComboBox.getValue());
+    }
+
+    @FXML
+    public void setMainRoad() {
+        currSign = new MainRoadSign();
+    }
+
     /**
      * Метод отрисовки текущего состояния карты
      */
@@ -248,7 +274,9 @@ public class MainController {
         Platform.runLater(() -> {
             mainPane.getChildren().clear();
             roadSettingsPane.setVisible(false);
-            roadSignPane.setVisible(false);
+            if (editOperationsManager.getCurrentOperation() != EditOperation.SIGN_CREATION) {
+                roadSignPane.setVisible(false);
+            }
 
             currMap.forEachRoads(road -> {
                 List<List<Shape>> roadShape = objectPainter.paintRoad(road);
@@ -277,6 +305,15 @@ public class MainController {
                                             roadSettingsPane.setLayoutX(event.getX());
                                             roadSettingsPane.setLayoutY(event.getY());
                                             lanesTextField.setText(String.valueOf(road.getLanesNum()));
+                                        }
+                                        case SIGN_CREATION -> {
+                                            RoadSign addedSign = currSign.getCopySign();
+                                            lane.addSign(addedSign);
+                                            if (currSign.getSignType() == SignType.MAIN_ROAD)
+                                                for (int k = 0; k < road.getLanesNum(); ++k) {
+                                                    road.getLane(k).addSign(addedSign);
+                                                }
+                                            updateMapView();
                                         }
                                     }
                                 }

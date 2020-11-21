@@ -2,5 +2,6 @@ package ru.nsu.fit.traffic.model.logic;
 
 public enum EditOperation {
     NONE,
-    ROAD_CREATION
+    ROAD_CREATION,
+    SIGN_CREATION
 }
