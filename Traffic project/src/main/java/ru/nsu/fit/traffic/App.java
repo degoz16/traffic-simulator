@@ -24,8 +24,8 @@ public class App extends Application {
     MainController controller = loader.getController();
     controller.setPrimaryStage(stage);
 
-    stage.setMinWidth(680);
-    stage.setMinHeight(150);
+    stage.setMinWidth(800);
+    stage.setMinHeight(520);
   }
 
   @Override

@@ -6,12 +6,18 @@ import java.util.function.UnaryOperator;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Bounds;
+import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.model.*;
@@ -32,28 +38,38 @@ public class MainController {
     private final int POINT_SIZE = 1;
 
     @FXML
-    public ScrollPane mainScrollPane;
+    private ScrollPane mainScrollPane;
     @FXML
-    public AnchorPane mainPane;
+    private Pane mainPane;
     @FXML
-    public Pane numberOfLanesPane,
-            roadSignPane;
-    @FXML       //Settings number of lanes on creation
-    public TextField backLanesTextField,
-            forwardLanesTextField,
+    private AnchorPane basePane;
+    @FXML
+    private Pane settingsWindowsPane;
+    @FXML
+    private Pane numberOfLanesPane;
+    @FXML
+    private Pane roadSignPane;
+    @FXML
+    private TextField backLanesTextField;
+    @FXML
+    private TextField forwardLanesTextField;
     //Settings number of lanes on road menu
-    lanesTextField;
-
     @FXML
-    public ComboBox<Integer> speedComboBox;
-
+    private TextField lanesTextField;
     @FXML
-    public Pane roadSettingsPane;
+    private ComboBox<Integer> speedComboBox;
+    @FXML
+    private Pane roadSettingsPane;
+    @FXML
+    private Group scrollPaneContent;
+    @FXML
+    private VBox centeredField;
 
-    private Road lastRoadClicked;
+    private Road lastRoadClicked = null;
     private final TrafficMap currMap = new TrafficMap();
     private Stage stage;
     private RoadSign currSign;
+    private double scaleValue = 1;
 
     //private boolean shapeChanged = false;
     private final UpdateListener updateListener = (ListenerAction action) -> {
@@ -83,9 +99,13 @@ public class MainController {
         numberOfLanesPane.setVisible(false);
         roadSettingsPane.setVisible(false);
         roadSignPane.setVisible(false);
-        //roadBuilder = new RoadBuilder(currMap, LANE_SIZE);
         speedComboBox.setItems(FXCollections.observableArrayList(20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120));
         speedComboBox.setValue(60);
+
+        centeredField.setOnScroll(event -> {
+            event.consume();
+            zoom(event);
+        });
 
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String input = change.getText();
@@ -113,16 +133,20 @@ public class MainController {
         mainPane.setOnMouseClicked(event -> {
             switch (event.getButton()) {
                 case PRIMARY -> {
-                    event.consume();
                     System.out.println("MAIN PANE CLICK");
                     switch (editOperationsManager.getCurrentOperation()) {
                         case ROAD_CREATION -> {
+                            event.consume();
                             editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
                             updateMapView();
                         }
                         case SIGN_CREATION -> {
+                            event.consume();
                             editOperationsManager.setCurrentOperation(EditOperation.NONE);
                             roadSignPane.setVisible(false);
+                        }
+                        case NONE -> {
+                            roadSettingsPane.setVisible(false);
                         }
                     }
                     //todo другие операции
@@ -130,8 +154,13 @@ public class MainController {
                 case SECONDARY -> stopOperation();
                 //todo другие функции
             }
-
         });
+
+        basePane.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
+            roadSettingsPane.setLayoutX(event.getX());
+            roadSettingsPane.setLayoutY(event.getY());
+        });
+
     }
 
     @FXML
@@ -292,25 +321,24 @@ public class MainController {
                             Lane lane = road.getLane(finalI);
                             switch (event.getButton()) {
                                 case PRIMARY -> {
-                                    event.consume();
                                     //Point2D parentCoords = shape.localToParent(event.getX(), event.getY());
                                     switch (editOperationsManager.getCurrentOperation()) {
                                         case ROAD_CREATION -> {
+                                            event.consume();
                                             editOperationsManager.buildRoadOnRoad(event.getX(), event.getY(), road);
                                             updateMapView();
                                         }
                                         case NONE -> {
+                                            event.consume();
                                             lastRoadClicked = road;
-                                            roadSettingsPane.setVisible(true);
-                                            roadSettingsPane.setLayoutX(event.getX());
-                                            roadSettingsPane.setLayoutY(event.getY());
                                             lanesTextField.setText(String.valueOf(road.getLanesNum()));
+                                            roadSettingsPane.setVisible(true);
                                         }
                                         case SIGN_CREATION -> {
                                             RoadSign addedSign = currSign.getCopySign();
                                             lane.addSign(addedSign);
                                             if (currSign.getSignType() == SignType.MAIN_ROAD)
-                                                for (int k = 0; k < road.getLanesNum(); ++k) {
+                                                for (int k = 0; k < road.getLanesNum(); k++) {
                                                     road.getLane(k).addSign(addedSign);
                                                 }
                                             updateMapView();
@@ -344,7 +372,36 @@ public class MainController {
                 });
                 mainPane.getChildren().add(nodeShape);
             });
-            mainPane.getChildren().add(roadSettingsPane);
         });
+    }
+
+    private void zoom(ScrollEvent event) {
+        double zoomFactor = Math.exp(event.getDeltaY() * 0.001);
+
+        Bounds innerBounds = scrollPaneContent.getLayoutBounds();
+        Bounds viewportBounds = mainScrollPane.getViewportBounds();
+
+        double valX = mainScrollPane.getHvalue() * (innerBounds.getWidth() - viewportBounds.getWidth());
+        double valY = mainScrollPane.getVvalue() * (innerBounds.getHeight() - viewportBounds.getHeight());
+
+        scaleValue = scaleValue * zoomFactor;
+        mainPane.setScaleX(scaleValue);
+        mainPane.setScaleY(scaleValue);
+        mainScrollPane.layout();
+
+        Point2D posInZoomTarget = mainPane
+                .parentToLocal(scrollPaneContent
+                        .parentToLocal(new Point2D(
+                                event.getX(),
+                                event.getY())));
+
+        // calculate adjustment of scroll position (pixels)
+        Point2D adjustment = mainPane.getLocalToParentTransform().deltaTransform(posInZoomTarget.multiply(zoomFactor - 1));
+
+        // convert back to [0, 1] range
+        // (too large/small values are automatically corrected by ScrollPane)
+        Bounds updatedInnerBounds = scrollPaneContent.getBoundsInLocal();
+        mainScrollPane.setHvalue((valX + adjustment.getX()) / (updatedInnerBounds.getWidth() - viewportBounds.getWidth()));
+        mainScrollPane.setVvalue((valY + adjustment.getY()) / (updatedInnerBounds.getHeight() - viewportBounds.getHeight()));
     }
 }
