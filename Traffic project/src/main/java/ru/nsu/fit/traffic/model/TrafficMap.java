@@ -5,8 +5,18 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class TrafficMap {
-  private List<Node> nodes = new ArrayList<>();
-  private List<Road> roads = new ArrayList<>();
+  private List<Node> nodes;
+  private List<Road> roads;
+
+  public TrafficMap() {
+    roads = new ArrayList<>();
+    nodes = new ArrayList<>();
+  }
+
+  public TrafficMap(List<Node> nodes, List<Road> roads) {
+    this.nodes = nodes;
+    this.roads = roads;
+  }
 
   public void addNode(Node node) {
     nodes.add(node);
@@ -38,5 +48,13 @@ public class TrafficMap {
 
   public int indexOfRoad(Road road) {
     return roads.indexOf(road);
+  }
+
+  public void setNodes(List<Node> nodes) {
+    this.nodes = nodes;
+  }
+
+  public void setRoads(List<Road> roads) {
+    this.roads = roads;
   }
 }

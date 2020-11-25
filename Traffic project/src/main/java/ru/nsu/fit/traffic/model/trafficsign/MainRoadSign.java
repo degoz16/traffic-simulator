@@ -12,7 +12,7 @@ public class MainRoadSign implements RoadSign {
     @Override
     public Map<String, String> getSettings() {
         Map<String, String> map = new TreeMap<>();
-        map.put("type", "mainRoad");
+        map.put("type", getSignType().toString());
         return map;
     }
 

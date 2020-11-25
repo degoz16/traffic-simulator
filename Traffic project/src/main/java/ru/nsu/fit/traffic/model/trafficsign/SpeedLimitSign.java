@@ -10,6 +10,8 @@ public class SpeedLimitSign implements RoadSign {
         this.speedLimit = speedLimit;
     }
 
+    public SpeedLimitSign(){}
+
     @Override
     public SignType getSignType() {
         return SignType.SPEED_LIMIT;
@@ -18,7 +20,7 @@ public class SpeedLimitSign implements RoadSign {
     @Override
     public Map<String, String> getSettings() {
         Map<String, String> map = new TreeMap<>();
-        map.put("type", "speed");
+        map.put("type", getSignType().toString());
         map.put("limit", String.valueOf(speedLimit));
         return map;
     }

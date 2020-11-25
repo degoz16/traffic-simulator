@@ -20,4 +20,28 @@ public class NodeJsonStruct {
         this.isSpawner = isSpawner;
         this.trafficLight = trafficLight;
     }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public List<Integer> getRoadsIn() {
+        return roadsIn;
+    }
+
+    public List<Integer> getRoadsOut() {
+        return roadsOut;
+    }
+
+    public boolean isSpawner() {
+        return isSpawner;
+    }
+
+    public TrafficLight getTrafficLight() {
+        return trafficLight;
+    }
 }
