@@ -62,7 +62,7 @@ public class MainController {
     @FXML
     private AnchorPane basePane;
     @FXML
-    private Pane settingsWindowsPane;
+    private Pane roadSettingsHelperPane;
     @FXML
     private Pane numberOfLanesPane;
     @FXML
@@ -188,14 +188,13 @@ public class MainController {
         });
 
         basePane.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            if (event.getSceneX() + roadSignPane.getWidth() > mainScrollPane.getWidth() ||
-                    event.getSceneY() + roadSignPane.getHeight() > mainScrollPane.getHeight()) {
-                roadSettingsPane.setLayoutX(event.getX() - roadSignPane.getWidth());
-                roadSettingsPane.setLayoutY(event.getY() - roadSignPane.getHeight());
-            } else {
-                roadSettingsPane.setLayoutX(event.getX());
-                roadSettingsPane.setLayoutY(event.getY());
-            }
+            roadSettingsPane.setVisible(false);
+            roadSettingsHelperPane.setLayoutX(Math.min(
+                    event.getX(),
+                    basePane.getWidth() - roadSettingsPane.getWidth()));
+            roadSettingsHelperPane.setLayoutY(Math.min(
+                    event.getY(),
+                    basePane.getHeight() - roadSettingsPane.getHeight()));
         });
 
     }
