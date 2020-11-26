@@ -62,7 +62,7 @@ public class MainController {
     @FXML
     private AnchorPane basePane;
     @FXML
-    private Group settingsWindowsPane;
+    private Pane settingsWindowsPane;
     @FXML
     private Pane numberOfLanesPane;
     @FXML
@@ -188,8 +188,9 @@ public class MainController {
         });
 
         basePane.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            roadSettingsPane.setLayoutX(event.getX());
-            roadSettingsPane.setLayoutY(event.getY());
+            settingsWindowsPane.setLayoutX(event.getX());
+            settingsWindowsPane.setLayoutY(event.getY());
+            roadSettingsPane.setVisible(false);
         });
 
     }
