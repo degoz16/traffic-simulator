@@ -46,7 +46,7 @@ public class MainController {
     private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
     @FXML
     private ScrollPane mainScrollPane;
-   
+
     //TODO FOR THE PROJECT CONTROLLER
     @FXML
     private MenuItem saveAs;
@@ -71,7 +71,7 @@ public class MainController {
     private TextField backLanesTextField;
     @FXML
     private TextField forwardLanesTextField;
-  
+
     //Settings number of lanes on road menu
     @FXML
     private TextField lanesTextField;
@@ -113,7 +113,7 @@ public class MainController {
     @FXML
     public void initialize() {
         saveAs.setOnAction(projectController.saveAsHandler());
-      
+
         newProject.setOnAction(event -> {
             event.consume();
             projectController.newProjectHandler();
@@ -188,9 +188,14 @@ public class MainController {
         });
 
         basePane.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            settingsWindowsPane.setLayoutX(event.getX());
-            settingsWindowsPane.setLayoutY(event.getY());
-            roadSettingsPane.setVisible(false);
+            if (event.getSceneX() + roadSignPane.getWidth() > mainScrollPane.getWidth() ||
+                    event.getSceneY() + roadSignPane.getHeight() > mainScrollPane.getHeight()) {
+                roadSettingsPane.setLayoutX(event.getX() - roadSignPane.getWidth());
+                roadSettingsPane.setLayoutY(event.getY() - roadSignPane.getHeight());
+            } else {
+                roadSettingsPane.setLayoutX(event.getX());
+                roadSettingsPane.setLayoutY(event.getY());
+            }
         });
 
     }
