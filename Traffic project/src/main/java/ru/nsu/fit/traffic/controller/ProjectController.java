@@ -64,7 +64,7 @@ public class ProjectController {
 
   void newProjectHandler() {
     File file =
-        new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНИТЬ/НЕТ
+        new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
     saveCurrentProject(file);
     map.setRoads(new ArrayList<>());
     map.setNodes(new ArrayList<>());
@@ -84,7 +84,7 @@ public class ProjectController {
         Reader fileReader = new FileReader(file);
         MapJsonStruct mapJsonStruct = gson.fromJson(fileReader, MapJsonStruct.class);
         File oldFile =
-            new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНИТЬ/НЕТ
+            new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
         saveCurrentProject(oldFile);
         mapJsonStruct.toTrafficMap(map);
         pathToProjectDir = file.getAbsolutePath();

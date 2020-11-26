@@ -46,7 +46,6 @@ public class MainController {
     private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
     @FXML
     private ScrollPane mainScrollPane;
-    @FXML
    
     //TODO FOR THE PROJECT CONTROLLER
     @FXML
@@ -58,12 +57,12 @@ public class MainController {
     @FXML
     private MenuItem save;
 
-
+    @FXML
     private Pane mainPane;
     @FXML
     private AnchorPane basePane;
     @FXML
-    private Pane settingsWindowsPane;
+    private Group settingsWindowsPane;
     @FXML
     private Pane numberOfLanesPane;
     @FXML
@@ -86,7 +85,6 @@ public class MainController {
     private VBox centeredField;
 
     private Road lastRoadClicked = null;
-    private final TrafficMap currMap = new TrafficMap();
     private Stage stage;
     private RoadSign currSign;
     private double scaleValue = 1;
@@ -136,8 +134,8 @@ public class MainController {
         speedComboBox.setValue(60);
 
         centeredField.setOnScroll(event -> {
-            event.consume();
             zoom(event);
+            event.consume();
         });
 
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {

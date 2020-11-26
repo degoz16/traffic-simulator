@@ -26,18 +26,18 @@
             <menus>
                 <Menu mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="New" fx:id="newProject"/>
-                        <MenuItem mnemonicParsing="false" text="Open…" fx:id="openProject"/>
-                        <Menu mnemonicParsing="false" text="Open Recent"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="Close"/>
-                        <MenuItem mnemonicParsing="false" text="Save" fx:id="save"/>
-                        <MenuItem mnemonicParsing="false" text="Save As…" fx:id="saveAs"/>
-                        <MenuItem mnemonicParsing="false" text="Revert"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="Preferences…"/>
-                        <SeparatorMenuItem mnemonicParsing="false"/>
-                        <MenuItem mnemonicParsing="false" text="Quit"/>
+                        <MenuItem fx:id="newProject" mnemonicParsing="false" text="New" />
+                        <MenuItem fx:id="openProject" mnemonicParsing="false" text="Open…" />
+                        <Menu mnemonicParsing="false" text="Open Recent" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem fx:id="save" mnemonicParsing="false" text="Save" />
+                        <MenuItem fx:id="saveAs" mnemonicParsing="false" text="Save As…" />
+                        <MenuItem mnemonicParsing="false" text="Revert" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Preferences…" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="Quit" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Edit">
@@ -157,7 +157,7 @@
                         </AnchorPane>
                     </children>
                 </AnchorPane>
-            <Pane fx:id="settingsWindowsPane" maxHeight="0.0" maxWidth="0.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" stylesheets="@MainViewStyleSheets/backgroundMenu.css" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <Group fx:id="settingsWindowsPane">
                <children>
                           <AnchorPane fx:id="roadSettingsPane" maxHeight="100.0" maxWidth="100.0" minHeight="82.0" minWidth="100.0" prefHeight="82.0" prefWidth="100.0" stylesheets="@MainViewStyleSheets/middle_grey.css">
                               <children>
@@ -188,7 +188,7 @@
                               </children>
                           </AnchorPane>
                </children>
-            </Pane>
+            </Group>
             </children>
         </AnchorPane>
     </children>
