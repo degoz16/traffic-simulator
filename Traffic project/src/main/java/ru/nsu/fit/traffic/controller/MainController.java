@@ -2,7 +2,6 @@ package ru.nsu.fit.traffic.controller;
 
 import java.util.List;
 import java.util.function.UnaryOperator;
-
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -10,6 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -20,9 +20,14 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
-import ru.nsu.fit.traffic.model.*;
-import ru.nsu.fit.traffic.model.logic.*;
 import ru.nsu.fit.traffic.controller.painters.ObjectPainter;
+import ru.nsu.fit.traffic.model.Lane;
+import ru.nsu.fit.traffic.model.ListenerAction;
+import ru.nsu.fit.traffic.model.Road;
+import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.UpdateListener;
+import ru.nsu.fit.traffic.model.logic.EditOperation;
+import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.trafficsign.MainRoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.SignType;
@@ -36,10 +41,24 @@ public class MainController {
     private final int NODE_SIZE = 10;
     private final int LANE_SIZE = 10;
     private final int POINT_SIZE = 1;
-
+    private final TrafficMap currMap = new TrafficMap();
+    private final EditOperationsManager editOperationsManager = new EditOperationsManager(currMap);
+    private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
     @FXML
     private ScrollPane mainScrollPane;
     @FXML
+   
+    //TODO FOR THE PROJECT CONTROLLER
+    @FXML
+    private MenuItem saveAs;
+    @FXML
+    private MenuItem newProject;
+    @FXML
+    private MenuItem openProject;
+    @FXML
+    private MenuItem save;
+
+
     private Pane mainPane;
     @FXML
     private AnchorPane basePane;
@@ -53,6 +72,7 @@ public class MainController {
     private TextField backLanesTextField;
     @FXML
     private TextField forwardLanesTextField;
+  
     //Settings number of lanes on road menu
     @FXML
     private TextField lanesTextField;
@@ -71,16 +91,14 @@ public class MainController {
     private RoadSign currSign;
     private double scaleValue = 1;
 
+
     //private boolean shapeChanged = false;
     private final UpdateListener updateListener = (ListenerAction action) -> {
         switch (action) {
             case MAP_UPDATE -> updateMapView();
         }
     };
-
-    private final EditOperationsManager editOperationsManager = new EditOperationsManager(currMap);
-    private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
-
+    private ProjectController projectController = new ProjectController(stage, currMap);
     public void setPrimaryStage(Stage stage) {
         this.stage = stage;
     }
@@ -96,6 +114,21 @@ public class MainController {
      */
     @FXML
     public void initialize() {
+        saveAs.setOnAction(projectController.saveAsHandler());
+      
+        newProject.setOnAction(event -> {
+            event.consume();
+            projectController.newProjectHandler();
+            updateMapView();
+        });
+        openProject.setOnAction(event-> {
+            event.consume();
+            projectController.openProjectHandler();
+            updateMapView();
+        });
+        save.setOnAction(projectController.saveHandler());
+
+
         numberOfLanesPane.setVisible(false);
         roadSettingsPane.setVisible(false);
         roadSignPane.setVisible(false);

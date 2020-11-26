@@ -9,4 +9,8 @@ public class LaneJsonStruct {
     public LaneJsonStruct(List<Map<String, String>> signs) {
         this.signs = signs;
     }
+
+    public List<Map<String, String>> getSigns() {
+        return signs;
+    }
 }
