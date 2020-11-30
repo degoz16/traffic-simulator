@@ -22,7 +22,7 @@ public class App extends Application {
     stage.show();
 
     MainController controller = loader.getController();
-    controller.setPrimaryStage(stage);
+    controller.setStage(stage);
 
     stage.setMinWidth(800);
     stage.setMinHeight(520);

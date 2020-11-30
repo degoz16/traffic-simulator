@@ -9,7 +9,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -40,65 +39,49 @@ public class MainController {
 
     private final int NODE_SIZE = 10;
     private final int LANE_SIZE = 10;
-    private final int POINT_SIZE = 1;
     private final TrafficMap currMap = new TrafficMap();
     private final EditOperationsManager editOperationsManager = new EditOperationsManager(currMap);
     private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
-    @FXML
-    private ScrollPane mainScrollPane;
 
-    //TODO FOR THE PROJECT CONTROLLER
-    @FXML
-    private MenuItem saveAs;
-    @FXML
-    private MenuItem newProject;
-    @FXML
-    private MenuItem openProject;
-    @FXML
-    private MenuItem save;
+    @FXML private ScrollPane mainScrollPane;
+    @FXML private Pane mainPane;
+    @FXML private AnchorPane basePane;
+    @FXML private Pane numberOfLanesPane;
+    @FXML private Pane roadSignPane;
+    @FXML private TextField backLanesTextField;
+    @FXML private TextField forwardLanesTextField;
+    @FXML private ComboBox<Integer> speedComboBox;
+    @FXML private Group scrollPaneContent;
+    @FXML private VBox centeredField;
 
-    @FXML
-    private Pane mainPane;
-    @FXML
-    private AnchorPane basePane;
-    @FXML
-    private Pane roadSettingsHelperPane;
-    @FXML
-    private Pane numberOfLanesPane;
-    @FXML
-    private Pane roadSignPane;
-    @FXML
-    private TextField backLanesTextField;
-    @FXML
-    private TextField forwardLanesTextField;
-
-    //Settings number of lanes on road menu
-    @FXML
-    private TextField lanesTextField;
-    @FXML
-    private ComboBox<Integer> speedComboBox;
-    @FXML
-    private Pane roadSettingsPane;
-    @FXML
-    private Group scrollPaneContent;
-    @FXML
-    private VBox centeredField;
+    @FXML private MenuBarController menuBarController;
+    @FXML private RoadSettingsController roadSettingsController;
 
     private Road lastRoadClicked = null;
     private Stage stage;
     private RoadSign currSign;
     private double scaleValue = 1;
 
-
-    //private boolean shapeChanged = false;
     private final UpdateListener updateListener = (ListenerAction action) -> {
         switch (action) {
             case MAP_UPDATE -> updateMapView();
         }
     };
-    private ProjectController projectController = new ProjectController(stage, currMap);
-    public void setPrimaryStage(Stage stage) {
+
+    public Road getLastRoadClicked() {
+        return lastRoadClicked;
+    }
+
+    public TrafficMap getCurrMap() {
+        return currMap;
+    }
+
+    public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public Stage getStage() {
+        return stage;
     }
 
     private void stopOperation() {
@@ -112,23 +95,14 @@ public class MainController {
      */
     @FXML
     public void initialize() {
-        saveAs.setOnAction(projectController.saveAsHandler());
+        menuBarController.setMainController(this);
+        menuBarController.setMap(currMap);
+        menuBarController.setStage(stage);
 
-        newProject.setOnAction(event -> {
-            event.consume();
-            projectController.newProjectHandler();
-            updateMapView();
-        });
-        openProject.setOnAction(event-> {
-            event.consume();
-            projectController.openProjectHandler();
-            updateMapView();
-        });
-        save.setOnAction(projectController.saveHandler());
-
+        roadSettingsController.setMainController(this);
 
         numberOfLanesPane.setVisible(false);
-        roadSettingsPane.setVisible(false);
+        roadSettingsController.getRoadSettingsPane().setVisible(false);
         roadSignPane.setVisible(false);
         speedComboBox.setItems(FXCollections.observableArrayList(20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120));
         speedComboBox.setValue(60);
@@ -153,8 +127,8 @@ public class MainController {
         backLanesTextField.textProperty().addListener((observable, oldValue, newValue) ->
                 editOperationsManager.setLanesNumRight(Integer.parseInt(newValue)));
 
-        lanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
-        lanesTextField.setText("1");
+        roadSettingsController.getLanesTextField().setTextFormatter(new TextFormatter<String>(integerFilter));
+        roadSettingsController.getLanesTextField().setText("1");
 
         forwardLanesTextField.setTextFormatter(new TextFormatter<String>(integerFilter));
         forwardLanesTextField.setText("1");
@@ -177,7 +151,7 @@ public class MainController {
                             roadSignPane.setVisible(false);
                         }
                         case NONE -> {
-                            roadSettingsPane.setVisible(false);
+                            roadSettingsController.getRoadSettingsPane().setVisible(false);
                         }
                     }
                     //todo другие операции
@@ -188,13 +162,13 @@ public class MainController {
         });
 
         basePane.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            roadSettingsPane.setVisible(false);
-            roadSettingsHelperPane.setLayoutX(Math.min(
+            roadSettingsController.getRoadSettingsPane().setVisible(false);
+            roadSettingsController.getRoadSettingsHelperPane().setLayoutX(Math.min(
                     event.getX(),
-                    basePane.getWidth() - roadSettingsPane.getWidth()));
-            roadSettingsHelperPane.setLayoutY(Math.min(
+                    basePane.getWidth() - roadSettingsController.getRoadSettingsPane().getWidth()));
+            roadSettingsController.getRoadSettingsHelperPane().setLayoutY(Math.min(
                     event.getY(),
-                    basePane.getHeight() - roadSettingsPane.getHeight()));
+                    basePane.getHeight() - roadSettingsController.getRoadSettingsPane().getHeight()));
         });
 
     }
@@ -254,7 +228,7 @@ public class MainController {
                 break;
             default:
                 roadSignPane.setVisible(true);
-                roadSettingsPane.setVisible(false);
+                roadSettingsController.getRoadSettingsPane().setVisible(false);
                 numberOfLanesPane.setVisible(false);
                 editOperationsManager.setCurrentOperation(EditOperation.SIGN_CREATION);
                 break;
@@ -278,51 +252,6 @@ public class MainController {
 
 
     @FXML
-    public void closeRoadSettings() {
-        roadSettingsPane.setVisible(false);
-    }
-
-    @FXML
-    public void confirmRoadSettings() {
-        int oldLanesNum = lastRoadClicked.getLanesNum();
-        int newLanesNum = Integer.parseInt(lanesTextField.getText());
-        if (newLanesNum > 0) {
-            if (newLanesNum < oldLanesNum) {
-                for (int i = newLanesNum; i < oldLanesNum; i++) {
-                    lastRoadClicked.removeLane(i);
-                }
-            } else {
-                for (int i = oldLanesNum; i < newLanesNum; i++) {
-                    lastRoadClicked.addLane(i);
-                }
-            }
-            updateMapView();
-        } else {
-            deleteRoad();
-        }
-    }
-
-    @FXML
-    public void deleteRoad() {
-        if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
-            if (lastRoadClicked.getFrom().getRoadsOutNum() <= 1) {
-                currMap.removeNode(lastRoadClicked.getFrom());
-            }
-            if (lastRoadClicked.getTo().getRoadsInNum() <= 1) {
-                currMap.removeNode(lastRoadClicked.getTo());
-            }
-            lastRoadClicked.getBackRoad().disconnect();
-            currMap.removeRoad(lastRoadClicked.getBackRoad());
-            lastRoadClicked.disconnect();
-            currMap.removeRoad(lastRoadClicked);
-        } else {
-            lastRoadClicked.clearLanes();
-        }
-        updateMapView();
-    }
-
-
-    @FXML
     public void setSpeedSign() {
         currSign = new SpeedLimitSign(speedComboBox.getValue());
     }
@@ -335,10 +264,10 @@ public class MainController {
     /**
      * Метод отрисовки текущего состояния карты
      */
-    private void updateMapView() {
+    public void updateMapView() {
         Platform.runLater(() -> {
             mainPane.getChildren().clear();
-            roadSettingsPane.setVisible(false);
+            roadSettingsController.getRoadSettingsPane().setVisible(false);
             if (editOperationsManager.getCurrentOperation() != EditOperation.SIGN_CREATION) {
                 roadSignPane.setVisible(false);
             }
@@ -367,8 +296,8 @@ public class MainController {
                                         case NONE -> {
                                             event.consume();
                                             lastRoadClicked = road;
-                                            lanesTextField.setText(String.valueOf(road.getLanesNum()));
-                                            roadSettingsPane.setVisible(true);
+                                            roadSettingsController.getLanesTextField().setText(String.valueOf(road.getLanesNum()));
+                                            roadSettingsController.getRoadSettingsPane().setVisible(true);
                                         }
                                         case SIGN_CREATION -> {
                                             RoadSign addedSign = currSign.getCopySign();
