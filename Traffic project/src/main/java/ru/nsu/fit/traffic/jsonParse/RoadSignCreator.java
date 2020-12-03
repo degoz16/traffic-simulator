@@ -15,9 +15,11 @@ class RoadSignCreator {
       case MAIN_ROAD:
         sign = new MainRoadSign();
         sign.setSettings(settings);
+        break;
       case SPEED_LIMIT:
         sign = new SpeedLimitSign();
         sign.setSettings(settings);
+        break;
     }
     if (sign == null) {
       throw new IllegalArgumentException("Wrong settings type");
