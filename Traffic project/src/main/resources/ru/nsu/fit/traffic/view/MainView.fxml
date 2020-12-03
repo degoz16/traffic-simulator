@@ -120,7 +120,7 @@
                </children>
             </Group>
             <fx:include fx:id="roadSettings" source="RoadSettingsView.fxml" />
-            <fx:include fx:id="trafficLightSettings" source="TrafficLigthSettings.fxml" />
+            <fx:include fx:id="trafficLight" source="TrafficLigthSettings.fxml" />
          </children>
       </AnchorPane>
     </children>

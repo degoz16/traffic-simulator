@@ -20,11 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.controller.painters.ObjectPainter;
-import ru.nsu.fit.traffic.model.Lane;
-import ru.nsu.fit.traffic.model.ListenerAction;
-import ru.nsu.fit.traffic.model.Road;
-import ru.nsu.fit.traffic.model.TrafficMap;
-import ru.nsu.fit.traffic.model.UpdateListener;
+import ru.nsu.fit.traffic.model.*;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.trafficsign.MainRoadSign;
@@ -57,7 +53,9 @@ public class MainController {
     @FXML private MenuBarController menuBarController;
     @FXML private RoadSettingsController roadSettingsController;
 
-    private Road lastRoadClicked = null;
+    public Road lastRoadClicked = null;
+    public Node lastNodeClicked = null;
+
     private Stage stage;
     private RoadSign currSign;
     private double scaleValue = 1;
@@ -104,6 +102,7 @@ public class MainController {
 
         numberOfLanesPane.setVisible(false);
         roadSettingsController.getRoadSettingsPane().setVisible(false);
+        trafficLightController.getTrafficLightPane().setVisible(false);
         roadSignPane.setVisible(false);
         speedComboBox.setItems(FXCollections.observableArrayList(20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120));
         speedComboBox.setValue(60);
@@ -276,6 +275,7 @@ public class MainController {
         Platform.runLater(() -> {
             mainPane.getChildren().clear();
             roadSettingsController.getRoadSettingsPane().setVisible(false);
+            trafficLightController.getTrafficLightPane().setVisible(false);
             if (editOperationsManager.getCurrentOperation() != EditOperation.SIGN_CREATION) {
                 roadSignPane.setVisible(false);
             }
@@ -329,6 +329,7 @@ public class MainController {
                 Shape nodeShape = objectPainter.paintNode(node);
                 nodeShape.setOnMouseClicked(event -> {
                     System.out.println("NODE CLICK");
+                    lastNodeClicked = node;
                     //Node nodeRef = node;
                     switch (event.getButton()) {
                         case PRIMARY -> {
@@ -339,7 +340,9 @@ public class MainController {
                                     updateMapView();
                                 }
                                 case TRAFFIC_LIGHT_CREATION -> {
-
+                                    trafficLightController.getTrafficLightPane().setVisible(true);
+                                    trafficLightController.getTrafficLightPane().setLayoutX(event.getX());
+                                    trafficLightController.getTrafficLightPane().setLayoutY(event.getY());
                                 }
                             }
 
