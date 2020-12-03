@@ -53,7 +53,7 @@ public class MainController {
     @FXML private ComboBox<Integer> speedComboBox;
     @FXML private Group scrollPaneContent;
     @FXML private VBox centeredField;
-
+    @FXML private TrafficLightController trafficLightController;
     @FXML private MenuBarController menuBarController;
     @FXML private RoadSettingsController roadSettingsController;
 
@@ -100,6 +100,7 @@ public class MainController {
         menuBarController.setStage(stage);
 
         roadSettingsController.setMainController(this);
+        trafficLightController.setMainController(this);
 
         numberOfLanesPane.setVisible(false);
         roadSettingsController.getRoadSettingsPane().setVisible(false);
@@ -206,7 +207,14 @@ public class MainController {
 
     @FXML
     public void trafficLightButtonClicked() {
-        System.out.println("светофор");
+        switch(editOperationsManager.getCurrentOperation()){
+            case TRAFFIC_LIGHT_CREATION -> {
+                editOperationsManager.setCurrentOperation(EditOperation.NONE);
+            }
+            default -> {
+                editOperationsManager.setCurrentOperation(EditOperation.TRAFFIC_LIGHT_CREATION);
+            }
+        }
     }
 
     @FXML
@@ -330,7 +338,11 @@ public class MainController {
                                     editOperationsManager.buildRoadOnNode(node);
                                     updateMapView();
                                 }
+                                case TRAFFIC_LIGHT_CREATION -> {
+
+                                }
                             }
+
                         }
                     }
                     //todo другие операции
@@ -368,5 +380,9 @@ public class MainController {
         Bounds updatedInnerBounds = scrollPaneContent.getBoundsInLocal();
         mainScrollPane.setHvalue((valX + adjustment.getX()) / (updatedInnerBounds.getWidth() - viewportBounds.getWidth()));
         mainScrollPane.setVvalue((valY + adjustment.getY()) / (updatedInnerBounds.getHeight() - viewportBounds.getHeight()));
+    }
+
+    EditOperationsManager getEOM(){
+        return editOperationsManager;
     }
 }

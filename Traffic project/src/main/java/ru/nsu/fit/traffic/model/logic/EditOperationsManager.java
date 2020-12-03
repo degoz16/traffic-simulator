@@ -11,7 +11,7 @@ public class EditOperationsManager {
 
     private TrafficMap map;
     private EditOperation currentOperation = EditOperation.NONE;
-    private Node lastNode = null;
+    public Node lastNode = null;
     private int lanesNumLeft = 1;
     private int lanesNumRight = 1;
 
