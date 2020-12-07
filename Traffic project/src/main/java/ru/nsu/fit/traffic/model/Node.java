@@ -10,6 +10,7 @@ public class Node {
     private final double y;
 
     private TrafficLight trafficLight = null;
+    private PlaceOfInterest placeOfInterest = null;
     private boolean isSpawner = false;
 
     //На одинаковых индексах лежат противоположно направленные дороги
@@ -19,6 +20,14 @@ public class Node {
     public Node(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public PlaceOfInterest getPlaceOfInterest() {
+        return placeOfInterest;
+    }
+
+    public void setPlaceOfInterest(PlaceOfInterest placeOfInterest) {
+        this.placeOfInterest = placeOfInterest;
     }
 
     public TrafficLight getTrafficLight() {
@@ -59,6 +68,13 @@ public class Node {
 
     public void removeRoadOut(Road road) {
         roadsOut.remove(road);
+    }
+
+    public void removeFromPlaceOfInterest() {
+        if (placeOfInterest != null) {
+            placeOfInterest.removeNode(this);
+        }
+        placeOfInterest = null;
     }
 
     public void removeRoadIn(Road road) {

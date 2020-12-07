@@ -36,9 +36,11 @@ public class RoadSettingsController {
 
         if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
             if (lastRoadClicked.getFrom().getRoadsOutNum() <= 1) {
+                lastRoadClicked.getFrom().removeFromPlaceOfInterest();
                 currMap.removeNode(lastRoadClicked.getFrom());
             }
             if (lastRoadClicked.getTo().getRoadsInNum() <= 1) {
+                lastRoadClicked.getTo().removeFromPlaceOfInterest();
                 currMap.removeNode(lastRoadClicked.getTo());
             }
             lastRoadClicked.getBackRoad().disconnect();

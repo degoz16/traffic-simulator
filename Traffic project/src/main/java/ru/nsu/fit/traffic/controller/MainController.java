@@ -12,11 +12,15 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.controller.painters.ObjectPainter;
@@ -59,6 +63,10 @@ public class MainController {
     private Stage stage;
     private RoadSign currSign;
     private double scaleValue = 1;
+    private double lastClickX = 0;
+    private double lastClickY = 0;
+
+    private Rectangle selectRect;
 
     private final UpdateListener updateListener = (ListenerAction action) -> {
         switch (action) {
@@ -97,6 +105,8 @@ public class MainController {
         menuBarController.setMap(currMap);
         menuBarController.setStage(stage);
 
+        selectRect = objectPainter.paintSelectRect();
+
         roadSettingsController.setMainController(this);
         trafficLightController.setMainController(this);
 
@@ -106,6 +116,15 @@ public class MainController {
         roadSignPane.setVisible(false);
         speedComboBox.setItems(FXCollections.observableArrayList(20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120));
         speedComboBox.setValue(60);
+
+        mainScrollPane.setPannable(false);
+
+        mainScrollPane.setOnMousePressed(event -> {
+            if (event.getButton() == MouseButton.MIDDLE) mainScrollPane.setPannable(true);
+        });
+        mainScrollPane.setOnMouseReleased(event -> {
+            if (event.getButton() == MouseButton.MIDDLE) mainScrollPane.setPannable(false);
+        });
 
         centeredField.setOnScroll(event -> {
             zoom(event);
@@ -135,29 +154,39 @@ public class MainController {
         forwardLanesTextField.textProperty().addListener((observable, oldValue, newValue) ->
                 editOperationsManager.setLanesNumLeft(Integer.parseInt(newValue)));
 
-        mainPane.setOnMouseClicked(event -> {
+        mainPane.setOnMousePressed(event -> {
             switch (event.getButton()) {
                 case PRIMARY -> {
-                    System.out.println("MAIN PANE CLICK");
+                    lastClickX = event.getX();
+                    lastClickY = event.getY();
                     switch (editOperationsManager.getCurrentOperation()) {
-                        case ROAD_CREATION -> {
-                            event.consume();
-                            editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
-                            updateMapView();
-                        }
-                        case SIGN_CREATION -> {
-                            event.consume();
-                            editOperationsManager.setCurrentOperation(EditOperation.NONE);
-                            roadSignPane.setVisible(false);
-                        }
-                        case NONE -> {
-                            roadSettingsController.getRoadSettingsPane().setVisible(false);
+                        case POI_CREATION -> {
+                            selectRect.setX(event.getX());
+                            selectRect.setY(event.getY());
+                            selectRect.setScaleX(-1);
+                            mainPane.getChildren().add(selectRect);
                         }
                     }
-                    //todo другие операции
                 }
-                case SECONDARY -> stopOperation();
-                //todo другие функции
+            }
+        });
+        mainPane.setOnMouseClicked(this::mainPaneOnClicked);
+
+        mainPane.setOnMouseDragged(this::mainPaneOnDrag);
+
+        mainPane.setOnMouseReleased(event -> {
+            if (event.getButton() == MouseButton.PRIMARY) {
+                switch (editOperationsManager.getCurrentOperation()) {
+                    case POI_CREATION -> {
+                        mainPane.getChildren().remove(selectRect);
+                        double x = Math.min(event.getX(), lastClickX);
+                        double y = Math.min(event.getY(), lastClickY);
+                        double width = Math.abs(event.getX() - lastClickX);
+                        double height = Math.abs(event.getY() - lastClickY);
+                        editOperationsManager.addPlaceOfInterest(x, y, width, height);
+                        updateMapView();
+                    }
+                }
             }
         });
 
@@ -171,6 +200,67 @@ public class MainController {
                     basePane.getHeight() - roadSettingsController.getRoadSettingsPane().getHeight()));
         });
 
+    }
+
+    /**
+     * Обработка клика по полю
+     * @param event событие
+     */
+    private void mainPaneOnClicked(MouseEvent event) {
+        switch (event.getButton()) {
+            case PRIMARY -> {
+                System.out.println("MAIN PANE CLICK");
+                switch (editOperationsManager.getCurrentOperation()) {
+                    case ROAD_CREATION -> {
+                        event.consume();
+                        editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
+                        updateMapView();
+                    }
+                    case SIGN_CREATION -> {
+                        event.consume();
+                        editOperationsManager.setCurrentOperation(EditOperation.NONE);
+                        roadSignPane.setVisible(false);
+                    }
+                    case NONE -> {
+                        roadSettingsController.getRoadSettingsPane().setVisible(false);
+                    }
+                }
+                //todo другие операции
+            }
+            case SECONDARY -> stopOperation();
+            //todo другие функции
+        }
+    }
+
+    /**
+     * Обработка драга на поле
+     * @param event событие
+     */
+    private void mainPaneOnDrag(MouseEvent event) {
+        if (event.getButton() == MouseButton.PRIMARY) {
+            switch (editOperationsManager.getCurrentOperation()) {
+                case POI_CREATION -> {
+                    double width = event.getX() - selectRect.getX();
+                    double height = event.getY() - selectRect.getY();
+                    if (width < 0) {
+                        selectRect.setTranslateX(width);
+                        selectRect.setWidth(-width);
+                    }
+                    else {
+                        selectRect.setTranslateX(0);
+                        selectRect.setWidth(width);
+                    }
+                    if (height < 0) {
+                        selectRect.setTranslateY(height);
+                        selectRect.setHeight(-height);
+                    }
+                    else {
+                        selectRect.setTranslateY(0);
+                        selectRect.setHeight(height);
+                    }
+                }
+            }
+        }
     }
 
     @FXML
@@ -218,7 +308,14 @@ public class MainController {
 
     @FXML
     public void buildingButtonClicked() {
-        System.out.println("точки интереса");
+        switch(editOperationsManager.getCurrentOperation()){
+            case POI_CREATION -> {
+                editOperationsManager.setCurrentOperation(EditOperation.NONE);
+            }
+            default -> {
+                editOperationsManager.setCurrentOperation(EditOperation.POI_CREATION);
+            }
+        }
     }
 
     @FXML
@@ -257,7 +354,6 @@ public class MainController {
         System.out.println("медленнее");
     }
 
-
     @FXML
     public void setSpeedSign() {
         currSign = new SpeedLimitSign(speedComboBox.getValue());
@@ -280,7 +376,29 @@ public class MainController {
                 roadSignPane.setVisible(false);
             }
 
-            currMap.forEachRoads(road -> {
+            currMap.forEachPlaceOfInterest(placeOfInterest -> {
+                Shape placeOfInterestShape = objectPainter.paintPlaceOfInterest(placeOfInterest);
+                placeOfInterestShape.setOnMouseClicked(event -> {
+                    switch (event.getButton()) {
+                        case PRIMARY -> {
+                            switch (editOperationsManager.getCurrentOperation()) {
+                                case ROAD_CREATION -> {
+                                    event.consume();
+                                    editOperationsManager.buildRoadOnPlaceOfInterest(event.getX(), event.getY(), placeOfInterest);
+                                    updateMapView();
+                                }
+                                case NONE -> {
+                                    event.consume();
+
+                                }
+                            }
+                        }
+                    }
+                });
+                mainPane.getChildren().add(placeOfInterestShape);
+            });
+
+            currMap.forEachRoad(road -> {
                 List<List<Shape>> roadShape = objectPainter.paintRoad(road);
                 if (roadShape.size() != road.getLanesNum()) {
                     System.err.println(roadShape.size() + "!=" + road.getLanesNum());
@@ -289,70 +407,78 @@ public class MainController {
                 for (int i = 0; i < road.getLanesNum(); i++) {
                     int finalI = i;
                     roadShape.get(i).forEach(shape -> {
-                        shape.setOnMouseClicked(event -> {
-                            System.out.println("ROAD CLICK");
-                            Lane lane = road.getLane(finalI);
-                            switch (event.getButton()) {
-                                case PRIMARY -> {
-                                    //Point2D parentCoords = shape.localToParent(event.getX(), event.getY());
-                                    switch (editOperationsManager.getCurrentOperation()) {
-                                        case ROAD_CREATION -> {
-                                            event.consume();
-                                            editOperationsManager.buildRoadOnRoad(event.getX(), event.getY(), road);
-                                            updateMapView();
-                                        }
-                                        case NONE -> {
-                                            event.consume();
-                                            lastRoadClicked = road;
-                                            roadSettingsController.getLanesTextField().setText(String.valueOf(road.getLanesNum()));
-                                            roadSettingsController.getRoadSettingsPane().setVisible(true);
-                                        }
-                                        case SIGN_CREATION -> {
-                                            RoadSign addedSign = currSign.getCopySign();
-                                            lane.addSign(addedSign);
-                                            if (currSign.getSignType() == SignType.MAIN_ROAD)
-                                                for (int k = 0; k < road.getLanesNum(); k++) {
-                                                    road.getLane(k).addSign(addedSign);
-                                                }
-                                            updateMapView();
-                                        }
-                                    }
-                                }
-                            }
-                            //todo другие операции
-                        });
+                        shape.setOnMouseClicked(event -> roadOnClick(road, finalI, event));
                         mainPane.getChildren().add(shape);
                     });
                 }
             });
-            currMap.forEachNodes(node -> {
+            currMap.forEachNode(node -> {
                 Shape nodeShape = objectPainter.paintNode(node);
+                if (node.getPlaceOfInterest() != null) {
+                    nodeShape.setFill(Paint.valueOf("#303030"));
+                }
                 nodeShape.setOnMouseClicked(event -> {
-                    System.out.println("NODE CLICK");
-                    lastNodeClicked = node;
-                    //Node nodeRef = node;
-                    switch (event.getButton()) {
-                        case PRIMARY -> {
-                            event.consume();
-                            switch (editOperationsManager.getCurrentOperation()) {
-                                case ROAD_CREATION -> {
-                                    editOperationsManager.buildRoadOnNode(node);
-                                    updateMapView();
-                                }
-                                case TRAFFIC_LIGHT_CREATION -> {
-                                    trafficLightController.getTrafficLightPane().setVisible(true);
-                                    trafficLightController.getTrafficLightPane().setLayoutX(event.getX());
-                                    trafficLightController.getTrafficLightPane().setLayoutY(event.getY());
-                                }
-                            }
-
-                        }
-                    }
-                    //todo другие операции
+                    nodeOnClick(node, event);
                 });
                 mainPane.getChildren().add(nodeShape);
             });
         });
+    }
+
+    private void nodeOnClick(Node node, MouseEvent event) {
+        System.out.println("NODE CLICK");
+        lastNodeClicked = node;
+        //Node nodeRef = node;
+        switch (event.getButton()) {
+            case PRIMARY -> {
+                event.consume();
+                switch (editOperationsManager.getCurrentOperation()) {
+                    case ROAD_CREATION -> {
+                        editOperationsManager.buildRoadOnNode(node);
+                        updateMapView();
+                    }
+                    case TRAFFIC_LIGHT_CREATION -> {
+                        trafficLightController.getTrafficLightPane().setVisible(true);
+                        trafficLightController.getTrafficLightPane().setLayoutX(event.getX());
+                        trafficLightController.getTrafficLightPane().setLayoutY(event.getY());
+                    }
+                }
+
+            }
+        }
+        //todo другие операции
+    }
+
+    private void roadOnClick(Road road, int finalI, MouseEvent event) {
+        System.out.println("ROAD CLICK");
+        Lane lane = road.getLane(finalI);
+        switch (event.getButton()) {
+            case PRIMARY -> {
+                switch (editOperationsManager.getCurrentOperation()) {
+                    case ROAD_CREATION -> {
+                        event.consume();
+                        editOperationsManager.buildRoadOnRoad(event.getX(), event.getY(), road);
+                        updateMapView();
+                    }
+                    case NONE -> {
+                        event.consume();
+                        lastRoadClicked = road;
+                        roadSettingsController.getLanesTextField().setText(String.valueOf(road.getLanesNum()));
+                        roadSettingsController.getRoadSettingsPane().setVisible(true);
+                    }
+                    case SIGN_CREATION -> {
+                        RoadSign addedSign = currSign.getCopySign();
+                        lane.addSign(addedSign);
+                        if (currSign.getSignType() == SignType.MAIN_ROAD)
+                            for (int k = 0; k < road.getLanesNum(); k++) {
+                                road.getLane(k).addSign(addedSign);
+                            }
+                        updateMapView();
+                    }
+                }
+            }
+        }
+        //todo другие операции
     }
 
     private void zoom(ScrollEvent event) {

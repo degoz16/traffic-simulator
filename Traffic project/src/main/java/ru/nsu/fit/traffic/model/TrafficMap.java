@@ -7,10 +7,12 @@ import java.util.function.Consumer;
 public class TrafficMap {
   private List<Node> nodes;
   private List<Road> roads;
+  private List<PlaceOfInterest> placesOfInterest;
 
   public TrafficMap() {
     roads = new ArrayList<>();
     nodes = new ArrayList<>();
+    placesOfInterest = new ArrayList<>();
   }
 
   public TrafficMap(List<Node> nodes, List<Road> roads) {
@@ -34,11 +36,15 @@ public class TrafficMap {
     roads.remove(road);
   }
 
-  public void forEachNodes(Consumer<Node> f) {
+  public void forEachPlaceOfInterest(Consumer<PlaceOfInterest> f) {
+    placesOfInterest.forEach(f);
+  }
+
+  public void forEachNode(Consumer<Node> f) {
     nodes.forEach(f);
   }
 
-  public void forEachRoads(Consumer<Road> f) {
+  public void forEachRoad(Consumer<Road> f) {
     roads.forEach(f);
   }
 
@@ -56,5 +62,9 @@ public class TrafficMap {
 
   public void setRoads(List<Road> roads) {
     this.roads = roads;
+  }
+
+  public void addPlaceOfInterest(PlaceOfInterest placeOfInterest) {
+    placesOfInterest.add(placeOfInterest);
   }
 }

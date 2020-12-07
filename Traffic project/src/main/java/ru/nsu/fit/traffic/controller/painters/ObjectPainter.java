@@ -4,13 +4,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import ru.nsu.fit.traffic.controller.MainController;
 import ru.nsu.fit.traffic.model.Node;
+import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.Road;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.SignType;
@@ -141,5 +139,23 @@ public class ObjectPainter {
         Shape shape = new Circle(node.getX(), node.getY(), (double) maxSize / 2 * NODE_SIZE);
         shape.setFill(roadColor);
         return shape;
+    }
+
+    public Rectangle paintSelectRect() {
+        Rectangle selectRect = new Rectangle(0, 0, 0, 0);
+        selectRect.setFill(Color.TRANSPARENT);
+        selectRect.setStroke(Color.BLACK);
+        return selectRect;
+    }
+
+    public Shape paintPlaceOfInterest(PlaceOfInterest placeOfInterest) {
+        Rectangle building = new Rectangle(
+                placeOfInterest.getX(),
+                placeOfInterest.getY(),
+                placeOfInterest.getWidth(),
+                placeOfInterest.getLength());
+        building.setFill(Color.FIREBRICK);
+        building.setStroke(Color.BLACK);
+        return building;
     }
 }

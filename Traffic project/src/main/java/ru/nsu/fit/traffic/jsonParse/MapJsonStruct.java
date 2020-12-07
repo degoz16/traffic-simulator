@@ -13,7 +13,7 @@ public class MapJsonStruct {
   private List<RoadJsonStruct> roads = new ArrayList<>();
 
   public MapJsonStruct(TrafficMap map) {
-    map.forEachNodes(
+    map.forEachNode(
         node -> {
           List<Integer> roadsFrom = new ArrayList<>();
           List<Integer> roadsTo = new ArrayList<>();
@@ -28,7 +28,7 @@ public class MapJsonStruct {
                   node.isSpawner(),
                   node.getTrafficLight()));
         });
-    map.forEachRoads(
+    map.forEachRoad(
         road -> {
           List<LaneJsonStruct> lanes = new ArrayList<>();
           road.forEachLane(

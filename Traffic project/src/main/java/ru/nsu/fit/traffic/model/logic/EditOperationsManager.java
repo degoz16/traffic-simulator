@@ -1,6 +1,7 @@
 package ru.nsu.fit.traffic.model.logic;
 
 import ru.nsu.fit.traffic.model.Node;
+import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.Road;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
@@ -17,6 +18,7 @@ public class EditOperationsManager {
 
     /**
      * Установить текущую операцию
+     *
      * @param currentOperation - операция
      */
     public void setCurrentOperation(EditOperation currentOperation) {
@@ -31,12 +33,13 @@ public class EditOperationsManager {
         this.lanesNumRight = lanesNumRight;
     }
 
-    public void resetLastNode(){
+    public void resetLastNode() {
         lastNode = null;
     }
 
     /**
      * Случай добавления ноды на пустое место
+     *
      * @param x координата x
      * @param y координата y
      */
@@ -58,12 +61,16 @@ public class EditOperationsManager {
 
     /**
      * Случай добавления ноды на дорогу
-     * @param x координата
-     * @param y координата
+     *
+     * @param x    координата
+     * @param y    координата
      * @param road дорога, по которой было произведено нажатие
      */
     public void buildRoadOnRoad(double x, double y, Road road) {
         if (lanesNumLeft + lanesNumRight == 0) {
+            return;
+        }
+        if (lastNode == road.getFrom() || lastNode == road.getTo()) {
             return;
         }
         Node nodeFrom = road.getFrom();
@@ -87,6 +94,7 @@ public class EditOperationsManager {
 
     /**
      * Случай клика по существующей ноде
+     *
      * @param node нода, по которой кликнули
      */
     public void buildRoadOnNode(Node node) {
@@ -95,6 +103,9 @@ public class EditOperationsManager {
         }
         if (lastNode == null) {
             lastNode = node;
+            return;
+        }
+        if (node.getRoadsOutNum() >= 4) {
             return;
         }
         boolean checkOverlap = lastNode.getRoadOutStream().anyMatch(road -> road.getTo() == node);
@@ -108,8 +119,33 @@ public class EditOperationsManager {
         }
     }
 
+    public void buildRoadOnPlaceOfInterest(double x, double y, PlaceOfInterest placeOfInterest) {
+        buildRoadOnEmpty(x, y);
+        placeOfInterest.addNode(lastNode);
+        lastNode.setPlaceOfInterest(placeOfInterest);
+        lastNode.getRoadInStream().forEach(road -> road.getFrom().removeFromPlaceOfInterest());
+    }
+
+    public void addPlaceOfInterest(double x, double y, double width, double height) {
+        PlaceOfInterest placeOfInterest = new PlaceOfInterest(width, height, x, y);
+        map.forEachNode(node -> {
+            if (
+                    node.getX() > x
+                    && node.getY() > y
+                    && node.getX() < x + width
+                    && node.getY() < y + height
+                    && node.getRoadsOutNum() <= 1
+            ) {
+                node.setPlaceOfInterest(placeOfInterest);
+                placeOfInterest.addNode(node);
+            }
+        });
+        map.addPlaceOfInterest(placeOfInterest);
+    }
+
     /**
      * Текущая операция
+     *
      * @return операция
      */
     public EditOperation getCurrentOperation() {
