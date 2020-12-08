@@ -5,16 +5,22 @@ import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.Road;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class EditOperationsManager {
-    public EditOperationsManager(TrafficMap map) {
-        this.map = map;
-    }
+    private final int ROAD_LIMIT = 4;
 
     private TrafficMap map;
     private EditOperation currentOperation = EditOperation.NONE;
     public Node lastNode = null;
     private int lanesNumLeft = 1;
     private int lanesNumRight = 1;
+
+
+    public EditOperationsManager(TrafficMap map) {
+        this.map = map;
+    }
 
     /**
      * Установить текущую операцию
@@ -50,13 +56,23 @@ public class EditOperationsManager {
         Node newNode = new Node(x, y);
         map.addNode(newNode);
         if (lastNode != null) {
-            Road newRoadTo = new Road(lanesNumLeft);
-            Road newRoadFrom = new Road(lanesNumRight);
-            newNode.connect(newRoadTo, newRoadFrom, lastNode);
-            map.addRoad(newRoadTo);
-            map.addRoad(newRoadFrom);
+            if (lastNode.getRoadsOutNum() >= ROAD_LIMIT) {
+                return;
+            }
+            buildRoad(newNode, lastNode);
         }
         lastNode = newNode;
+    }
+
+    private void buildRoad(Node newNode, Node lastNode) {
+        Road newRoadTo = new Road(lanesNumLeft);
+        Road newRoadFrom = new Road(lanesNumRight);
+        newNode.connect(newRoadTo, newRoadFrom, lastNode);
+        map.addRoad(newRoadTo);
+        map.addRoad(newRoadFrom);
+        if (lastNode.getRoadsOutNum() > 1) {
+            lastNode.removeFromPlaceOfInterest();
+        }
     }
 
     /**
@@ -105,17 +121,16 @@ public class EditOperationsManager {
             lastNode = node;
             return;
         }
-        if (node.getRoadsOutNum() >= 4) {
+        if (node.getRoadsOutNum() >= ROAD_LIMIT) {
             return;
         }
         boolean checkOverlap = lastNode.getRoadOutStream().anyMatch(road -> road.getTo() == node);
         if (!checkOverlap) {
-            Road newRoadTo = new Road(lanesNumLeft);
-            Road newRoadFrom = new Road(lanesNumRight);
-            lastNode.connect(newRoadTo, newRoadFrom, node);
-            map.addRoad(newRoadTo);
-            map.addRoad(newRoadFrom);
+            buildRoad(lastNode, node);
             lastNode = node;
+            if (lastNode.getRoadsOutNum() > 1) {
+                lastNode.removeFromPlaceOfInterest();
+            }
         }
     }
 
@@ -123,7 +138,7 @@ public class EditOperationsManager {
         buildRoadOnEmpty(x, y);
         placeOfInterest.addNode(lastNode);
         lastNode.setPlaceOfInterest(placeOfInterest);
-        lastNode.getRoadInStream().forEach(road -> road.getFrom().removeFromPlaceOfInterest());
+        List<Node> nodeList = new ArrayList<>();
     }
 
     public void addPlaceOfInterest(double x, double y, double width, double height) {
@@ -131,10 +146,10 @@ public class EditOperationsManager {
         map.forEachNode(node -> {
             if (
                     node.getX() > x
-                    && node.getY() > y
-                    && node.getX() < x + width
-                    && node.getY() < y + height
-                    && node.getRoadsOutNum() <= 1
+                            && node.getY() > y
+                            && node.getX() < x + width
+                            && node.getY() < y + height
+                            && node.getRoadsOutNum() <= 1
             ) {
                 node.setPlaceOfInterest(placeOfInterest);
                 placeOfInterest.addNode(node);
