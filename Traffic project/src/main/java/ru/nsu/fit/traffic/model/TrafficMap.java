@@ -15,9 +15,10 @@ public class TrafficMap {
     placesOfInterest = new ArrayList<>();
   }
 
-  public TrafficMap(List<Node> nodes, List<Road> roads) {
-    this.nodes = nodes;
-    this.roads = roads;
+  public void clearMap() {
+    nodes.clear();
+    roads.clear();
+    placesOfInterest.clear(); //TODO Каждую сущность, которую добавили в мап - добавьте в clear
   }
 
   public void addNode(Node node) {
@@ -62,6 +63,10 @@ public class TrafficMap {
 
   public void setRoads(List<Road> roads) {
     this.roads = roads;
+  }
+
+  public void setPlacesOfInterest(List<PlaceOfInterest> placesOfInterest) {
+    this.placesOfInterest = placesOfInterest;
   }
 
   public void addPlaceOfInterest(PlaceOfInterest placeOfInterest) {

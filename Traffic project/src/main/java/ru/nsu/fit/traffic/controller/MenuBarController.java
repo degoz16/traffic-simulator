@@ -100,8 +100,7 @@ public class MenuBarController {
     File file =
         new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
     saveCurrentProject(file);
-    map.setRoads(new ArrayList<>());
-    map.setNodes(new ArrayList<>());
+    map.clearMap();
     pathToProjectDir = getDocsPath();
   }
 

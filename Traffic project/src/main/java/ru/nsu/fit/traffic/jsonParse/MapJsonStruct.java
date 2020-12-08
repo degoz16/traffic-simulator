@@ -5,12 +5,14 @@ import java.util.List;
 import java.util.Map;
 import ru.nsu.fit.traffic.model.Lane;
 import ru.nsu.fit.traffic.model.Node;
+import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.Road;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
 public class MapJsonStruct {
   private List<NodeJsonStruct> nodes = new ArrayList<>();
   private List<RoadJsonStruct> roads = new ArrayList<>();
+  private List<PlaceOfInterestJsonStruct> pois = new ArrayList<>();
 
   public MapJsonStruct(TrafficMap map) {
     map.forEachNode(
@@ -43,17 +45,33 @@ public class MapJsonStruct {
                   map.indexOfNode(road.getFrom()), map.indexOfNode(road.getTo()), lanes);
           roads.add(roadJsonStruct);
         });
+    map.forEachPlaceOfInterest(
+        poi -> {
+          List<Integer> nodes = new ArrayList<>();
+          poi.foreachNodeIn(node -> nodes.add(map.indexOfNode(node)));
+          pois.add(
+              new PlaceOfInterestJsonStruct(
+                  poi.getX(),
+                  poi.getY(),
+                  poi.getWidth(),
+                  poi.getHeight(),
+                  poi.getNumberOfParkingPlaces(),
+                  poi.getWeight(),
+                  nodes));
+        });
   }
-
 
   /**
    * Меняет переданный traffic map новыми данными.
+   *
    * @param trafficMap
    */
   public void toTrafficMap(TrafficMap trafficMap) {
     RoadSignCreator creator = new RoadSignCreator();
     List<Road> mapRoads = new ArrayList<>();
     List<Node> mapNodes = new ArrayList<>();
+    List<PlaceOfInterest> mapPois = new ArrayList<>();
+
     nodes.forEach(
         node -> {
           Node mapNode = new Node(node.getX(), node.getY());
@@ -106,7 +124,27 @@ public class MapJsonStruct {
       }
     }
 
+    pois.forEach(
+        poiJsonStruct -> {
+          PlaceOfInterest place =
+              new PlaceOfInterest(
+                  poiJsonStruct.getX(),
+                  poiJsonStruct.getY(),
+                  poiJsonStruct.getWidth(),
+                  poiJsonStruct.getHeight(),
+                  poiJsonStruct.getCapacity(),
+                  poiJsonStruct.getWeight());
+          poiJsonStruct
+              .getNodes()
+              .forEach(
+                  nodeNum -> {
+                    place.addNode(mapNodes.get(nodeNum));
+                  });
+          mapPois.add(place);
+        });
+
     trafficMap.setNodes(mapNodes);
     trafficMap.setRoads(mapRoads);
+    trafficMap.setPlacesOfInterest(mapPois);
   }
 }

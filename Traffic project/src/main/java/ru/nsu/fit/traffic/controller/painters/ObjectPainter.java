@@ -153,7 +153,7 @@ public class ObjectPainter {
                 placeOfInterest.getX(),
                 placeOfInterest.getY(),
                 placeOfInterest.getWidth(),
-                placeOfInterest.getLength());
+                placeOfInterest.getHeight());
         building.setFill(Color.FIREBRICK);
         building.setStroke(Color.BLACK);
         return building;

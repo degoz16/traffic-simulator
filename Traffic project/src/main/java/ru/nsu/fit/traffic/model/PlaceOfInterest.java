@@ -5,27 +5,37 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class PlaceOfInterest {
-  private int numberOfParkingPlaces;
   private final List<Node> nodes = new ArrayList<>();
   private final double width;
-  private final double length;
+  private final double height;
   private final double x;
   private final double y;
+  private int numberOfParkingPlaces;
   private double weight = 1;
 
-  public PlaceOfInterest(double width, double length, double x, double y) {
+  public PlaceOfInterest(double width, double height, double x, double y) {
     this.width = width;
-    this.length = length;
+    this.height = height;
     this.x = x;
     this.y = y;
+  }
+
+  public PlaceOfInterest(
+      double x, double y, double width, double height, int numberOfParkingPlaces, double weight) {
+    this.numberOfParkingPlaces = numberOfParkingPlaces;
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+    this.weight = weight;
   }
 
   public double getWidth() {
     return width;
   }
 
-  public double getLength() {
-    return length;
+  public double getHeight() {
+    return height;
   }
 
   public double getX() {
@@ -60,4 +70,7 @@ public class PlaceOfInterest {
     nodes.remove(node);
   }
 
+  public void foreachNodeIn(Consumer<Node> f) {
+    nodes.forEach(f);
+  }
 }
