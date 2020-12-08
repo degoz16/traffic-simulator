@@ -138,9 +138,13 @@ public class MapJsonStruct {
               .getNodes()
               .forEach(
                   nodeNum -> {
-                    place.addNode(mapNodes.get(nodeNum));
+                    Node node = mapNodes.get(nodeNum);
+                    node.setPlaceOfInterest(place);
+                    place.addNode(node);
+
                   });
           mapPois.add(place);
+
         });
 
     trafficMap.setNodes(mapNodes);
