@@ -15,4 +15,6 @@ public class TrafficLight {
         this.delayRed = delayRed;
         this.pairsOfRoad = pairsOfRoad;
     }
+
+
 }

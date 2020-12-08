@@ -121,6 +121,7 @@
             </Group>
             <fx:include fx:id="roadSettings" source="RoadSettingsView.fxml" />
             <fx:include fx:id="trafficLight" source="TrafficLigthSettings.fxml" />
+            <fx:include fx:id="nodeSettings" source="NodeSettingsView.fxml" />
          </children>
       </AnchorPane>
     </children>

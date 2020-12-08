@@ -6,7 +6,6 @@ import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.SignType;
 import ru.nsu.fit.traffic.model.trafficsign.SpeedLimitSign;
 
-// FIXME: 25.11.2020 ASK DENIS MEGINSKIY HOW TO MAKE IT.
 class RoadSignCreator {
 
   RoadSign createSign(Map<String, String> settings) {

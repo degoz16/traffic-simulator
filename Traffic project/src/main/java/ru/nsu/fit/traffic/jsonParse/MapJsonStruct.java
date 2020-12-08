@@ -7,6 +7,7 @@ import ru.nsu.fit.traffic.model.Lane;
 import ru.nsu.fit.traffic.model.Node;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.Road;
+import ru.nsu.fit.traffic.model.Spawner;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
 public class MapJsonStruct {
@@ -19,15 +20,23 @@ public class MapJsonStruct {
         node -> {
           List<Integer> roadsFrom = new ArrayList<>();
           List<Integer> roadsTo = new ArrayList<>();
+          SpawnerJsonStruct spawnerJsonStruct =
+              (node.getSpawner() != null)
+                  ? new SpawnerJsonStruct(
+                      node.getSpawner().getStartString(),
+                      node.getSpawner().getEndString(),
+                      node.getSpawner().getSpawnRate())
+                  : null;
           node.foreachRoadIn(road -> roadsFrom.add(map.indexOfRoad(road)));
           node.foreachRoadOut(road -> roadsTo.add(map.indexOfRoad(road)));
+
           nodes.add(
               new NodeJsonStruct(
                   node.getX(),
                   node.getY(),
                   roadsFrom,
                   roadsTo,
-                  node.isSpawner(),
+                  spawnerJsonStruct,
                   node.getTrafficLight()));
         });
     map.forEachRoad(
@@ -75,6 +84,14 @@ public class MapJsonStruct {
     nodes.forEach(
         node -> {
           Node mapNode = new Node(node.getX(), node.getY());
+          Spawner spawner =
+              node.getSpawner() != null
+                  ? new Spawner(
+                      node.getSpawner().getStart(),
+                      node.getSpawner().getEnd(),
+                      node.getSpawner().getSpawnerRate())
+                  : null;
+          mapNode.setSpawner(spawner);
           mapNodes.add(mapNode);
         });
     roads.forEach(
@@ -95,10 +112,8 @@ public class MapJsonStruct {
                     lanes.add(lane);
                   });
           mapRoad.setLanes(lanes);
-          Node nodeFrom =
-              mapNodes.get(roadJsonStruct.getFrom()); // FIXME: 25.11.2020 FOR TESTING PURPOSES
-          Node nodeTo =
-              mapNodes.get(roadJsonStruct.getTo()); // FIXME: 25.11.2020 FOR TESTING PURPOSES
+          Node nodeFrom = mapNodes.get(roadJsonStruct.getFrom());
+          Node nodeTo = mapNodes.get(roadJsonStruct.getTo());
           mapRoad.setTo(nodeTo);
           mapRoad.setFrom(nodeFrom);
 
@@ -111,10 +126,10 @@ public class MapJsonStruct {
       assert nodeJsonStruct.getRoadsIn().size() == nodeJsonStruct.getRoadsOut().size();
       for (int j = 0; j < nodeJsonStruct.getRoadsIn().size(); j++) {
         Road roadIn = mapRoads.get(nodeJsonStruct.getRoadsIn().get(j));
-        assert roadIn.getTo() == node; // FIXME: 25.11.2020 FOR TESTING PURPOSES
+        assert roadIn.getTo() == node;
 
         Road roadOut = mapRoads.get(nodeJsonStruct.getRoadsOut().get(j));
-        assert roadOut.getFrom() == node; // FIXME: 25.11.2020 FOR TESTING PURPOSES
+        assert roadOut.getFrom() == node;
 
         node.addRoadOut(roadOut);
         node.addRoadIn(roadIn);
@@ -141,10 +156,8 @@ public class MapJsonStruct {
                     Node node = mapNodes.get(nodeNum);
                     node.setPlaceOfInterest(place);
                     place.addNode(node);
-
                   });
           mapPois.add(place);
-
         });
 
     trafficMap.setNodes(mapNodes);
