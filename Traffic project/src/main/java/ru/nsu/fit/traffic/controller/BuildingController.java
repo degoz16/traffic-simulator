@@ -14,19 +14,23 @@ import java.util.function.UnaryOperator;
 
 public class BuildingController {
     @FXML
-    Slider slider;
+    private Slider slider;
 
     @FXML
-    Pane pane;
+    private Pane pane;
 
     @FXML
-    TextField parkingPlaces;
+    private TextField parkingPlaces;
 
     private TrafficMap map;
     private MainController mainController;
 
     public Pane getPane() {
         return pane;
+    }
+
+    public TextField getParkingPlaces() {
+        return parkingPlaces;
     }
 
     public Slider getSlider() {

@@ -24,8 +24,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
-import javafx.util.Duration;
-import org.controlsfx.control.Notifications;
 import ru.nsu.fit.traffic.controller.painters.ObjectPainter;
 import ru.nsu.fit.traffic.model.*;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
@@ -423,7 +421,7 @@ public class MainController {
                                     buildingSettingsController.getPane().setLayoutX(event.getX());
                                     buildingSettingsController.getPane().setLayoutY(event.getY());
                                     buildingSettingsController.getSlider().setValue(lastPOIClicked.getWeight());
-                                    buildingSettingsController.parkingPlaces.setText
+                                    buildingSettingsController.getParkingPlaces().setText
                                             (String.valueOf(lastPOIClicked.getNumberOfParkingPlaces()));
                                     buildingSettingsController.getPane().setVisible(true);
                                     updateMapView();
