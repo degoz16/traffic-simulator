@@ -423,7 +423,7 @@ public class MainController {
                                     buildingSettingsController.getPane().setLayoutX(event.getX());
                                     buildingSettingsController.getPane().setLayoutY(event.getY());
                                     buildingSettingsController.getSlider().setValue(lastPOIClicked.getWeight());
-                                    buildingSettingsController.parkingPlaces.setText
+                                    buildingSettingsController.getParkingPlaces().setText
                                             (String.valueOf(lastPOIClicked.getNumberOfParkingPlaces()));
                                     buildingSettingsController.getPane().setVisible(true);
                                     updateMapView();
