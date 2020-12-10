@@ -49,6 +49,7 @@ public class BuildingController {
     @FXML
     public void deleteBuilding(){
         map.removePOI(mainController.getLastPOIClicked());
+        mainController.updateMapView();
         pane.setVisible(false);
     }
 }
