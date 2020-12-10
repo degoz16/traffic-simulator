@@ -47,9 +47,9 @@ public class MainController {
     private final TrafficMap currMap = new TrafficMap();
     private final EditOperationsManager editOperationsManager = new EditOperationsManager(currMap);
     private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
-    public Road lastRoadClicked = null;
-    public Node lastNodeClicked = null;
-    public PlaceOfInterest lastPOIClicked = null;
+    private Road lastRoadClicked = null;
+    private Node lastNodeClicked = null;
+    private PlaceOfInterest lastPOIClicked = null;
     @FXML private ScrollPane mainScrollPane;
     @FXML private Pane mainPane;
     @FXML private AnchorPane basePane;
@@ -79,12 +79,18 @@ public class MainController {
     private double lastClickY = 0;
     private Rectangle selectRect;
 
+    public PlaceOfInterest getLastPOIClicked() {
+        return lastPOIClicked;
+    }
+
     public Road getLastRoadClicked() {
         return lastRoadClicked;
     }
+
     public Node getLastNodeClicked() {
         return lastNodeClicked;
     }
+
     public TrafficMap getCurrMap() {
         return currMap;
     }
@@ -416,7 +422,7 @@ public class MainController {
                                     event.consume();
                                     buildingSettingsController.getPane().setLayoutX(event.getX());
                                     buildingSettingsController.getPane().setLayoutY(event.getY());
-                                    buildingSettingsController.slider.setValue(lastPOIClicked.getWeight());
+                                    buildingSettingsController.getSlider().setValue(lastPOIClicked.getWeight());
                                     buildingSettingsController.getPane().setVisible(true);
                                     updateMapView();
                                 }
@@ -560,7 +566,7 @@ public class MainController {
     }
 
     void closeAllSettings(){
-        buildingSettingsController.pane.setVisible(false);
+        buildingSettingsController.getPane().setVisible(false);
         nodeSettingsController.getNodeSettingPane().setVisible(false);
         numberOfLanesPane.setVisible(false);
         roadSettingsController.getRoadSettingsPane().setVisible(false);

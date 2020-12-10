@@ -8,16 +8,20 @@ import ru.nsu.fit.traffic.model.TrafficMap;
 
 public class BuildingController {
     @FXML
-    Slider slider;
+    private Slider slider;
 
     @FXML
-    Pane pane;
+    private Pane pane;
 
     private TrafficMap map;
     private MainController mainController;
 
     public Pane getPane() {
         return pane;
+    }
+
+    public Slider getSlider() {
+        return slider;
     }
 
     public void setMainController(MainController mainController) {
@@ -38,13 +42,13 @@ public class BuildingController {
 
     @FXML
     public void confirmSettings(){
-        mainController.lastPOIClicked.setWeight(slider.getValue());
+        mainController.getLastPOIClicked().setWeight(slider.getValue());
         pane.setVisible(false);
     }
 
     @FXML
     public void deleteBuilding(){
-        map.removePOI(mainController.lastPOIClicked);
+        map.removePOI(mainController.getLastPOIClicked());
         pane.setVisible(false);
     }
 }
