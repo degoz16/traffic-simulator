@@ -9,38 +9,43 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="120.0" prefWidth="130.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.controller.BuildingController">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="125.0" prefWidth="130.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.controller.BuildingController">
    <children>
-      <AnchorPane prefHeight="120.0" prefWidth="130.0">
+      <AnchorPane prefHeight="125.0" prefWidth="135.0">
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#353535" height="120.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="135.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#353535" height="125.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="135.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="-37.0" AnchorPane.topAnchor="0.0" />
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#111111" height="18.0" layoutX="6.0" layoutY="6.0" smooth="false" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="135.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <Button minHeight="18.0" minWidth="18.0" mnemonicParsing="false" onMouseClicked="#closeSettings" prefHeight="18.0" prefWidth="18.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/closeButton.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <Button minHeight="18.0" minWidth="18.0" mnemonicParsing="false" onMouseClicked="#confirmSettings" prefHeight="18.0" prefWidth="18.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/confirmButton.css" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="0.0" />
-            <Slider fx:id="slider" layoutX="4.0" layoutY="50.0" prefHeight="14.0" prefWidth="125.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="44.0" />
-            <Pane layoutX="72.0" layoutY="25.0" prefHeight="25.0" prefWidth="25.0" stylesheets="@MainViewStyleSheets/queue.css" AnchorPane.rightAnchor="3.0" AnchorPane.topAnchor="19.0" />
-            <Pane layoutX="2.0" layoutY="25.0" prefHeight="25.0" prefWidth="25.0" stylesheets="@MainViewStyleSheets/person.css" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="20.0" />
-            <Text fill="WHITE" layoutX="8.0" layoutY="106.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delete building" wrappingWidth="96.0" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="8.0">
+            <Slider fx:id="slider" layoutX="3.0" layoutY="43.0" prefHeight="14.0" prefWidth="125.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="40.0" />
+            <Pane layoutX="105.0" layoutY="50.0" prefHeight="25.0" prefWidth="25.0" stylesheets="@MainViewStyleSheets/queue.css" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="50.0" />
+            <Pane layoutX="3.0" layoutY="51.0" prefHeight="25.0" prefWidth="25.0" stylesheets="@MainViewStyleSheets/person.css" AnchorPane.leftAnchor="3.0" AnchorPane.topAnchor="51.0" />
+            <Text fill="WHITE" layoutX="8.0" layoutY="114.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Delete building" wrappingWidth="85.0" AnchorPane.leftAnchor="8.0">
                <font>
                   <Font name="Arial Bold" size="11.0" />
                </font>
             </Text>
-            <Button layoutX="70.0" layoutY="99.0" mnemonicParsing="false" onMouseClicked="#deleteBuilding" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/deleteButton.css" text="Button" AnchorPane.bottomAnchor="4.0" AnchorPane.rightAnchor="8.0" />
+            <Button layoutX="96.0" layoutY="98.0" mnemonicParsing="false" onMouseClicked="#deleteBuilding" prefHeight="25.0" prefWidth="23.0" style="-fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/deleteButton.css" text="Button" AnchorPane.rightAnchor="15.0" />
             <Text fill="WHITE" layoutX="10.0" layoutY="4.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Building" wrappingWidth="60.0" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="2.0">
                <font>
                   <Font name="Arial Bold" size="11.0" />
                </font>
             </Text>
-            <Text fill="WHITE" layoutX="8.0" layoutY="81.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Parking places" wrappingWidth="96.0">
+            <Text fill="WHITE" layoutX="6.0" layoutY="88.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Parking places" wrappingWidth="78.0" AnchorPane.leftAnchor="8.0">
                <font>
                   <Font name="Arial Bold" size="11.0" />
                </font>
             </Text>
-            <TextField fx:id="parkingPlaces" layoutX="89.0" layoutY="65.0" prefHeight="25.0" prefWidth="39.0" promptText="30" style="-fx-background-color: #454545;" text="30" AnchorPane.rightAnchor="5.0">
+            <TextField fx:id="parkingPlaces" layoutX="89.0" layoutY="71.0" prefHeight="25.0" prefWidth="39.0" promptText="30" style="-fx-background-color: #454545;" text="30" AnchorPane.rightAnchor="7.0">
                <font>
                   <Font size="11.0" />
                </font>
             </TextField>
+            <Text fill="WHITE" layoutX="18.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Popularity" wrappingWidth="96.0" AnchorPane.leftAnchor="8.0" AnchorPane.topAnchor="23.0">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
          </children>
       </AnchorPane>
    </children>

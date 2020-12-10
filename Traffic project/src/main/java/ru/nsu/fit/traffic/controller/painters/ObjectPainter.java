@@ -151,8 +151,14 @@ public class ObjectPainter {
                 placeOfInterest.getWidth(),
                 placeOfInterest.getHeight());
         building.setFill(Color.valueOf("#dddddd"));
-        building.setStroke(Color.valueOf("#dadada"));
+        building.setStroke(Color.valueOf("#858585"));
         building.setStrokeWidth(4);
+        building.setStyle("{" +
+            "-fx-stroke-width: 7;" +
+            "-fx-stroke-dash-array: 12 2 4 2;" +
+            "-fx-stroke-dash-offset: 6;" +
+            "-fx-stroke-line-cap: butt;" +
+        "}");
         return building;
     }
 }

@@ -1,5 +1,6 @@
 package ru.nsu.fit.traffic.controller;
 
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
@@ -8,6 +9,7 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
+import javax.swing.event.ChangeListener;
 import java.util.function.UnaryOperator;
 
 public class BuildingController {
@@ -47,6 +49,7 @@ public class BuildingController {
             }
             return null;
         };
+
         parkingPlaces.setTextFormatter(new TextFormatter<>(integerFilter));
         System.out.println(slider.getMax());
         System.out.println(slider.getMin());
@@ -55,19 +58,19 @@ public class BuildingController {
     }
 
     @FXML
-    public void closeSettings(){
+    public void closeSettings() {
         pane.setVisible(false);
     }
 
     @FXML
-    public void confirmSettings(){
+    public void confirmSettings() {
         mainController.getLastPOIClicked().setWeight(slider.getValue());
         mainController.getLastPOIClicked().setNumberOfParkingPlaces(Integer.parseInt(parkingPlaces.getText()));
         pane.setVisible(false);
     }
 
     @FXML
-    public void deleteBuilding(){
+    public void deleteBuilding() {
         map.removePOI(mainController.getLastPOIClicked());
         mainController.updateMapView();
         pane.setVisible(false);
