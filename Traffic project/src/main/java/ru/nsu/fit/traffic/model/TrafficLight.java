@@ -15,6 +15,15 @@ public class TrafficLight {
         this.delayRed = delayRed;
         this.pairsOfRoad = pairsOfRoad;
     }
+/*
+    private List<Road> onGreenDelay;
+    private List<Road> onRedDelay;
 
-
+    public TrafficLight(int delayGreen, int delayRed, List<Road> onGreenDelay, List<Road> onRedDelay) {
+        this.delayGreen = delayGreen;
+        this.delayRed = delayRed;
+        this.onGreenDelay = onGreenDelay;
+        this.onRedDelay = onRedDelay;
+    }
+    */
 }

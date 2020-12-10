@@ -1,17 +1,13 @@
 package ru.nsu.fit.traffic.controller.painters;
 
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
-import ru.nsu.fit.traffic.controller.MainController;
 import ru.nsu.fit.traffic.model.Node;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.Road;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
-import ru.nsu.fit.traffic.model.trafficsign.SignType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +30,7 @@ public class ObjectPainter {
 
         // направляющий вектор перпендикуляра
         double vx = pointFromY - pointToY;
-        double vy = -pointFromX + pointToX;
+        double vy = - pointFromX + pointToX;
 
         double vlen = Math.sqrt(Math.abs(vx * vx + vy * vy));
         List<List<Shape>> paintedRoad = new ArrayList<>();
@@ -154,8 +150,9 @@ public class ObjectPainter {
                 placeOfInterest.getY(),
                 placeOfInterest.getWidth(),
                 placeOfInterest.getHeight());
-        building.setFill(Color.FIREBRICK);
-        building.setStroke(Color.BLACK);
+        building.setFill(Color.valueOf("#dddddd"));
+        building.setStroke(Color.valueOf("#dadada"));
+        building.setStrokeWidth(4);
         return building;
     }
 }

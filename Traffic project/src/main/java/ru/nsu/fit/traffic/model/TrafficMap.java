@@ -37,6 +37,10 @@ public class TrafficMap {
     roads.remove(road);
   }
 
+  public void removePOI(PlaceOfInterest poi){
+    placesOfInterest.remove(poi);
+  }
+
   public void forEachPlaceOfInterest(Consumer<PlaceOfInterest> f) {
     placesOfInterest.forEach(f);
   }
