@@ -42,7 +42,7 @@ public class BuildingController {
             String input = change.getText();
             int text_size = change.getControlNewText().length();
 
-            if (input.matches("[0-5]*") && text_size <= 4) {
+            if (input.matches("[0-9]*") && text_size <= 4) {
                 return change;
             }
             return null;
