@@ -1,6 +1,8 @@
 package ru.nsu.fit.traffic.controller.painters;
 
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
@@ -122,6 +124,7 @@ public class ObjectPainter {
     }
 
     public Shape paintNode(Node node) {
+        //TODO: изменить на полигон.
         int maxSize = Math.max(
                 node.getRoadInStream()
                         .map(road -> road.getLanesNum() + road.getBackRoad().getLanesNum())
@@ -131,16 +134,27 @@ public class ObjectPainter {
                         .map(road -> road.getLanesNum() + road.getBackRoad().getLanesNum())
                         .max(Integer::compareTo)
                         .orElse(0));
-
-        Shape shape = new Circle(node.getX(), node.getY(), (double) maxSize / 2 * NODE_SIZE);
+        double rad = (double) maxSize / 2 * NODE_SIZE;
+        Shape shape = new Circle(node.getX(), node.getY(), rad);
         shape.setFill(roadColor);
+        if (node.getSpawner() != null){
+            Image img = new Image(getClass().getResource("../../view/Images/spawner.png").toExternalForm());
+            shape.setFill(new ImagePattern(img));
+        }
         return shape;
     }
 
     public Rectangle paintSelectRect() {
         Rectangle selectRect = new Rectangle(0, 0, 0, 0);
         selectRect.setFill(Color.TRANSPARENT);
-        selectRect.setStroke(Color.BLACK);
+        selectRect.setStroke(Color.valueOf("#656565"));
+        selectRect.setStrokeWidth(4);
+        selectRect.setStyle("{" +
+                "-fx-stroke-width: 7;" +
+                "-fx-stroke-dash-array: 12 2 4 2;" +
+                "-fx-stroke-dash-offset: 6;" +
+                "-fx-stroke-line-cap: butt;" +
+                "}");
         return selectRect;
     }
 
@@ -150,8 +164,8 @@ public class ObjectPainter {
                 placeOfInterest.getY(),
                 placeOfInterest.getWidth(),
                 placeOfInterest.getHeight());
-        building.setFill(Color.valueOf("#dddddd"));
-        building.setStroke(Color.valueOf("#858585"));
+        building.setFill(Color.valueOf("#bbbbbb"));
+        building.setStroke(Color.valueOf("#656565"));
         building.setStrokeWidth(4);
         building.setStyle("{" +
             "-fx-stroke-width: 7;" +

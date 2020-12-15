@@ -452,9 +452,6 @@ public class MainController {
                 if (node.getPlaceOfInterest() != null) {
                     nodeShape.setFill(Paint.valueOf("#303030"));
                 }
-                if (node.getSpawner() != null) {
-                    nodeShape.setFill(Paint.valueOf("#00FFFF"));
-                }
                 nodeShape.setOnMouseClicked(event -> {
                     nodeOnClick(node, event);
                 });
