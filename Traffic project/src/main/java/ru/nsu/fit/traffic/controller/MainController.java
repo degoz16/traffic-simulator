@@ -114,6 +114,8 @@ public class MainController {
      */
     @FXML
     public void initialize() {
+        mainScrollPane.setVvalue(0.5);
+        mainScrollPane.setHvalue(0.5);
         menuBarController.setMainController(this);
         menuBarController.setMap(currMap);
         menuBarController.setStage(stage);
