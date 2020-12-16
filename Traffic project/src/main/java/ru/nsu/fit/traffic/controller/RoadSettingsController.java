@@ -2,15 +2,23 @@ package ru.nsu.fit.traffic.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.road.Street;
+
+import java.util.function.UnaryOperator;
 
 public class RoadSettingsController {
-    @FXML private Pane roadSettingsHelperPane;
-    @FXML private Pane roadSettingsPane;
-    @FXML private TextField lanesTextField;
+    @FXML
+    private Pane roadSettingsHelperPane;
+    @FXML
+    private Pane roadSettingsPane;
+    @FXML
+    private TextField lanesTextField;
 
+    private Road lastRoadClicked;
     private MainController mainController;
 
     public void setMainController(MainController mainController) {
@@ -30,8 +38,10 @@ public class RoadSettingsController {
     }
 
     @FXML
+    private TextField streetName;
+
+    @FXML
     public void deleteRoad() {
-        Road lastRoadClicked = mainController.getLastRoadClicked();
         TrafficMap currMap = mainController.getCurrMap();
 
         if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
@@ -72,12 +82,65 @@ public class RoadSettingsController {
             mainController.updateMapView();
         } else {
             deleteRoad();
+            return;
+        }
+        if (streetName.getText().equals("") && lastRoadClicked.getStreet() != null) {
+            lastRoadClicked.disconnectWithStreet();
+        } else if (!streetName.getText().equals("")) {
+            if (lastRoadClicked.getStreet() != null && !streetName.getText().equals(lastRoadClicked.getStreet().getName())) {
+                lastRoadClicked.disconnectWithStreet();
+            }
+            Street currStreet = null;
+            for (Street s : mainController.getCurrMap().getStreets()) {
+                if (s.getName().equals(streetName.getText())) {
+                    currStreet = s;
+                    break;
+                }
+            }
+            if (currStreet == null) {
+                currStreet = new Street(streetName.getText());
+                mainController.getCurrMap().getStreets().add(currStreet);
+            }
+            if (lastRoadClicked.getBackRoad() != null) {
+                lastRoadClicked.getBackRoad().disconnectWithStreet();
+                currStreet.addRoad(lastRoadClicked.getBackRoad());
+                lastRoadClicked.getBackRoad().setCurrStreet(currStreet);
+            }
+            currStreet.addRoad(lastRoadClicked);
+            lastRoadClicked.setCurrStreet(currStreet);
+           // System.out.println(currStreet);
+        }
+
+    }
+
+    public void updateRoad(Road road) {
+        lastRoadClicked = road;
+        getLanesTextField().setText(String.valueOf(road.getLanesNum()));
+        if (road.getStreet() != null) {
+            streetName.setText(road.getStreet().getName());
+        } else {
+            streetName.setText("");
         }
     }
 
     @FXML
     public void closeRoadSettings() {
         roadSettingsPane.setVisible(false);
+    }
+
+    @FXML
+    public void initialize() {
+        UnaryOperator<TextFormatter.Change> integerFilter = change -> {
+            String input = change.getText();
+            int text_size = change.getControlNewText().length();
+
+            if (text_size <= 14) {
+                return change;
+            }
+            return null;
+        };
+
+        streetName.setTextFormatter(new TextFormatter<Object>(integerFilter));
     }
 
 

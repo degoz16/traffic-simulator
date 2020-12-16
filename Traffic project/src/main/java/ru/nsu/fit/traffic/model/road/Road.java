@@ -7,100 +7,116 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class Road {
-  private Node from = null;
-  private Node to = null;
-  private List<Lane> lanes;
-  private int length = -1;
-  private Road backRoad = null;
+    private Node from = null;
+    private Node to = null;
+    private List<Lane> lanes;
+    private int length = -1;
+    private Road backRoad = null;
+    private Street currStreet = null;
 
-  public Road(int lanesNum) {
-    lanes = new ArrayList<>();
-    for (int i = 0; i < lanesNum; ++i) lanes.add(new Lane());
-  }
+    public Road(int lanesNum) {
+        lanes = new ArrayList<>();
+        for (int i = 0; i < lanesNum; ++i) lanes.add(new Lane());
+    }
 
-  public Road() {
-  }
+    public Road() {
+    }
 
-  public void setLanes(List<Lane> lanes) {
-    this.lanes = lanes;
-  }
+    public void setLanes(List<Lane> lanes) {
+        this.lanes = lanes;
+    }
 
-  public void forEachLane(Consumer<Lane> f) {
-    lanes.forEach(f);
-  }
+    public void forEachLane(Consumer<Lane> f) {
+        lanes.forEach(f);
+    }
 
-  // Этот и аналогичные методы для Lane и RoadSign
-  // нужны для случая вставки ноды в середину дороги
-  // чтобы сохранить настройки дороги.
+    // Этот и аналогичные методы для Lane и RoadSign
+    // нужны для случая вставки ноды в середину дороги
+    // чтобы сохранить настройки дороги.
 
-  /**
-   * Возвращает копию дороги.
-   *
-   * @return копия
-   */
-  public Road getCopyRoad() {
-    List<Lane> laneList = new ArrayList<>();
-    Road copyRoad = new Road(0);
-    lanes.forEach(lane -> laneList.add(lane.getCopyLane()));
-    copyRoad.setLanes(laneList);
-    return copyRoad;
-  }
+    /**
+     * Возвращает копию дороги.
+     *
+     * @return копия
+     */
+    public Road getCopyRoad() {
+        List<Lane> laneList = new ArrayList<>();
+        Road copyRoad = new Road(0);
+        lanes.forEach(lane -> laneList.add(lane.getCopyLane()));
+        copyRoad.setLanes(laneList);
+        return copyRoad;
+    }
 
-  public void disconnect() {
-    to.removeRoadIn(this);
-    from.removeRoadOut(this);
-  }
+    public void setCurrStreet(Street currStreet) {
+        this.currStreet = currStreet;
+    }
 
-  public Node getFrom() {
-    return from;
-  }
+    public void disconnect() {
+        to.removeRoadIn(this);
+        from.removeRoadOut(this);
+    }
 
-  public void setFrom(Node from) {
-    this.from = from;
-  }
+    public Node getFrom() {
+        return from;
+    }
 
-  public Node getTo() {
-    return to;
-  }
+    public void setFrom(Node from) {
+        this.from = from;
+    }
 
-  public void setTo(Node to) {
-    this.to = to;
-  }
+    public Node getTo() {
+        return to;
+    }
 
-  public Road getBackRoad() {
-    return backRoad;
-  }
+    public void setTo(Node to) {
+        this.to = to;
+    }
 
-  public void setBackRoad(Road backRoad) {
-    this.backRoad = backRoad;
-  }
+    public Road getBackRoad() {
+        return backRoad;
+    }
 
-  public int getLen() {
-    if (length == -1) {
-      return length =
-          (int)
-              Math.sqrt(
-                  Math.pow(from.getX() - to.getX(), 2) + Math.pow(from.getY() - to.getY(), 2));
-    } else return length;
-  }
+    public void setBackRoad(Road backRoad) {
+        this.backRoad = backRoad;
+    }
 
-  public Lane getLane(int id) {
-    return lanes.get(id);
-  }
+    public int getLen() {
+        if (length == -1) {
+            return length =
+                    (int)
+                            Math.sqrt(
+                                    Math.pow(from.getX() - to.getX(), 2) + Math.pow(from.getY() - to.getY(), 2));
+        } else return length;
+    }
 
-  public int getLanesNum() {
-    return lanes.size();
-  }
+    public Lane getLane(int id) {
+        return lanes.get(id);
+    }
 
-  public void removeLane(int id) {
-    lanes.remove(id);
-  }
+    public int getLanesNum() {
+        return lanes.size();
+    }
 
-  public void addLane(int id) {
-    lanes.add(id, new Lane());
-  }
+    public void removeLane(int id) {
+        lanes.remove(id);
+    }
 
-  public void clearLanes() {
-    lanes = new ArrayList<>();
-  }
+    public void addLane(int id) {
+        lanes.add(id, new Lane());
+    }
+
+    public void clearLanes() {
+        lanes = new ArrayList<>();
+    }
+
+    public Street getStreet() {
+        return currStreet;
+    }
+
+    public void disconnectWithStreet() {
+        if (currStreet != null) {
+            currStreet.removeRoad(this);
+            currStreet = null;
+        }
+    }
 }

@@ -27,6 +27,12 @@ public class TrafficLightController {
     private Node lastNodeClicked;
 
     @FXML
+    public void closeSettings(){
+        trafficLightPane.setVisible(false);
+        mainController.updateMapView();
+    }
+
+    @FXML
     public void confirmTrafficLightSettings() {
         trafficLightPane.setVisible(false);
         List<Integer> roadsGreen;

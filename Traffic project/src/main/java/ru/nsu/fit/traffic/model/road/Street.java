@@ -12,7 +12,7 @@ public class Street {
   private List<Road> roads;
   private List<Node> nodes;
 
-  Street(String name) {
+  public Street(String name) {
     this.name = name;
     roads = new ArrayList<>();
     nodes = new ArrayList<>();
@@ -22,8 +22,27 @@ public class Street {
     nodes.add(node);
   }
 
+  public void removeRoad(Road road){
+    if (roads.contains(road)) {
+      roads.remove(road);
+      boolean removeFrom = true;
+      boolean removeTo = true;
+      for (Road r : roads) {
+        if (road.getFrom() == r.getFrom() || road.getFrom() == r.getTo())
+          removeFrom = false;
+        if (road.getTo() == r.getFrom() || road.getTo() == r.getTo())
+          removeTo = false;
+        if (!removeFrom && !removeTo) break;
+      }
+      if (removeFrom) nodes.remove(road.getFrom());
+      if (removeTo) nodes.remove(road.getTo());
+    }
+  }
+
   public void addRoad(Road road) {
     roads.add(road);
+    nodes.add(road.getFrom());
+    nodes.add(road.getTo());
   }
 
   public String getName() {

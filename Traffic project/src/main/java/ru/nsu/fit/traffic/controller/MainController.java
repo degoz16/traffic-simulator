@@ -206,9 +206,8 @@ public class MainController {
                 }
             }
         });
-
+/*
         basePane.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            roadSettingsController.getRoadSettingsPane().setVisible(false);
             roadSettingsController.getRoadSettingsHelperPane().setLayoutX(Math.min(
                     event.getX(),
                     basePane.getWidth() - roadSettingsController.getRoadSettingsPane().getWidth()));
@@ -216,7 +215,7 @@ public class MainController {
                     event.getY(),
                     basePane.getHeight() - roadSettingsController.getRoadSettingsPane().getHeight()));
         });
-
+*/
     }
 
     /**
@@ -526,8 +525,10 @@ public class MainController {
                     case NONE -> {
                         event.consume();
                         lastRoadClicked = road;
-                        roadSettingsController.getLanesTextField().setText(String.valueOf(road.getLanesNum()));
+                        roadSettingsController.updateRoad(road);
                         roadSettingsController.getRoadSettingsPane().setVisible(true);
+                        roadSettingsController.getRoadSettingsPane().setLayoutX(event.getX());
+                        roadSettingsController.getRoadSettingsPane().setLayoutY(event.getY());
                     }
                     case SIGN_CREATION -> {
                         RoadSign addedSign = currSign.getCopySign();
