@@ -21,6 +21,9 @@ public class RoadSettingsController {
     private Road lastRoadClicked;
     private MainController mainController;
 
+    @FXML
+    private TextField streetName;
+
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
     }
@@ -36,9 +39,6 @@ public class RoadSettingsController {
     public Pane getRoadSettingsPane() {
         return roadSettingsPane;
     }
-
-    @FXML
-    private TextField streetName;
 
     @FXML
     public void deleteRoad() {

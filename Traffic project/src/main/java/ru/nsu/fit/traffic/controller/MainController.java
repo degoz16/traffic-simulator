@@ -48,6 +48,8 @@ public class MainController {
     private Road lastRoadClicked = null;
     private Node lastNodeClicked = null;
     private PlaceOfInterest lastPOIClicked = null;
+    private double lastXbase = 0d;
+    private double lastYbase = 0d;
     @FXML private ScrollPane mainScrollPane;
     @FXML private Pane mainPane;
     @FXML private AnchorPane basePane;
@@ -206,16 +208,16 @@ public class MainController {
                 }
             }
         });
-/*
+
         basePane.addEventFilter(MouseEvent.MOUSE_CLICKED, event -> {
-            roadSettingsController.getRoadSettingsHelperPane().setLayoutX(Math.min(
+            lastXbase = (Math.min(
                     event.getX(),
                     basePane.getWidth() - roadSettingsController.getRoadSettingsPane().getWidth()));
-            roadSettingsController.getRoadSettingsHelperPane().setLayoutY(Math.min(
+            lastYbase = (Math.min(
                     event.getY(),
                     basePane.getHeight() - roadSettingsController.getRoadSettingsPane().getHeight()));
         });
-*/
+
     }
 
     /**
@@ -443,7 +445,7 @@ public class MainController {
                 for (int i = 0; i < road.getLanesNum(); i++) {
                     int finalI = i;
                     roadShape.get(i).forEach(shape -> {
-                        shape.setOnMouseClicked(event -> roadOnClick(road, finalI, event));
+                        shape.setOnMouseClicked(event -> onRoadClick(road, finalI, event));
                         mainPane.getChildren().add(shape);
                     });
                 }
@@ -511,7 +513,7 @@ public class MainController {
         //todo другие операции
     }
 
-    private void roadOnClick(Road road, int finalI, MouseEvent event) {
+    private void onRoadClick(Road road, int finalI, MouseEvent event) {
         System.out.println("ROAD CLICK");
         Lane lane = road.getLane(finalI);
         switch (event.getButton()) {
@@ -527,8 +529,10 @@ public class MainController {
                         lastRoadClicked = road;
                         roadSettingsController.updateRoad(road);
                         roadSettingsController.getRoadSettingsPane().setVisible(true);
-                        roadSettingsController.getRoadSettingsPane().setLayoutX(event.getX());
-                        roadSettingsController.getRoadSettingsPane().setLayoutY(event.getY());
+                        roadSettingsController.getRoadSettingsHelperPane().setLayoutX(lastXbase);
+                        roadSettingsController.getRoadSettingsHelperPane().setLayoutY(lastYbase);
+                        //roadSettingsController.getRoadSettingsPane().setLayoutX(event.getX());
+                        //roadSettingsController.getRoadSettingsPane().setLayoutY(event.getY());
                     }
                     case SIGN_CREATION -> {
                         RoadSign addedSign = currSign.getCopySign();
