@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import ru.nsu.fit.traffic.model.Node;
-import ru.nsu.fit.traffic.model.Spawner;
+import ru.nsu.fit.traffic.model.road.Spawner;
 
 public class NodeSettingsController {
 

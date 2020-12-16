@@ -1,7 +1,6 @@
-package ru.nsu.fit.traffic.model;
+package ru.nsu.fit.traffic.model.road;
 
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
-import ru.nsu.fit.traffic.model.trafficsign.SignType;
 
 import java.util.ArrayList;
 import java.util.List;

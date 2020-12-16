@@ -3,7 +3,7 @@ package ru.nsu.fit.traffic.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.model.Road;
+import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
 public class RoadSettingsController {

@@ -1,7 +1,7 @@
 package ru.nsu.fit.traffic.jsonParse;
 
 import java.util.List;
-import ru.nsu.fit.traffic.model.TrafficLight;
+import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
 
 public class NodeJsonStruct {
   private double x;

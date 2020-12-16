@@ -1,6 +1,7 @@
 package ru.nsu.fit.traffic.controller;
 
 import java.time.LocalTime;
+import java.util.Iterator;
 import java.util.List;
 import java.util.function.UnaryOperator;
 import javafx.application.Platform;
@@ -8,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
@@ -28,12 +28,12 @@ import ru.nsu.fit.traffic.controller.painters.ObjectPainter;
 import ru.nsu.fit.traffic.model.*;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
+import ru.nsu.fit.traffic.model.road.Lane;
+import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.trafficsign.MainRoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.SignType;
 import ru.nsu.fit.traffic.model.trafficsign.SpeedLimitSign;
-
-import javax.management.Notification;
 
 /**
  * Контроллер основной сцены, на которой располагаются все остальные.
@@ -114,8 +114,6 @@ public class MainController {
      */
     @FXML
     public void initialize() {
-        mainScrollPane.setVvalue(0.5);
-        mainScrollPane.setHvalue(0.5);
         menuBarController.setMainController(this);
         menuBarController.setMap(currMap);
         menuBarController.setStage(stage);
@@ -299,7 +297,7 @@ public class MainController {
 
     @FXML
     public void roadButtonClicked() {
-        roadSignPane.setVisible(false);
+        closeAllSettings();
         switch (editOperationsManager.getCurrentOperation()) {
             case ROAD_CREATION -> {
                 numberOfLanesPane.setVisible(false);
@@ -336,6 +334,7 @@ public class MainController {
 
     @FXML
     public void buildingButtonClicked() {
+        closeAllSettings();
         switch(editOperationsManager.getCurrentOperation()){
             case POI_CREATION -> {
                 editOperationsManager.setCurrentOperation(EditOperation.NONE);
@@ -354,6 +353,7 @@ public class MainController {
 
     @FXML
     public void roadSignButtonClicked() {
+        closeAllSettings();
         switch (editOperationsManager.getCurrentOperation()) {
             case SIGN_CREATION:
                 roadSignPane.setVisible(false);
@@ -475,18 +475,32 @@ public class MainController {
                         updateMapView();
                     }
                     case TRAFFIC_LIGHT_CREATION -> {
+                        if (node.getRoadsInNum() <= 2)
+                            break;
                         trafficLightController.getTrafficLightPane().setVisible(true);
                         trafficLightController.getTrafficLightPane().setLayoutX(event.getX());
                         trafficLightController.getTrafficLightPane().setLayoutY(event.getY());
+                        trafficLightController.setLastNodeClicked(node);
+                        trafficLightController.updateDelay(node);
+                        List<Integer> greenIndex = trafficLightController.findPairOfRoad(node);
+
+                        int i = 0;
+                        for (Iterator<Road> it = node.getRoadInStream().iterator(); it.hasNext();i++ ) {
+                            Road r = it.next();
+                            boolean isGreen = false;
+                            for (int j: greenIndex) if (j == i) {
+                                    isGreen = true;
+                                    break;}
+                            mainPane.getChildren().add(objectPainter.paintRoadLight(r, isGreen));
+                        }
+                        mainPane.getChildren().add(objectPainter.paintNode(node));
                     }
                     case NONE -> {
-
                         if (node.getSpawner() != null) {
                             nodeSettingsController.getStartTime().setValue(LocalTime.parse(node.getSpawner().getStartString()));
                             nodeSettingsController.getEndTime().setValue(LocalTime.parse(node.getSpawner().getEndString()));
                             nodeSettingsController.getSpawnerRate().setText(String.valueOf(node.getSpawner().getSpawnRate()));
                         }
-
                         nodeSettingsController.getNodeSettingPane().setLayoutX(event.getX());
                         nodeSettingsController.getNodeSettingPane().setLayoutY(event.getY());
                         nodeSettingsController.getNodeSettingPane().setVisible(true);
@@ -571,5 +585,6 @@ public class MainController {
         roadSettingsController.getRoadSettingsPane().setVisible(false);
         trafficLightController.getTrafficLightPane().setVisible(false);
         roadSignPane.setVisible(false);
+        updateMapView();
     }
 }

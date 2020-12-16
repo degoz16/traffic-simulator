@@ -2,7 +2,7 @@ package ru.nsu.fit.traffic.model.logic;
 
 import ru.nsu.fit.traffic.model.Node;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.Road;
+import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
 import java.util.ArrayList;

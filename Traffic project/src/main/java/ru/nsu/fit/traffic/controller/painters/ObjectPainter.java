@@ -8,7 +8,7 @@ import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import ru.nsu.fit.traffic.model.Node;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.Road;
+import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ public class ObjectPainter {
 
         // направляющий вектор перпендикуляра
         double vx = pointFromY - pointToY;
-        double vy = - pointFromX + pointToX;
+        double vy = -pointFromX + pointToX;
 
         double vlen = Math.sqrt(Math.abs(vx * vx + vy * vy));
         List<List<Shape>> paintedRoad = new ArrayList<>();
@@ -106,7 +106,7 @@ public class ObjectPainter {
                             double y = (pointToY + i * vy + vy / 2 + vx * 2 + vy);
 
                             Polygon shape = new Polygon(
-                                    x - 4 ,y,
+                                    x - 4, y,
                                     x, y + 4,
                                     x + 4, y,
                                     x, y - 4);
@@ -123,6 +123,40 @@ public class ObjectPainter {
         return paintedRoad;
     }
 
+    public Shape paintRoadLight(Road road, boolean isGreen) {
+        List<Shape> list = new ArrayList<>();
+        Shape curr;
+        int pointFromX = (int)road.getFrom().getX();
+        int pointFromY = (int)road.getFrom().getY();
+        int pointToX = (int)road.getTo().getX();
+        int pointToY = (int)road.getTo().getY();
+
+        double vx = pointFromY - pointToY;
+        double vy = -pointFromX + pointToX;
+
+        double vlen = Math.sqrt(Math.abs(vx * vx + vy * vy));
+        List<List<Shape>> paintedRoad = new ArrayList<>();
+
+        vx *= LANE_SIZE / vlen;
+        vy *= LANE_SIZE / vlen;
+
+        curr = new Polygon(
+                vx + pointFromX,
+                vy + pointFromY,
+                pointFromX, pointFromY,
+                pointToX, pointToY,
+                vx*road.getLanesNum() + pointToX,
+                vy*road.getLanesNum() + pointToY);
+        curr.setFill(Paint.valueOf("transparent"));
+        curr.setStrokeWidth(3);
+        if (isGreen){
+            curr.setStroke(Paint.valueOf("#00a550"));
+        } else{
+            curr.setStroke(Paint.valueOf("#eb003b"));
+        }
+        return curr;
+    }
+
     public Shape paintNode(Node node) {
         //TODO: изменить на полигон.
         int maxSize = Math.max(
@@ -137,8 +171,17 @@ public class ObjectPainter {
         double rad = (double) maxSize / 2 * NODE_SIZE;
         Shape shape = new Circle(node.getX(), node.getY(), rad);
         shape.setFill(roadColor);
-        if (node.getSpawner() != null){
-            Image img = new Image(getClass().getResource("../../view/Images/spawner.png").toExternalForm());
+        if (node.getSpawner() != null ) {
+            if (node.getTrafficLight() == null) {
+                Image img = new Image(getClass().getResource("../../view/Images/spawner.png").toExternalForm());
+                shape.setFill(new ImagePattern(img));
+            }
+            else {
+                Image img = new Image(getClass().getResource("../../view/Images/spawner_trafficlight.png").toExternalForm());
+                shape.setFill(new ImagePattern(img));
+            }
+        } else if (node.getTrafficLight() != null) {
+            Image img = new Image(getClass().getResource("../../view/Images/trafficlight.png").toExternalForm());
             shape.setFill(new ImagePattern(img));
         }
         return shape;
@@ -168,11 +211,11 @@ public class ObjectPainter {
         building.setStroke(Color.valueOf("#656565"));
         building.setStrokeWidth(4);
         building.setStyle("{" +
-            "-fx-stroke-width: 7;" +
-            "-fx-stroke-dash-array: 12 2 4 2;" +
-            "-fx-stroke-dash-offset: 6;" +
-            "-fx-stroke-line-cap: butt;" +
-        "}");
+                "-fx-stroke-width: 7;" +
+                "-fx-stroke-dash-array: 12 2 4 2;" +
+                "-fx-stroke-dash-offset: 6;" +
+                "-fx-stroke-line-cap: butt;" +
+                "}");
         return building;
     }
 }

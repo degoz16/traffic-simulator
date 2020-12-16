@@ -3,11 +3,11 @@ package ru.nsu.fit.traffic.jsonParse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import ru.nsu.fit.traffic.model.Lane;
+import ru.nsu.fit.traffic.model.road.Lane;
 import ru.nsu.fit.traffic.model.Node;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.Road;
-import ru.nsu.fit.traffic.model.Spawner;
+import ru.nsu.fit.traffic.model.road.Road;
+import ru.nsu.fit.traffic.model.road.Spawner;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
 public class MapJsonStruct {
