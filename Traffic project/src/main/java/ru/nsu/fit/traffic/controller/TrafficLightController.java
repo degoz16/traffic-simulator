@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.model.Node;
+import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;

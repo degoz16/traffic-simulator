@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
@@ -63,8 +64,7 @@
                         <Button fx:id="simulationStartButton" layoutX="14.0" layoutY="12.0" mnemonicParsing="false" onAction="#startSimulation" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/startButton.css" />
                         <Button fx:id="simulationPauseButton" layoutX="54.0" layoutY="12.0" mnemonicParsing="false" onAction="#pauseSimulation" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/pauseButton.css" />
                         <Button fx:id="simulationStopButton" layoutX="91.0" layoutY="12.0" mnemonicParsing="false" onAction="#stopSimulation" prefHeight="20.0" prefWidth="20.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/stopButton.css" />
-                        <Button fx:id="simulationSpeenDown" layoutX="76.0" layoutY="45.0" mnemonicParsing="false" onAction="#speedUpSimulation" prefHeight="15.0" prefWidth="23.0" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/simulationSpeedUp.css" />
-                        <Button fx:id="simulationSpeedDown" layoutX="29.0" layoutY="45.0" mnemonicParsing="false" onAction="#speedDownSimulation" prefHeight="15.0" prefWidth="23.0" style="-fx-background-radius: 10;" stylesheets="@MainViewStyleSheets/simulationSpeedDown.css" />
+                        <Slider fx:id="timeLineSlider" showTickLabels="true" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" />
                      </children>
                   </AnchorPane>
                   <AnchorPane layoutX="351.0" layoutY="329.79998779296875" prefHeight="63.0" prefWidth="264.0">

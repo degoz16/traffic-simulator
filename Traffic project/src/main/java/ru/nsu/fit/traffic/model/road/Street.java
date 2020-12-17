@@ -1,7 +1,6 @@
 package ru.nsu.fit.traffic.model.road;
 
-import ru.nsu.fit.traffic.model.Node;
-import ru.nsu.fit.traffic.model.road.Road;
+import ru.nsu.fit.traffic.model.node.Node;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
-package ru.nsu.fit.traffic.model;
+package ru.nsu.fit.traffic.model.node;
 
+import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.road.Spawner;
 import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
 
 import java.util.ArrayList;

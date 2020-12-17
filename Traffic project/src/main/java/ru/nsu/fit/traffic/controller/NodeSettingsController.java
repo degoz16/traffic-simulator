@@ -5,8 +5,8 @@ import java.time.LocalTime;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.model.Node;
-import ru.nsu.fit.traffic.model.road.Spawner;
+import ru.nsu.fit.traffic.model.node.Node;
+import ru.nsu.fit.traffic.model.node.Spawner;
 
 public class NodeSettingsController {
 

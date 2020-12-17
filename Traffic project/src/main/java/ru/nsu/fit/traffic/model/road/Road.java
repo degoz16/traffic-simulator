@@ -1,6 +1,6 @@
 package ru.nsu.fit.traffic.model.road;
 
-import ru.nsu.fit.traffic.model.Node;
+import ru.nsu.fit.traffic.model.node.Node;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ public class Road {
     private int length = -1;
     private Road backRoad = null;
     private Street currStreet = null;
+    private int congestion = 0;
 
     public Road(int lanesNum) {
         lanes = new ArrayList<>();
@@ -20,6 +21,14 @@ public class Road {
     }
 
     public Road() {
+    }
+
+    public int getCongestion() {
+        return congestion;
+    }
+
+    public void setCongestion(int congestion) {
+        this.congestion = congestion;
     }
 
     public void setLanes(List<Lane> lanes) {
