@@ -4,16 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import ru.nsu.fit.traffic.model.road.Lane;
-import ru.nsu.fit.traffic.model.Node;
+import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.road.Spawner;
+import ru.nsu.fit.traffic.model.node.Spawner;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
 public class MapJsonStruct {
-  private List<NodeJsonStruct> nodes = new ArrayList<>();
-  private List<RoadJsonStruct> roads = new ArrayList<>();
-  private List<PlaceOfInterestJsonStruct> pois = new ArrayList<>();
+  private final List<NodeJsonStruct> nodes = new ArrayList<>();
+  private final List<RoadJsonStruct> roads = new ArrayList<>();
+  private final List<PlaceOfInterestJsonStruct> pois = new ArrayList<>();
 
   public MapJsonStruct(TrafficMap map) {
     map.forEachNode(

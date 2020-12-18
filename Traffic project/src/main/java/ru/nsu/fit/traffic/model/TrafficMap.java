@@ -1,5 +1,6 @@
 package ru.nsu.fit.traffic.model;
 
+import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.Street;
 
@@ -33,6 +34,14 @@ public class TrafficMap {
 
     public void addRoad(Road road) {
         roads.add(road);
+    }
+
+    public int getRoadCount() {
+        return roads.size();
+    }
+
+    public Road getRoad(int i) {
+        return roads.get(i);
     }
 
     public void removeNode(Node node) {

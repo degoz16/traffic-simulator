@@ -1,5 +1,7 @@
 package ru.nsu.fit.traffic.model;
 
+import ru.nsu.fit.traffic.model.node.Node;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

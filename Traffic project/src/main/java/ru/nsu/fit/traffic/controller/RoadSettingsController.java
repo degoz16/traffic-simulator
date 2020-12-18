@@ -5,7 +5,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.TrafficMap;
 import ru.nsu.fit.traffic.model.road.Street;
 
 import java.util.function.UnaryOperator;
@@ -20,6 +19,9 @@ public class RoadSettingsController {
 
     private Road lastRoadClicked;
     private MainController mainController;
+
+    @FXML
+    private TextField streetName;
 
     public void setMainController(MainController mainController) {
         this.mainController = mainController;
@@ -38,25 +40,20 @@ public class RoadSettingsController {
     }
 
     @FXML
-    private TextField streetName;
-
-    @FXML
     public void deleteRoad() {
-        TrafficMap currMap = mainController.getCurrMap();
-
         if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
             if (lastRoadClicked.getFrom().getRoadsOutNum() <= 1) {
                 lastRoadClicked.getFrom().removeFromPlaceOfInterest();
-                currMap.removeNode(lastRoadClicked.getFrom());
+                mainController.getCurrMap().removeNode(lastRoadClicked.getFrom());
             }
             if (lastRoadClicked.getTo().getRoadsInNum() <= 1) {
                 lastRoadClicked.getTo().removeFromPlaceOfInterest();
-                currMap.removeNode(lastRoadClicked.getTo());
+                mainController.getCurrMap().removeNode(lastRoadClicked.getTo());
             }
             lastRoadClicked.getBackRoad().disconnect();
-            currMap.removeRoad(lastRoadClicked.getBackRoad());
+            mainController.getCurrMap().removeRoad(lastRoadClicked.getBackRoad());
             lastRoadClicked.disconnect();
-            currMap.removeRoad(lastRoadClicked);
+            mainController.getCurrMap().removeRoad(lastRoadClicked);
         } else {
             lastRoadClicked.clearLanes();
         }

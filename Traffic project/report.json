@@ -1,0 +1,49 @@
+{
+	"windowList" : [
+		{
+			"start" : 0,
+			"end" : 2,
+			"congestionList" : [10,100,90,60]
+		},
+		{
+			"start" : 1,
+			"end" : 3,
+			"congestionList" : [1,10,50,70]
+		},
+		{
+			"start" : 2,
+			"end" : 4,
+			"congestionList" : [1,1,9,60]
+		},
+		{
+			"start" : 3,
+			"end" : 5,
+			"congestionList" : [10,10,90,6]
+		},
+		{
+			"start" : 4,
+			"end" : 6,
+			"congestionList" : [0,0,90,0]
+		},
+		{
+			"start" : 5,
+			"end" : 7,
+			"congestionList" : [15,10,50,60]
+		},
+		{
+			"start" : 6,
+			"end" : 8,
+			"congestionList" : [80,50,50,30]
+		},
+		{
+			"start" : 7,
+			"end" : 9,
+			"congestionList" : [70,0,90,0]
+		},
+		{
+			"start" : 8,
+			"end" : 10,
+			"congestionList" : [0,100,0,60]
+		}
+	]
+}

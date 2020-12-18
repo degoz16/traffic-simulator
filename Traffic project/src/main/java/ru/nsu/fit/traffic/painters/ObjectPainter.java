@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.controller.painters;
+package ru.nsu.fit.traffic.painters;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -6,7 +6,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
-import ru.nsu.fit.traffic.model.Node;
+import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
@@ -24,7 +24,21 @@ public class ObjectPainter {
         NODE_SIZE = nodeSize;
     }
 
-    public List<List<Shape>> paintRoad(Road road) {
+    private Color getGradientColor(int percent) {
+        int percentBounded;
+        if (percent < 0) {
+            percentBounded = 0;
+        }
+        else percentBounded = Math.min(percent, 100);
+        if (percentBounded < 50) {
+            return Color.GREEN.interpolate(Color.YELLOW, (double)percentBounded / 50d);
+        }
+        else {
+            return Color.YELLOW.interpolate(Color.RED, ((double)percentBounded - 50) / 50d);
+        }
+    }
+
+    public List<List<Shape>> paintRoad(Road road, boolean reportMode) {
         double pointFromX = road.getFrom().getX();
         double pointFromY = road.getFrom().getY();
         double pointToX = road.getTo().getX();
@@ -49,7 +63,12 @@ public class ObjectPainter {
                     pointToX + i * vx, pointToY + i * vy,
                     vx + pointToX + i * vx,
                     vy + pointToY + i * vy);
-            curr.setFill(roadColor);
+            if (!reportMode) {
+                curr.setFill(roadColor);
+            }
+            else {
+                curr.setFill(getGradientColor(road.getCongestion()));
+            }
             curr.strokeWidthProperty().setValue(2);
             curr.setStroke(curr.getFill());
 
@@ -102,15 +121,15 @@ public class ObjectPainter {
                         case MAIN_ROAD:
                             if (road.getLanesNum() - 1 != i)
                                 break;
-                            double x = (pointToX + vx / 2 - vy * 2 );
-                            double y = (pointToY + vy / 2 + vx * 2 );
-                            int d = road.getLanesNum() * (int)(LANE_SIZE / 2.5);
+                            double x = (pointToX + vx / 2 - vy * 2);
+                            double y = (pointToY + vy / 2 + vx * 2);
+                            int d = road.getLanesNum() * (int) (LANE_SIZE / 2.5);
                             Polygon shape = new Polygon(
                                     x - d, y,
                                     x, y + d,
                                     x + d, y,
                                     x, y - d);
-                            shape.setFill(new Color(1,1,0,0.5));
+                            shape.setFill(new Color(1, 1, 0, 0.5));
                             shape.setStroke(Color.WHITE);
                             shape.setStrokeWidth(2);
                             roadGroup.add(shape);
@@ -126,10 +145,10 @@ public class ObjectPainter {
     public Shape paintRoadLight(Road road, boolean isGreen) {
         List<Shape> list = new ArrayList<>();
         Shape curr;
-        int pointFromX = (int)road.getFrom().getX();
-        int pointFromY = (int)road.getFrom().getY();
-        int pointToX = (int)road.getTo().getX();
-        int pointToY = (int)road.getTo().getY();
+        int pointFromX = (int) road.getFrom().getX();
+        int pointFromY = (int) road.getFrom().getY();
+        int pointToX = (int) road.getTo().getX();
+        int pointToY = (int) road.getTo().getY();
 
         double vx = pointFromY - pointToY;
         double vy = -pointFromX + pointToX;
@@ -145,13 +164,13 @@ public class ObjectPainter {
                 vy + pointFromY,
                 pointFromX, pointFromY,
                 pointToX, pointToY,
-                vx*road.getLanesNum() + pointToX,
-                vy*road.getLanesNum() + pointToY);
+                vx * road.getLanesNum() + pointToX,
+                vy * road.getLanesNum() + pointToY);
         curr.setFill(Paint.valueOf("transparent"));
         curr.setStrokeWidth(3);
-        if (isGreen){
+        if (isGreen) {
             curr.setStroke(Paint.valueOf("#00a550"));
-        } else{
+        } else {
             curr.setStroke(Paint.valueOf("#eb003b"));
         }
         return curr;
@@ -171,12 +190,11 @@ public class ObjectPainter {
         double rad = (double) maxSize / 2 * NODE_SIZE;
         Shape shape = new Circle(node.getX(), node.getY(), rad);
         shape.setFill(roadColor);
-        if (node.getSpawner() != null ) {
+        if (node.getSpawner() != null) {
             if (node.getTrafficLight() == null) {
                 Image img = new Image(getClass().getResource("../../view/Images/spawner.png").toExternalForm());
                 shape.setFill(new ImagePattern(img));
-            }
-            else {
+            } else {
                 Image img = new Image(getClass().getResource("../../view/Images/spawner_trafficlight.png").toExternalForm());
                 shape.setFill(new ImagePattern(img));
             }
@@ -192,12 +210,15 @@ public class ObjectPainter {
         selectRect.setFill(Color.TRANSPARENT);
         selectRect.setStroke(Color.valueOf("#656565"));
         selectRect.setStrokeWidth(4);
-        selectRect.setStyle("{" +
-                "-fx-stroke-width: 7;" +
-                "-fx-stroke-dash-array: 12 2 4 2;" +
-                "-fx-stroke-dash-offset: 6;" +
-                "-fx-stroke-line-cap: butt;" +
-                "}");
+        StringBuilder style = new StringBuilder();
+        style
+                .append("{")
+                .append("-fx-stroke-width: 7;")
+                .append("-fx-stroke-dash-array: 12 2 4 2;")
+                .append("-fx-stroke-dash-offset: 6;")
+                .append("-fx-stroke-line-cap: butt;")
+                .append("}");
+        selectRect.setStyle(style.toString());
         return selectRect;
     }
 
@@ -210,12 +231,15 @@ public class ObjectPainter {
         building.setFill(Color.valueOf("#bbbbbb"));
         building.setStroke(Color.valueOf("#656565"));
         building.setStrokeWidth(4);
-        building.setStyle("{" +
-                "-fx-stroke-width: 7;" +
-                "-fx-stroke-dash-array: 12 2 4 2;" +
-                "-fx-stroke-dash-offset: 6;" +
-                "-fx-stroke-line-cap: butt;" +
-                "}");
+        StringBuilder style = new StringBuilder();
+        style
+                .append("{")
+                .append("-fx-stroke-width: 7;")
+                .append("-fx-stroke-dash-array: 12 2 4 2;")
+                .append("-fx-stroke-dash-offset: 6;")
+                .append("-fx-stroke-line-cap: butt;")
+                .append("}");
+        building.setStyle(style.toString());
         return building;
     }
 }
