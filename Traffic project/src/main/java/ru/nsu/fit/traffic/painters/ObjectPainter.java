@@ -192,14 +192,14 @@ public class ObjectPainter {
         shape.setFill(roadColor);
         if (node.getSpawner() != null) {
             if (node.getTrafficLight() == null) {
-                Image img = new Image(getClass().getResource("../../view/Images/spawner.png").toExternalForm());
+                Image img = new Image(getClass().getResource("../view/Images/spawner.png").toExternalForm());
                 shape.setFill(new ImagePattern(img));
             } else {
-                Image img = new Image(getClass().getResource("../../view/Images/spawner_trafficlight.png").toExternalForm());
+                Image img = new Image(getClass().getResource("../view/Images/spawner_trafficlight.png").toExternalForm());
                 shape.setFill(new ImagePattern(img));
             }
         } else if (node.getTrafficLight() != null) {
-            Image img = new Image(getClass().getResource("../../view/Images/trafficlight.png").toExternalForm());
+            Image img = new Image(getClass().getResource("../view/Images/trafficlight.png").toExternalForm());
             shape.setFill(new ImagePattern(img));
         }
         return shape;
