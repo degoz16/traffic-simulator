@@ -1,22 +1,22 @@
 package ru.nsu.fit.traffic.model.trafficlight;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TrafficLight {
-    private TrafficLightConfig greenConfig;
-    private TrafficLightConfig redConfig;
+    private final List<TrafficLightConfig> config = new ArrayList<>();
 
     public TrafficLight(TrafficLightConfig greenConfig, TrafficLightConfig redConfig) {
-        this.greenConfig = greenConfig;
-        this.redConfig = redConfig;
+        config.add(greenConfig);
+        config.add(redConfig);
     }
 
     public int getGreenDelay(){
-        return greenConfig.getDelay();
+        return config.get(0).getDelay();
     }
 
     public int getRedDelay(){
-        return redConfig.getDelay();
+        return config.get(1).getDelay();
     }
 
 }

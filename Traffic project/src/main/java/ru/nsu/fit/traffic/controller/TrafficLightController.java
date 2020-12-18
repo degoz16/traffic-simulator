@@ -35,12 +35,13 @@ public class TrafficLightController {
     @FXML
     public void confirmTrafficLightSettings() {
         trafficLightPane.setVisible(false);
-        List<Integer> roadsGreen;
-        List<Integer> roadsRed = new ArrayList<>();
-        roadsGreen = findPairOfRoad(lastNodeClicked);
+        List<Road> roadsGreen = new ArrayList<>();
+        List<Road> roadsRed = new ArrayList<>();
+        List<Integer> roadsIndexes= findPairOfRoad(lastNodeClicked);
         for (int i = 0; i < lastNodeClicked.getRoadsInNum(); ++i){
-            if (roadsGreen.get(0) != i && roadsGreen.get(1) != i)
-                roadsRed.add(i);
+            if (roadsIndexes.get(0) != i && roadsIndexes.get(1) != i)
+                roadsRed.add((Road)lastNodeClicked.getRoadInStream().toArray()[i]);
+            else roadsGreen.add((Road)lastNodeClicked.getRoadInStream().toArray()[i]);
         }
         TrafficLightConfig greenConfig = new TrafficLightConfig(
                 Integer.parseInt(greenDelay.getText()),roadsGreen);

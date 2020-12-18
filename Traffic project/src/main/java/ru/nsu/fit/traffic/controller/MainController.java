@@ -471,6 +471,7 @@ public class MainController {
                 switch (editOperationsManager.getCurrentOperation()) {
                     case ROAD_CREATION -> {
                         editOperationsManager.buildRoadOnNode(node);
+                        node.setTrafficLight(null);
                         updateMapView();
                     }
                     case TRAFFIC_LIGHT_CREATION -> {

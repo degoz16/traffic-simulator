@@ -60,6 +60,7 @@ public class RoadSettingsController {
         } else {
             lastRoadClicked.clearLanes();
         }
+        lastRoadClicked.getTo().setTrafficLight(null);
         mainController.updateMapView();
     }
 
