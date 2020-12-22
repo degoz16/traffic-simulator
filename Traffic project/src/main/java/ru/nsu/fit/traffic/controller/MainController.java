@@ -534,8 +534,8 @@ public class MainController {
                         if (node.getRoadsInNum() <= 2)
                             break;
                         trafficLightController.getTrafficLightPane().setVisible(true);
-                        trafficLightController.getTrafficLightPane().setLayoutX(event.getX());
-                        trafficLightController.getTrafficLightPane().setLayoutY(event.getY());
+                        trafficLightController.getTrafficLightPane().setLayoutX(lastXbase);
+                        trafficLightController.getTrafficLightPane().setLayoutY(lastYbase);
                         trafficLightController.setLastNodeClicked(node);
                         trafficLightController.updateDelay(node);
                         List<Integer> greenIndex = trafficLightController.findPairOfRoad(node);
@@ -559,8 +559,8 @@ public class MainController {
                             nodeSettingsController.getEndTime().setValue(LocalTime.parse(node.getSpawner().getEndString()));
                             nodeSettingsController.getSpawnerRate().setText(String.valueOf(node.getSpawner().getSpawnRate()));
                         }
-                        nodeSettingsController.getNodeSettingPane().setLayoutX(event.getX());
-                        nodeSettingsController.getNodeSettingPane().setLayoutY(event.getY());
+                        nodeSettingsController.getNodeSettingPane().setLayoutX(lastXbase);
+                        nodeSettingsController.getNodeSettingPane().setLayoutY(lastYbase);
                         nodeSettingsController.getNodeSettingPane().setVisible(true);
                     }
                 }
