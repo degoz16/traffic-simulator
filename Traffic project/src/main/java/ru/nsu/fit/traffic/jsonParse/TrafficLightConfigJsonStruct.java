@@ -1,15 +1,15 @@
-package ru.nsu.fit.traffic.model.trafficlight;
+package ru.nsu.fit.traffic.jsonParse;
 
 import java.util.ArrayList;
 import java.util.List;
-import ru.nsu.fit.traffic.jsonParse.TrafficLightConfigJsonStruct;
 import ru.nsu.fit.traffic.model.road.Road;
 
-public class TrafficLightConfig {
-  private int delay;
-  private List<Road> roads;
+public class TrafficLightConfigJsonStruct {
 
-  public TrafficLightConfig(int delay, List<Road> roads) {
+  private int delay;
+  private List<Integer> roads;
+
+  public TrafficLightConfigJsonStruct(int delay, List<Integer> roads){
     this.delay = delay;
     assert roads != null;
     this.roads = new ArrayList<>(roads);
@@ -19,7 +19,8 @@ public class TrafficLightConfig {
     return delay;
   }
 
-  public List<Road> getRoads() {
+  public List<Integer> getRoads() {
     return roads;
   }
+
 }

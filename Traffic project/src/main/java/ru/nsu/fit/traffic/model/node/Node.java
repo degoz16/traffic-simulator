@@ -13,7 +13,7 @@ public class Node {
   private final double x;
   private final double y;
 
-  private Spawner spawner = null;
+  private List<Spawner> spawners = null;
   private TrafficLight trafficLight = null;
   private PlaceOfInterest placeOfInterest = null;
 
@@ -26,12 +26,12 @@ public class Node {
     this.y = y;
   }
 
-  public Spawner getSpawner() {
-    return spawner;
+  public List<Spawner> getSpawners() {
+    return spawners;
   }
 
-  public void setSpawner(Spawner spawner) {
-    this.spawner = spawner;
+  public void setSpawners(List<Spawner> spawners) {
+    this.spawners = spawners;
   }
 
   public PlaceOfInterest getPlaceOfInterest() {

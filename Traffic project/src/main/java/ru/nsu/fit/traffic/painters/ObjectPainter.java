@@ -190,7 +190,7 @@ public class ObjectPainter {
         double rad = (double) maxSize / 2 * NODE_SIZE;
         Shape shape = new Circle(node.getX(), node.getY(), rad);
         shape.setFill(roadColor);
-        if (node.getSpawner() != null) {
+        if (node.getSpawners() != null) {
             if (node.getTrafficLight() == null) {
                 Image img = new Image(getClass().getResource("../view/Images/spawner.png").toExternalForm());
                 shape.setFill(new ImagePattern(img));

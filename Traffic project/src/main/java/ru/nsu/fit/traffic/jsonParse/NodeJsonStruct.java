@@ -1,28 +1,27 @@
 package ru.nsu.fit.traffic.jsonParse;
 
 import java.util.List;
-import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
 
 public class NodeJsonStruct {
   private double x;
   private double y;
   private List<Integer> roadsIn;
   private List<Integer> roadsOut;
-  private TrafficLight trafficLight;
-  private SpawnerJsonStruct spawner;
+  private List<TrafficLightConfigJsonStruct> trafficLight;
+  private List<SpawnerJsonStruct> periodsOfSpawn;
 
   public NodeJsonStruct(
       double x,
       double y,
       List<Integer> roadsFrom,
       List<Integer> roadsTo,
-      SpawnerJsonStruct spawner,
-      TrafficLight trafficLight) { //FIXME Поменять на TrafficJson
+      List<SpawnerJsonStruct> periodsOfSpawn,
+      List<TrafficLightConfigJsonStruct> trafficLight) { //FIXME Поменять на TrafficJson
     this.x = x;
     this.y = y;
     this.roadsIn = roadsFrom;
     this.roadsOut = roadsTo;
-    this.spawner = spawner;
+    this.periodsOfSpawn = periodsOfSpawn;
     this.trafficLight = trafficLight;
   }
 
@@ -42,11 +41,11 @@ public class NodeJsonStruct {
     return roadsOut;
   }
 
-  public TrafficLight getTrafficLight() {
+  public List<TrafficLightConfigJsonStruct> getTrafficLight() {
     return trafficLight;
   }
 
-  public SpawnerJsonStruct getSpawner() {
-      return spawner;
+  public List<SpawnerJsonStruct>  getPeriodsOfSpawn() {
+      return periodsOfSpawn;
   }
 }
