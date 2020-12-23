@@ -124,8 +124,8 @@ public class ObjectPainter {
                         case MAIN_ROAD:
                             if (road.getLanesNum() - 1 != i)
                                 break;
-                            double x = (pointToX + vx / 2 - vy * 2 - vx * road.getLanesNum() / 2 + vy * road.getLanesNum() / 2);
-                            double y = (pointToY + vy / 2 + vx * 2 - vx * road.getLanesNum() / 2 + vy * road.getLanesNum() / 2);
+                            double x = pointToX + vx * road.getLanesNum() / 2 - vy * 3;
+                            double y = pointToY + vy * road.getLanesNum() / 2 + vx * 3;
                             int d = road.getLanesNum() * (int) (LANE_SIZE / 3);
                             Polygon shape = new Polygon(
                                     x - d, y,
@@ -134,7 +134,7 @@ public class ObjectPainter {
                                     x, y - d);
                             shape.setFill(new Color(1, 1, 0, 0.5));
                             shape.setStroke(Color.WHITE);
-                            shape.setStrokeWidth(d / 2);
+                            shape.setStrokeWidth(d / 2.5);
                             roadGroup.add(shape);
                     }
 
