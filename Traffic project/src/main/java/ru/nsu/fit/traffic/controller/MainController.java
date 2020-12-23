@@ -110,6 +110,7 @@ public class MainController {
   private Rectangle selectRect;
   private ReportStruct reportStruct = new ReportStruct();
 
+
   public PlaceOfInterest getLastPOIClicked() {
     return lastPOIClicked;
   }
@@ -487,12 +488,68 @@ public class MainController {
             roadSettingsController.getRoadSettingsPane().setVisible(false);
           }
         }
-        //todo другие операции
       }
-      case SECONDARY -> stopOperation();
-      //todo другие функции
+      case SECONDARY -> {
+        stopOperation();
+      }
     }
   }
+
+
+  private void onNodeClick(Node node, MouseEvent event) {
+    System.out.println("NODE CLICK");
+    lastNodeClicked = node;
+    //Node nodeRef = node;
+    switch (event.getButton()) {
+      case PRIMARY -> {
+        event.consume();
+        switch (editOperationsManager.getCurrentOperation()) {
+          case ROAD_CREATION -> {
+            editOperationsManager.buildRoadOnNode(node);
+            node.setTrafficLight(null);
+            updateMapView();
+          }
+          case TRAFFIC_LIGHT_CREATION -> {
+            if (node.getRoadsInNum() <= 2)
+              break;
+            trafficLightController.getTrafficLightPane().setVisible(true);
+            trafficLightController.getTrafficLightPane().setLayoutX(lastXbase);
+            trafficLightController.getTrafficLightPane().setLayoutY(lastYbase);
+            trafficLightController.setLastNodeClicked(node);
+            trafficLightController.updateDelay(node);
+            List<Integer> greenIndex = trafficLightController.findPairOfRoad(node);
+
+            int i = 0;
+            for (Iterator<Road> it = node.getRoadInStream().iterator(); it.hasNext(); i++) {
+              Road r = it.next();
+              boolean isGreen = false;
+              for (int j : greenIndex)
+                if (j == i) {
+                  isGreen = true;
+                  break;
+                }
+              mainPane.getChildren().add(objectPainter.paintRoadLight(r, isGreen));
+            }
+            mainPane.getChildren().add(objectPainter.paintNode(node));
+          }
+          case NONE -> {
+            if (node.getSpawners() != null) {
+              nodeSettingsController.getStartTime().setValue(LocalTime.parse(node.getSpawners().get(0).getStartString()));
+              nodeSettingsController.getEndTime().setValue(LocalTime.parse(node.getSpawners().get(0).getEndString()));
+              nodeSettingsController.getSpawnerRate().setText(String.valueOf(node.getSpawners().get(0).getSpawnRate()));
+            }
+            nodeSettingsController.getNodeSettingPane().setLayoutX(lastXbase);
+            nodeSettingsController.getNodeSettingPane().setLayoutY(lastYbase);
+            nodeSettingsController.getNodeSettingPane().setVisible(true);
+          }
+        }
+
+      }
+    }
+    //todo другие операции
+  }
+  //todo другие функции
+
 
   /**
    * Обработка драга на поле
@@ -524,58 +581,6 @@ public class MainController {
     }
   }
 
-  private void onNodeClick(Node node, MouseEvent event) {
-    System.out.println("NODE CLICK");
-    lastNodeClicked = node;
-    //Node nodeRef = node;
-    switch (event.getButton()) {
-      case PRIMARY -> {
-        event.consume();
-        switch (editOperationsManager.getCurrentOperation()) {
-          case ROAD_CREATION -> {
-            editOperationsManager.buildRoadOnNode(node);
-            node.setTrafficLight(null);
-            updateMapView();
-          }
-          case TRAFFIC_LIGHT_CREATION -> {
-            if (node.getRoadsInNum() <= 2)
-              break;
-            trafficLightController.getTrafficLightPane().setVisible(true);
-            trafficLightController.getTrafficLightPane().setLayoutX(event.getX());
-            trafficLightController.getTrafficLightPane().setLayoutY(event.getY());
-            trafficLightController.setLastNodeClicked(node);
-            trafficLightController.updateDelay(node);
-            List<Integer> greenIndex = trafficLightController.findPairOfRoad(node);
-
-            int i = 0;
-            for (Iterator<Road> it = node.getRoadInStream().iterator(); it.hasNext(); i++) {
-              Road r = it.next();
-              boolean isGreen = false;
-              for (int j : greenIndex)
-                if (j == i) {
-                  isGreen = true;
-                  break;
-                }
-              mainPane.getChildren().add(objectPainter.paintRoadLight(r, isGreen));
-            }
-            mainPane.getChildren().add(objectPainter.paintNode(node));
-          }
-          case NONE -> {
-            if (node.getSpawners() != null) {
-              nodeSettingsController.getStartTime().setValue(LocalTime.parse(node.getSpawners().get(0).getStartString()));
-              nodeSettingsController.getEndTime().setValue(LocalTime.parse(node.getSpawners().get(0).getEndString()));
-              nodeSettingsController.getSpawnerRate().setText(String.valueOf(node.getSpawners().get(0).getSpawnRate()));
-            }
-            nodeSettingsController.getNodeSettingPane().setLayoutX(event.getX());
-            nodeSettingsController.getNodeSettingPane().setLayoutY(event.getY());
-            nodeSettingsController.getNodeSettingPane().setVisible(true);
-          }
-        }
-
-      }
-    }
-    //todo другие операции
-  }
 
   private void onRoadClick(Road road, int finalI, MouseEvent event) {
     System.out.println("ROAD CLICK");

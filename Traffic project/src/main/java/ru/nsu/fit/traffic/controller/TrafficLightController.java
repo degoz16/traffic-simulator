@@ -18,12 +18,9 @@ import java.util.function.UnaryOperator;
 public class TrafficLightController {
     private MainController mainController;
 
-    @FXML
-    private TextField greenDelay;
-    @FXML
-    private Pane trafficLightPane;
-    @FXML
-    private TextField redDelay;
+    @FXML private TextField greenDelay;
+    @FXML private Pane trafficLightPane;
+    @FXML private TextField redDelay;
     private Node lastNodeClicked;
 
     @FXML
