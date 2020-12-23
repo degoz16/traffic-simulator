@@ -9,6 +9,8 @@ import java.io.Reader;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.function.UnaryOperator;
+
+import com.google.gson.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -32,8 +34,9 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.ReportStruct;
+import ru.nsu.fit.traffic.model.congestion.ReportStruct;
 import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.node.Node;
@@ -296,11 +299,14 @@ public class MainController {
 
   @FXML
   public void startSimulation() {
-    File file = new File("report.json");
+    File file = new File("heatMap.json");
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     try {
       Reader fileReader = new FileReader(file);
-      reportStruct = gson.fromJson(fileReader, ReportStruct.class);
+      List<ReportWindowStruct> reportWindowStructList = gson.fromJson(
+              fileReader, new TypeToken<List<ReportWindowStruct>>(){}.getType());
+      reportStruct.setWindowList(reportWindowStructList);
+      reportStruct.fillCongestionList(currMap.getRoadCount());
       editOperationsManager.setCurrentOperation(EditOperation.REPORT_SHOWING);
       if (reportStruct.getWindowList().size() > 0) {
         editOperationsManager.updateCongestions(reportStruct.getWindowList().get(0));

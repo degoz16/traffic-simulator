@@ -58,6 +58,7 @@ public class NodeSettingsController {
     }
     lastNodeClick.getSpawners().add(
       new Spawner(startTime, endTime, Integer.parseInt(spawnerRate.getText())));
+    nodeSettingPane.setVisible(false);
     mainController.getViewUpdater()
             .updateMapView(mainController.getEditOperationManager());
   }

@@ -1,0 +1,92 @@
+[
+  {
+    "start": 11400000,
+    "end": 28800000,
+    "congestionList": [
+      {
+        "roadId": 0,
+        "congestion": 10
+      },
+      {
+        "roadId": 1,
+        "congestion": 10
+      },
+      {
+        "roadId": 2,
+        "congestion": 10
+      }
+    ]
+  },
+  {
+    "start": 11400000,
+    "end": 28800000,
+    "congestionList": [
+      {
+        "roadId": 0,
+        "congestion": 20
+      },
+      {
+        "roadId": 1,
+        "congestion": 20
+      },
+      {
+        "roadId": 2,
+        "congestion": 20
+      }
+    ]
+  },
+  {
+    "start": 11400000,
+    "end": 28800000,
+    "congestionList": [
+      {
+        "roadId": 0,
+        "congestion": 30
+      },
+      {
+        "roadId": 1,
+        "congestion": 30
+      },
+      {
+        "roadId": 2,
+        "congestion": 30
+      }
+    ]
+  },
+  {
+    "start": 11400000,
+    "end": 28800000,
+    "congestionList": [
+      {
+        "roadId": 0,
+        "congestion": 40
+      },
+      {
+        "roadId": 1,
+        "congestion": 40
+      },
+      {
+        "roadId": 2,
+        "congestion": 40
+      }
+    ]
+  },
+  {
+    "start": 11400000,
+    "end": 28800000,
+    "congestionList": [
+      {
+        "roadId": 0,
+        "congestion": 50
+      },
+      {
+        "roadId": 1,
+        "congestion": 50
+      },
+      {
+        "roadId": 2,
+        "congestion": 50
+      }
+    ]
+  }
+]

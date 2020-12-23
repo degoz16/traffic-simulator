@@ -1,6 +1,7 @@
 package ru.nsu.fit.traffic.model.logic;
 
 import ru.nsu.fit.traffic.model.*;
+import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.RoadHighLight;
@@ -48,6 +49,7 @@ public class EditOperationsManager {
      */
     public void setCurrentOperation(EditOperation currentOperation) {
         this.currentOperation = currentOperation;
+        updateView.update(this);
     }
 
     public void setLanesNumLeft(int lanesNumLeft) {
@@ -185,7 +187,7 @@ public class EditOperationsManager {
 
     public void updateCongestions(ReportWindowStruct reportWindowStruct) {
         for (int i = 0; i < Math.min(reportWindowStruct.getCongestionList().size(), map.getRoadCount()); i++) {
-            map.getRoad(i).setCongestion(reportWindowStruct.getCongestionList().get(i));
+            map.getRoad(i).setCongestion(reportWindowStruct.getCongestionListFilled().get(i));
         }
         updateView.update(this);
     }
