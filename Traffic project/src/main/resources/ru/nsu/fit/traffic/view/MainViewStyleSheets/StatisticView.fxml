@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane fx:id="statistics" depthTest="DISABLE" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="220.0" prefWidth="150.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.controller.StatisticsController">
+   <children>
+      <AnchorPane fx:id="s" prefHeight="220.0" prefWidth="150.0">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#555555" height="220.0" layoutY="1.0" stroke="#555555" strokeType="INSIDE" width="150.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#353535" height="22.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="150.0" />
+            <Text fill="WHITE" layoutX="6.0" layoutY="14.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Statistics" wrappingWidth="60.0">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="6.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Roads" wrappingWidth="75.2000732421875" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="30.0">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="6.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Streets" wrappingWidth="75.2000732421875" AnchorPane.topAnchor="125.0">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="6.0" layoutY="85.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buildings" wrappingWidth="75.2000732421875" AnchorPane.topAnchor="50.0">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fill="WHITE" layoutX="12.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Connectivity ellements" wrappingWidth="75.2000732421875" AnchorPane.leftAnchor="6.0" AnchorPane.topAnchor="70.0">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fx:id="streets" layoutX="82.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="39.73675537109375" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="125.0" />
+            <Text fx:id="buildings" layoutX="92.0" layoutY="127.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="39.73675537109375" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="50.0" />
+            <Text fx:id="connectivity" layoutX="85.0" layoutY="98.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="39.73675537109375" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="77.0" />
+            <Text fx:id="roads" layoutX="85.0" layoutY="42.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="39.73675537109375" AnchorPane.leftAnchor="110.0" AnchorPane.topAnchor="30.0" />
+            <ScrollPane layoutY="144.0" maxHeight="75.0" minHeight="0.0" prefHeight="75.0" prefWidth="150.0">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="80.0" prefWidth="147.0">
+                     <children>
+                        <VBox fx:id="streetsView" prefHeight="75.0" prefWidth="150.0" style="-fx-background-color: transparent;" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
+            <Text fill="WHITE" layoutX="7.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Car spawners" wrappingWidth="75.2000732421875" AnchorPane.topAnchor="105.0">
+               <font>
+                  <Font name="Arial Bold" size="11.0" />
+               </font>
+            </Text>
+            <Text fx:id="carSpawners" layoutX="110.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" wrappingWidth="39.73675537109375" AnchorPane.topAnchor="105.0" />
+         </children>
+      </AnchorPane>
+   </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</Pane>

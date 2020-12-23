@@ -68,6 +68,7 @@ public class BuildingController {
         mainController.getLastPOIClicked().setWeight(slider.getValue());
         mainController.getLastPOIClicked().setNumberOfParkingPlaces(Integer.parseInt(parkingPlaces.getText()));
         pane.setVisible(false);
+        mainController.UpdateStatistics();
     }
 
     @FXML
@@ -76,5 +77,6 @@ public class BuildingController {
         mainController.getViewUpdater()
                 .updateMapView(mainController.getEditOperationManager());
         pane.setVisible(false);
+        mainController.UpdateStatistics();
     }
 }

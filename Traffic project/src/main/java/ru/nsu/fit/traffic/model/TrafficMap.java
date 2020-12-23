@@ -96,6 +96,18 @@ public class TrafficMap {
         this.placesOfInterest = placesOfInterest;
     }
 
+    public List<PlaceOfInterest> getPlaceOfInterest() {
+        return placesOfInterest;
+    }
+
+    public List<Node> getNodes() {
+        return nodes;
+    }
+
+    public List<Road> getRoads() {
+        return roads;
+    }
+
     public void addPlaceOfInterest(PlaceOfInterest placeOfInterest) {
         placesOfInterest.add(placeOfInterest);
     }
