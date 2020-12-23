@@ -110,7 +110,7 @@ public class RoadSettingsController {
             lastRoadClicked.setCurrStreet(currStreet);
            // System.out.println(currStreet);
         }
-
+        roadSettingsPane.setVisible(false);
     }
 
     public void updateRoad(Road road) {
