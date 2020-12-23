@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,8 +10,6 @@ import java.io.Reader;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.function.UnaryOperator;
-
-import com.google.gson.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -34,8 +33,8 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.congestion.ReportStruct;
 import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.congestion.ReportStruct;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
@@ -137,12 +136,12 @@ public class MainController {
     selectRect.setStrokeWidth(4);
     StringBuilder style = new StringBuilder();
     style
-            .append("{")
-            .append("-fx-stroke-width: 7;")
-            .append("-fx-stroke-dash-array: 12 2 4 2;")
-            .append("-fx-stroke-dash-offset: 6;")
-            .append("-fx-stroke-line-cap: butt;")
-            .append("}");
+      .append("{")
+      .append("-fx-stroke-width: 7;")
+      .append("-fx-stroke-dash-array: 12 2 4 2;")
+      .append("-fx-stroke-dash-offset: 6;")
+      .append("-fx-stroke-line-cap: butt;")
+      .append("}");
     selectRect.setStyle(style.toString());
     return selectRect;
   }
@@ -165,12 +164,12 @@ public class MainController {
   @FXML
   public void initialize() {
     viewUpdater = new ViewUpdater(
-            this::poiObserver,
-            this::roadObserver,
-            this::nodeObserver,
-            mainPane);
+      this::poiObserver,
+      this::roadObserver,
+      this::nodeObserver,
+      mainPane);
     editOperationsManager =
-            new EditOperationsManager(currMap, viewUpdater::updateMapView);
+      new EditOperationsManager(currMap, viewUpdater::updateMapView);
     menuBarController.setMainController(this);
     menuBarController.setMap(currMap);
     menuBarController.setStage(stage);
@@ -304,7 +303,8 @@ public class MainController {
     try {
       Reader fileReader = new FileReader(file);
       List<ReportWindowStruct> reportWindowStructList = gson.fromJson(
-              fileReader, new TypeToken<List<ReportWindowStruct>>(){}.getType());
+        fileReader, new TypeToken<List<ReportWindowStruct>>() {
+        }.getType());
       reportStruct.setWindowList(reportWindowStructList);
       reportStruct.fillCongestionList(currMap.getRoadCount());
       editOperationsManager.setCurrentOperation(EditOperation.REPORT_SHOWING);
@@ -410,7 +410,7 @@ public class MainController {
   }
 
   private void nodeObserver(Node node, Shape nodeShape) {
-    if (node.getPlaceOfInterest() != null) {
+    if (node.getPlaceOfInterest() != null && node.getSpawners() == null) {
       nodeShape.setFill(Paint.valueOf("#303030"));
     }
     nodeShape.setOnMouseClicked(event -> {
@@ -455,7 +455,7 @@ public class MainController {
             buildingSettingsController.getPane().setLayoutY(event.getY());
             buildingSettingsController.getSlider().setValue(lastPOIClicked.getWeight());
             buildingSettingsController.getParkingPlaces().setText
-                    (String.valueOf(lastPOIClicked.getNumberOfParkingPlaces()));
+              (String.valueOf(lastPOIClicked.getNumberOfParkingPlaces()));
             buildingSettingsController.getPane().setVisible(true);
           }
         }
@@ -515,14 +515,17 @@ public class MainController {
 
           }
           case NONE -> {
-            if (node.getSpawners() != null) {
-              nodeSettingsController.getStartTime().setValue(LocalTime.parse(node.getSpawners().get(0).getStartString()));
-              nodeSettingsController.getEndTime().setValue(LocalTime.parse(node.getSpawners().get(0).getEndString()));
-              nodeSettingsController.getSpawnerRate().setText(String.valueOf(node.getSpawners().get(0).getSpawnRate()));
+            stopOperation();
+            if (node.getPlaceOfInterest() != null) {
+              if (node.getSpawners() != null) {
+                nodeSettingsController.getStartTime().setValue(LocalTime.parse(node.getSpawners().get(0).getStartString()));
+                nodeSettingsController.getEndTime().setValue(LocalTime.parse(node.getSpawners().get(0).getEndString()));
+                nodeSettingsController.getSpawnerRate().setText(String.valueOf(node.getSpawners().get(0).getSpawnRate()));
+              }
+              nodeSettingsController.getNodeSettingPane().setLayoutX(lastXbase);
+              nodeSettingsController.getNodeSettingPane().setLayoutY(lastYbase);
+              nodeSettingsController.getNodeSettingPane().setVisible(true);
             }
-            nodeSettingsController.getNodeSettingPane().setLayoutX(lastXbase);
-            nodeSettingsController.getNodeSettingPane().setLayoutY(lastYbase);
-            nodeSettingsController.getNodeSettingPane().setVisible(true);
           }
         }
 
