@@ -28,13 +28,11 @@ public class ObjectPainter {
         int percentBounded;
         if (percent < 0) {
             percentBounded = 0;
-        }
-        else percentBounded = Math.min(percent, 100);
+        } else percentBounded = Math.min(percent, 100);
         if (percentBounded < 50) {
-            return Color.GREEN.interpolate(Color.YELLOW, (double)percentBounded / 50d);
-        }
-        else {
-            return Color.YELLOW.interpolate(Color.RED, ((double)percentBounded - 50) / 50d);
+            return Color.GREEN.interpolate(Color.YELLOW, (double) percentBounded / 50d);
+        } else {
+            return Color.YELLOW.interpolate(Color.RED, ((double) percentBounded - 50) / 50d);
         }
     }
 
@@ -70,8 +68,7 @@ public class ObjectPainter {
                     case RED -> curr.setFill(Color.RED);
                 }
 
-            }
-            else {
+            } else {
                 curr.setFill(getGradientColor(road.getCongestion()));
             }
 
@@ -127,9 +124,9 @@ public class ObjectPainter {
                         case MAIN_ROAD:
                             if (road.getLanesNum() - 1 != i)
                                 break;
-                            double x = (pointToX + vx / 2 - vy * 2);
-                            double y = (pointToY + vy / 2 + vx * 2);
-                            int d = road.getLanesNum() * (int) (LANE_SIZE / 2.5);
+                            double x = (pointToX + vx / 2 - vy * 2 - vx * road.getLanesNum() / 2 + vy * road.getLanesNum() / 2);
+                            double y = (pointToY + vy / 2 + vx * 2 - vx * road.getLanesNum() / 2 + vy * road.getLanesNum() / 2);
+                            int d = road.getLanesNum() * (int) (LANE_SIZE / 3);
                             Polygon shape = new Polygon(
                                     x - d, y,
                                     x, y + d,
@@ -137,7 +134,7 @@ public class ObjectPainter {
                                     x, y - d);
                             shape.setFill(new Color(1, 1, 0, 0.5));
                             shape.setStroke(Color.WHITE);
-                            shape.setStrokeWidth(2);
+                            shape.setStrokeWidth(d / 2);
                             roadGroup.add(shape);
                     }
 
