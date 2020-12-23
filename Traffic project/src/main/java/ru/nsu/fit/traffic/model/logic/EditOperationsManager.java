@@ -1,27 +1,44 @@
 package ru.nsu.fit.traffic.model.logic;
 
-import ru.nsu.fit.traffic.model.ReportStruct;
-import ru.nsu.fit.traffic.model.ReportWindowStruct;
+import ru.nsu.fit.traffic.model.*;
 import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.road.RoadHighLight;
+import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
+import ru.nsu.fit.traffic.model.trafficlight.TrafficLightConfig;
+import ru.nsu.fit.traffic.model.trafficsign.MainRoadSign;
+import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class EditOperationsManager {
     private final int ROAD_LIMIT = 4;
 
-    private TrafficMap map;
+    private final TrafficMap map;
     private EditOperation currentOperation = EditOperation.NONE;
     public Node lastNode = null;
     private int lanesNumLeft = 1;
     private int lanesNumRight = 1;
+    private final UpdateObserver updateView;
+    private RoadSign currSign = new MainRoadSign();
 
-
-    public EditOperationsManager(TrafficMap map) {
+    public EditOperationsManager(TrafficMap map, UpdateObserver updateView) {
         this.map = map;
+        this.updateView = updateView;
+    }
+
+    public TrafficMap getMap() {
+        return map;
+    }
+
+    public RoadSign getCurrSign() {
+        return currSign;
+    }
+
+    public void setCurrSign(RoadSign currSign) {
+        this.currSign = currSign;
     }
 
     /**
@@ -64,6 +81,7 @@ public class EditOperationsManager {
             buildRoad(newNode, lastNode);
         }
         lastNode = newNode;
+        updateView.update(this);
     }
 
     private void buildRoad(Node newNode, Node lastNode) {
@@ -108,6 +126,7 @@ public class EditOperationsManager {
 
         nodeFrom.connect(road, backRoad, lastNode);
         lastNode.connect(road1, backRoad1, nodeTo);
+        updateView.update(this);
     }
 
     /**
@@ -134,6 +153,8 @@ public class EditOperationsManager {
                 lastNode.removeFromPlaceOfInterest();
             }
         }
+        node.setTrafficLight(null);
+        updateView.update(this);
     }
 
     public void buildRoadOnPlaceOfInterest(double x, double y, PlaceOfInterest placeOfInterest) {
@@ -141,6 +162,7 @@ public class EditOperationsManager {
         placeOfInterest.addNode(lastNode);
         lastNode.setPlaceOfInterest(placeOfInterest);
         List<Node> nodeList = new ArrayList<>();
+        updateView.update(this);
     }
 
     public void addPlaceOfInterest(double x, double y, double width, double height) {
@@ -158,12 +180,74 @@ public class EditOperationsManager {
             }
         });
         map.addPlaceOfInterest(placeOfInterest);
+        updateView.update(this);
     }
 
     public void updateCongestions(ReportWindowStruct reportWindowStruct) {
         for (int i = 0; i < Math.min(reportWindowStruct.getCongestionList().size(), map.getRoadCount()); i++) {
             map.getRoad(i).setCongestion(reportWindowStruct.getCongestionList().get(i));
         }
+        updateView.update(this);
+    }
+
+    public List<Integer> findPairOfRoad(Node node){
+        List<Double> k = new ArrayList<>();
+        for (Iterator<Road> it = node.getRoadInStream().iterator(); it.hasNext(); ) {
+            Road r = it.next();
+            double a = -(r.getFrom().getY() - r.getTo().getY()) / (r.getFrom().getX() - r.getTo().getX());
+            k.add(Math.atan(a));
+            System.out.println(Math.atan(a));
+        }
+        double d2 = Double.MAX_VALUE;
+        double d1 = d2;
+        int curr = -1;
+
+        for (int i = 1; i < k.size(); ++i){
+            if (Math.abs(k.get(0) - k.get(i)) < d1){
+                d1 = Math.abs(k.get(0) - k.get(i));
+                curr = i;
+            }
+        }
+
+        int curr2 = -1;
+        for (int i = 1; i < k.size(); ++i){
+            if (curr != i && Math.abs(k.get(0) - k.get(i)) < d1){
+                d2 = Math.abs(k.get(0) - k.get(i));
+                curr2 = i;
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        res.add(curr);
+        if (d1 < d2){
+            res.add(0);
+        }
+        else {
+            res.add(curr2);
+        }
+        return res;
+    }
+
+    public void updateRoadsHighLight(Node node) {
+        List<Integer> greenIndex = findPairOfRoad(node);
+
+        int i = 0;
+        for (Iterator<Road> it = node.getRoadInStream().iterator(); it.hasNext(); i++) {
+            Road r = it.next();
+            boolean isGreen = false;
+            for (int j : greenIndex)
+                if (j == i) {
+                    isGreen = true;
+                    break;
+                }
+            r.setRoadHighLight(isGreen ? RoadHighLight.GREEN : RoadHighLight.RED);
+        }
+        updateView.update(this);
+    }
+
+    public void resetRoadsHighLight(Node node) {
+        node.foreachRoadIn(road -> {
+            road.setRoadHighLight(RoadHighLight.NONE);
+        });
     }
 
     /**
@@ -173,5 +257,22 @@ public class EditOperationsManager {
      */
     public EditOperation getCurrentOperation() {
         return currentOperation;
+    }
+
+    public void applyTrafficLightSettings(Node lastNodeClicked, int greenDelay, int redDelay) {
+        List<Road> roadsGreen = new ArrayList<>();
+        List<Road> roadsRed = new ArrayList<>();
+        List<Integer> roadsIndexes = findPairOfRoad(lastNodeClicked);
+        for (int i = 0; i < lastNodeClicked.getRoadsInNum(); ++i){
+            if (roadsIndexes.get(0) != i && roadsIndexes.get(1) != i)
+                roadsRed.add((Road)lastNodeClicked.getRoadInStream().toArray()[i]);
+            else roadsGreen.add((Road)lastNodeClicked.getRoadInStream().toArray()[i]);
+        }
+        TrafficLightConfig greenConfig = new TrafficLightConfig(greenDelay, roadsGreen);
+        TrafficLightConfig redConfig = new TrafficLightConfig(redDelay, roadsRed);
+        TrafficLight trafficLight = new TrafficLight(greenConfig, redConfig);
+        lastNodeClicked.setTrafficLight(trafficLight);
+        setCurrentOperation(EditOperation.NONE);
+        updateView.update(this);
     }
 }

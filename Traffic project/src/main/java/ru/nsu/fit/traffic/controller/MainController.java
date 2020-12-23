@@ -7,10 +7,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.time.LocalTime;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.UnaryOperator;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
@@ -27,16 +25,15 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import ru.nsu.fit.traffic.model.ListenerAction;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.ReportStruct;
 import ru.nsu.fit.traffic.model.TrafficMap;
-import ru.nsu.fit.traffic.model.UpdateListener;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.node.Node;
@@ -46,18 +43,16 @@ import ru.nsu.fit.traffic.model.trafficsign.MainRoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.SignType;
 import ru.nsu.fit.traffic.model.trafficsign.SpeedLimitSign;
-import ru.nsu.fit.traffic.painters.ObjectPainter;
+import ru.nsu.fit.traffic.view.ViewUpdater;
 
 /**
  * Контроллер основной сцены, на которой располагаются все остальные.
  */
 public class MainController {
 
-  private final int NODE_SIZE = 10;
-  private final int LANE_SIZE = 10;
+
   private final TrafficMap currMap = new TrafficMap();
-  private final EditOperationsManager editOperationsManager = new EditOperationsManager(currMap);
-  private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
+
   @FXML
   private ScrollPane mainScrollPane;
   @FXML
@@ -96,12 +91,7 @@ public class MainController {
   private double lastXbase = 0d;
   private double lastYbase = 0d;
   private Stage stage;
-  private RoadSign currSign;
-  private final UpdateListener updateListener = (ListenerAction action) -> {
-    switch (action) {
-      case MAP_UPDATE -> updateMapView();
-    }
-  };
+
   private long startTime = 0;
   private long endTime = 10;
   private double scaleValue = 1;
@@ -110,6 +100,8 @@ public class MainController {
   private Rectangle selectRect;
   private ReportStruct reportStruct = new ReportStruct();
 
+  private ViewUpdater viewUpdater;
+  private EditOperationsManager editOperationsManager;
 
   public PlaceOfInterest getLastPOIClicked() {
     return lastPOIClicked;
@@ -135,6 +127,27 @@ public class MainController {
     this.stage = stage;
   }
 
+  private Rectangle getSelectRect() {
+    Rectangle selectRect = new Rectangle(0, 0, 0, 0);
+    selectRect.setFill(Color.TRANSPARENT);
+    selectRect.setStroke(Color.valueOf("#656565"));
+    selectRect.setStrokeWidth(4);
+    StringBuilder style = new StringBuilder();
+    style
+            .append("{")
+            .append("-fx-stroke-width: 7;")
+            .append("-fx-stroke-dash-array: 12 2 4 2;")
+            .append("-fx-stroke-dash-offset: 6;")
+            .append("-fx-stroke-line-cap: butt;")
+            .append("}");
+    selectRect.setStyle(style.toString());
+    return selectRect;
+  }
+
+  public ViewUpdater getViewUpdater() {
+    return viewUpdater;
+  }
+
   private void stopOperation() {
     numberOfLanesPane.setVisible(false);
     editOperationsManager.resetLastNode();
@@ -148,11 +161,18 @@ public class MainController {
    */
   @FXML
   public void initialize() {
+    viewUpdater = new ViewUpdater(
+            this::poiObserver,
+            this::roadObserver,
+            this::nodeObserver,
+            mainPane);
+    editOperationsManager =
+            new EditOperationsManager(currMap, viewUpdater::updateMapView);
     menuBarController.setMainController(this);
     menuBarController.setMap(currMap);
     menuBarController.setStage(stage);
 
-    selectRect = objectPainter.paintSelectRect();
+    selectRect = getSelectRect();
 
     roadSettingsController.setMainController(this);
     trafficLightController.setMainController(this);
@@ -191,7 +211,6 @@ public class MainController {
       if (reportStruct.getWindowList().size() > (int) Math.round(newValue.doubleValue())) {
         editOperationsManager.updateCongestions(reportStruct.getWindowList().get((int) Math.round(newValue.doubleValue())));
       }
-      updateMapView();
     });
 
     mainScrollPane.setOnMousePressed(event -> {
@@ -259,7 +278,6 @@ public class MainController {
             double width = Math.abs(event.getX() - lastClickX);
             double height = Math.abs(event.getY() - lastClickY);
             editOperationsManager.addPlaceOfInterest(x, y, width, height);
-            updateMapView();
           }
         }
       }
@@ -287,7 +305,6 @@ public class MainController {
       if (reportStruct.getWindowList().size() > 0) {
         editOperationsManager.updateCongestions(reportStruct.getWindowList().get(0));
       }
-      updateMapView();
       timeLineSlider.setMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
     } catch (FileNotFoundException e) {
       System.err.println(e.getMessage());
@@ -302,7 +319,6 @@ public class MainController {
   @FXML
   public void stopSimulation() {
     editOperationsManager.setCurrentOperation(EditOperation.NONE);
-    updateMapView();
   }
 
   @FXML
@@ -331,13 +347,6 @@ public class MainController {
       }
       default -> {
         closeAllSettings();
-                /*Notifications info = Notifications.create();
-                info.text("Click on node with 3 or 4 road");
-                info.title("Traffic light creation");
-                info.darkStyle();
-                info.position(Pos.BOTTOM_RIGHT);
-                info.hideAfter(Duration.seconds(3));
-                info.showInformation();*/
         editOperationsManager.setCurrentOperation(EditOperation.TRAFFIC_LIGHT_CREATION);
       }
     }
@@ -386,82 +395,66 @@ public class MainController {
 
   @FXML
   public void setSpeedSign() {
-    currSign = new SpeedLimitSign(speedComboBox.getValue());
+    editOperationsManager.setCurrSign(new SpeedLimitSign(speedComboBox.getValue()));
   }
 
   @FXML
   public void setMainRoad() {
-    currSign = new MainRoadSign();
+    editOperationsManager.setCurrSign(new MainRoadSign());
   }
 
-  /**
-   * Метод отрисовки текущего состояния карты
-   */
-  public void updateMapView() {
-    Platform.runLater(() -> {
-      mainPane.getChildren().clear();
-      roadSettingsController.getRoadSettingsPane().setVisible(false);
-      trafficLightController.getTrafficLightPane().setVisible(false);
-      nodeSettingsController.getNodeSettingPane().setVisible(false);
-      if (editOperationsManager.getCurrentOperation() != EditOperation.SIGN_CREATION) {
-        roadSignPane.setVisible(false);
-      }
-
-      currMap.forEachPlaceOfInterest(placeOfInterest -> {
-        Shape placeOfInterestShape = objectPainter.paintPlaceOfInterest(placeOfInterest);
-        placeOfInterestShape.setOnMouseClicked(event -> {
-          lastPOIClicked = placeOfInterest;
-          switch (event.getButton()) {
-            case PRIMARY -> {
-              switch (editOperationsManager.getCurrentOperation()) {
-                case ROAD_CREATION -> {
-                  event.consume();
-                  editOperationsManager.buildRoadOnPlaceOfInterest(event.getX(), event.getY(), placeOfInterest);
-                  updateMapView();
-                }
-                case NONE -> {
-                  event.consume();
-                  buildingSettingsController.getPane().setLayoutX(event.getX());
-                  buildingSettingsController.getPane().setLayoutY(event.getY());
-                  buildingSettingsController.getSlider().setValue(lastPOIClicked.getWeight());
-                  buildingSettingsController.getParkingPlaces().setText
-                    (String.valueOf(lastPOIClicked.getNumberOfParkingPlaces()));
-                  buildingSettingsController.getPane().setVisible(true);
-                  updateMapView();
-                }
-              }
-            }
-          }
-        });
-        mainPane.getChildren().add(placeOfInterestShape);
-      });
-
-      currMap.forEachRoad(road -> {
-        List<List<Shape>> roadShape = objectPainter.paintRoad(
-          road, editOperationsManager.getCurrentOperation() == EditOperation.REPORT_SHOWING);
-        if (roadShape.size() != road.getLanesNum()) {
-          System.err.println(roadShape.size() + "!=" + road.getLanesNum());
-          throw new RuntimeException();
-        }
-        for (int i = 0; i < road.getLanesNum(); i++) {
-          int finalI = i;
-          roadShape.get(i).forEach(shape -> {
-            shape.setOnMouseClicked(event -> onRoadClick(road, finalI, event));
-            mainPane.getChildren().add(shape);
-          });
-        }
-      });
-      currMap.forEachNode(node -> {
-        Shape nodeShape = objectPainter.paintNode(node);
-        if (node.getPlaceOfInterest() != null) {
-          nodeShape.setFill(Paint.valueOf("#303030"));
-        }
-        nodeShape.setOnMouseClicked(event -> {
-          onNodeClick(node, event);
-        });
-        mainPane.getChildren().add(nodeShape);
-      });
+  private void nodeObserver(Node node, Shape nodeShape) {
+    if (node.getPlaceOfInterest() != null) {
+      nodeShape.setFill(Paint.valueOf("#303030"));
+    }
+    nodeShape.setOnMouseClicked(event -> {
+      onNodeClick(node, event);
     });
+    mainPane.getChildren().add(nodeShape);
+  }
+
+  private void roadObserver(Road road, List<List<Shape>> roadShape) {
+    if (roadShape.size() != road.getLanesNum()) {
+      System.err.println(roadShape.size() + "!=" + road.getLanesNum());
+      throw new RuntimeException();
+    }
+    for (int i = 0; i < road.getLanesNum(); i++) {
+      int finalI = i;
+      roadShape.get(i).forEach(shape -> {
+        shape.setOnMouseClicked(event -> onRoadClick(road, finalI, event));
+        mainPane.getChildren().add(shape);
+      });
+    }
+  }
+
+  private void poiObserver(PlaceOfInterest placeOfInterest, Shape placeOfInterestShape) {
+    placeOfInterestShape.setOnMouseClicked(event -> {
+      onPOIClicked(event, placeOfInterest);
+    });
+    mainPane.getChildren().add(placeOfInterestShape);
+  }
+
+  private void onPOIClicked(MouseEvent event, PlaceOfInterest placeOfInterest) {
+    lastPOIClicked = placeOfInterest;
+    switch (event.getButton()) {
+      case PRIMARY -> {
+        switch (editOperationsManager.getCurrentOperation()) {
+          case ROAD_CREATION -> {
+            event.consume();
+            editOperationsManager.buildRoadOnPlaceOfInterest(event.getX(), event.getY(), placeOfInterest);
+          }
+          case NONE -> {
+            event.consume();
+            buildingSettingsController.getPane().setLayoutX(event.getX());
+            buildingSettingsController.getPane().setLayoutY(event.getY());
+            buildingSettingsController.getSlider().setValue(lastPOIClicked.getWeight());
+            buildingSettingsController.getParkingPlaces().setText
+                    (String.valueOf(lastPOIClicked.getNumberOfParkingPlaces()));
+            buildingSettingsController.getPane().setVisible(true);
+          }
+        }
+      }
+    }
   }
 
   /**
@@ -477,7 +470,6 @@ public class MainController {
           case ROAD_CREATION -> {
             event.consume();
             editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
-            updateMapView();
           }
           case SIGN_CREATION -> {
             event.consume();
@@ -499,38 +491,22 @@ public class MainController {
   private void onNodeClick(Node node, MouseEvent event) {
     System.out.println("NODE CLICK");
     lastNodeClicked = node;
-    //Node nodeRef = node;
     switch (event.getButton()) {
       case PRIMARY -> {
         event.consume();
         switch (editOperationsManager.getCurrentOperation()) {
-          case ROAD_CREATION -> {
-            editOperationsManager.buildRoadOnNode(node);
-            node.setTrafficLight(null);
-            updateMapView();
-          }
+          case ROAD_CREATION -> editOperationsManager.buildRoadOnNode(node);
           case TRAFFIC_LIGHT_CREATION -> {
-            if (node.getRoadsInNum() <= 2)
+            if (node.getRoadsInNum() <= 2) {
               break;
+            }
             trafficLightController.getTrafficLightPane().setVisible(true);
             trafficLightController.getTrafficLightPane().setLayoutX(lastXbase);
             trafficLightController.getTrafficLightPane().setLayoutY(lastYbase);
             trafficLightController.setLastNodeClicked(node);
             trafficLightController.updateDelay(node);
-            List<Integer> greenIndex = trafficLightController.findPairOfRoad(node);
+            editOperationsManager.updateRoadsHighLight(node);
 
-            int i = 0;
-            for (Iterator<Road> it = node.getRoadInStream().iterator(); it.hasNext(); i++) {
-              Road r = it.next();
-              boolean isGreen = false;
-              for (int j : greenIndex)
-                if (j == i) {
-                  isGreen = true;
-                  break;
-                }
-              mainPane.getChildren().add(objectPainter.paintRoadLight(r, isGreen));
-            }
-            mainPane.getChildren().add(objectPainter.paintNode(node));
           }
           case NONE -> {
             if (node.getSpawners() != null) {
@@ -591,7 +567,6 @@ public class MainController {
           case ROAD_CREATION -> {
             event.consume();
             editOperationsManager.buildRoadOnRoad(event.getX(), event.getY(), road);
-            updateMapView();
           }
           case NONE -> {
             event.consume();
@@ -604,13 +579,14 @@ public class MainController {
             //roadSettingsController.getRoadSettingsPane().setLayoutY(event.getY());
           }
           case SIGN_CREATION -> {
-            RoadSign addedSign = currSign.getCopySign();
+            RoadSign addedSign = editOperationsManager.getCurrSign().getCopySign();
             lane.addSign(addedSign);
-            if (currSign.getSignType() == SignType.MAIN_ROAD)
+            if (editOperationsManager.getCurrSign().getSignType() == SignType.MAIN_ROAD) {
               for (int k = 0; k < road.getLanesNum(); k++) {
                 road.getLane(k).addSign(addedSign);
               }
-            updateMapView();
+            }
+            viewUpdater.updateMapView(editOperationsManager);
           }
         }
       }
@@ -638,27 +614,24 @@ public class MainController {
           event.getX(),
           event.getY())));
 
-    // calculate adjustment of scroll position (pixels)
     Point2D adjustment = mainPane.getLocalToParentTransform().deltaTransform(posInZoomTarget.multiply(zoomFactor - 1));
 
-    // convert back to [0, 1] range
-    // (too large/small values are automatically corrected by ScrollPane)
     Bounds updatedInnerBounds = scrollPaneContent.getBoundsInLocal();
     mainScrollPane.setHvalue((valX + adjustment.getX()) / (updatedInnerBounds.getWidth() - viewportBounds.getWidth()));
     mainScrollPane.setVvalue((valY + adjustment.getY()) / (updatedInnerBounds.getHeight() - viewportBounds.getHeight()));
   }
 
-  EditOperationsManager getEOM() {
+  public EditOperationsManager getEditOperationManager() {
     return editOperationsManager;
   }
 
-  void closeAllSettings() {
+  private void closeAllSettings() {
     buildingSettingsController.getPane().setVisible(false);
     nodeSettingsController.getNodeSettingPane().setVisible(false);
     numberOfLanesPane.setVisible(false);
     roadSettingsController.getRoadSettingsPane().setVisible(false);
     trafficLightController.getTrafficLightPane().setVisible(false);
     roadSignPane.setVisible(false);
-    updateMapView();
+    //updateMapView();
   }
 }

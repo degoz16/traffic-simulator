@@ -1,15 +1,12 @@
 package ru.nsu.fit.traffic.controller;
 
-import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import ru.nsu.fit.traffic.model.TrafficMap;
 
-import javax.swing.event.ChangeListener;
 import java.util.function.UnaryOperator;
 
 public class BuildingController {
@@ -76,7 +73,8 @@ public class BuildingController {
     @FXML
     public void deleteBuilding() {
         map.removePOI(mainController.getLastPOIClicked());
-        mainController.updateMapView();
+        mainController.getViewUpdater()
+                .updateMapView(mainController.getEditOperationManager());
         pane.setVisible(false);
     }
 }

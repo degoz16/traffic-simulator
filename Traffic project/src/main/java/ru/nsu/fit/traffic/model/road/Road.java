@@ -14,6 +14,7 @@ public class Road {
     private Road backRoad = null;
     private Street currStreet = null;
     private int congestion = 0;
+    private RoadHighLight roadHighLight = RoadHighLight.NONE;
 
     public Road(int lanesNum) {
         lanes = new ArrayList<>();
@@ -21,6 +22,14 @@ public class Road {
     }
 
     public Road() {
+    }
+
+    public RoadHighLight getRoadHighLight() {
+        return roadHighLight;
+    }
+
+    public void setRoadHighLight(RoadHighLight roadHighLight) {
+        this.roadHighLight = roadHighLight;
     }
 
     public int getCongestion() {

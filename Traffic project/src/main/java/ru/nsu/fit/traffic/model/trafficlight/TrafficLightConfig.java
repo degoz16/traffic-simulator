@@ -2,7 +2,6 @@ package ru.nsu.fit.traffic.model.trafficlight;
 
 import java.util.ArrayList;
 import java.util.List;
-import ru.nsu.fit.traffic.jsonParse.TrafficLightConfigJsonStruct;
 import ru.nsu.fit.traffic.model.road.Road;
 
 public class TrafficLightConfig {

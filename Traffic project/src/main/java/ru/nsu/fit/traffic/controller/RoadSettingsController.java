@@ -58,7 +58,8 @@ public class RoadSettingsController {
             lastRoadClicked.clearLanes();
         }
         lastRoadClicked.getTo().setTrafficLight(null);
-        mainController.updateMapView();
+        mainController.getViewUpdater()
+                .updateMapView(mainController.getEditOperationManager());
     }
 
     @FXML
@@ -77,7 +78,8 @@ public class RoadSettingsController {
                     lastRoadClicked.addLane(i);
                 }
             }
-            mainController.updateMapView();
+            mainController.getViewUpdater()
+                    .updateMapView(mainController.getEditOperationManager());
         } else {
             deleteRoad();
             return;

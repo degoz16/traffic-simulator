@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.painters;
+package ru.nsu.fit.traffic.view;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -64,11 +64,17 @@ public class ObjectPainter {
                     vx + pointToX + i * vx,
                     vy + pointToY + i * vy);
             if (!reportMode) {
-                curr.setFill(roadColor);
+                switch (road.getRoadHighLight()) {
+                    case NONE -> curr.setFill(roadColor);
+                    case GREEN -> curr.setFill(Color.GREEN);
+                    case RED -> curr.setFill(Color.RED);
+                }
+
             }
             else {
                 curr.setFill(getGradientColor(road.getCongestion()));
             }
+
             curr.strokeWidthProperty().setValue(2);
             curr.setStroke(curr.getFill());
 
@@ -142,40 +148,6 @@ public class ObjectPainter {
         return paintedRoad;
     }
 
-    public Shape paintRoadLight(Road road, boolean isGreen) {
-        List<Shape> list = new ArrayList<>();
-        Shape curr;
-        int pointFromX = (int) road.getFrom().getX();
-        int pointFromY = (int) road.getFrom().getY();
-        int pointToX = (int) road.getTo().getX();
-        int pointToY = (int) road.getTo().getY();
-
-        double vx = pointFromY - pointToY;
-        double vy = -pointFromX + pointToX;
-
-        double vlen = Math.sqrt(Math.abs(vx * vx + vy * vy));
-        List<List<Shape>> paintedRoad = new ArrayList<>();
-
-        vx *= LANE_SIZE / vlen;
-        vy *= LANE_SIZE / vlen;
-
-        curr = new Polygon(
-                vx + pointFromX,
-                vy + pointFromY,
-                pointFromX, pointFromY,
-                pointToX, pointToY,
-                vx * road.getLanesNum() + pointToX,
-                vy * road.getLanesNum() + pointToY);
-        curr.setFill(Paint.valueOf("transparent"));
-        curr.setStrokeWidth(3);
-        if (isGreen) {
-            curr.setStroke(Paint.valueOf("#00a550"));
-        } else {
-            curr.setStroke(Paint.valueOf("#eb003b"));
-        }
-        return curr;
-    }
-
     public Shape paintNode(Node node) {
         //TODO: изменить на полигон.
         int maxSize = Math.max(
@@ -203,23 +175,6 @@ public class ObjectPainter {
             shape.setFill(new ImagePattern(img));
         }
         return shape;
-    }
-
-    public Rectangle paintSelectRect() {
-        Rectangle selectRect = new Rectangle(0, 0, 0, 0);
-        selectRect.setFill(Color.TRANSPARENT);
-        selectRect.setStroke(Color.valueOf("#656565"));
-        selectRect.setStrokeWidth(4);
-        StringBuilder style = new StringBuilder();
-        style
-                .append("{")
-                .append("-fx-stroke-width: 7;")
-                .append("-fx-stroke-dash-array: 12 2 4 2;")
-                .append("-fx-stroke-dash-offset: 6;")
-                .append("-fx-stroke-line-cap: butt;")
-                .append("}");
-        selectRect.setStyle(style.toString());
-        return selectRect;
     }
 
     public Shape paintPlaceOfInterest(PlaceOfInterest placeOfInterest) {

@@ -52,13 +52,15 @@ public class MenuBarController {
         event -> {
           event.consume();
           newProjectHandler();
-          mainController.updateMapView();
+          mainController.getViewUpdater()
+                  .updateMapView(mainController.getEditOperationManager());
         });
     openProject.setOnAction(
         event -> {
           event.consume();
           openProjectHandler();
-          mainController.updateMapView();
+          mainController.getViewUpdater()
+                  .updateMapView(mainController.getEditOperationManager());
         });
     save.setOnAction(saveHandler());
   }

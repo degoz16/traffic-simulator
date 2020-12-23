@@ -58,7 +58,8 @@ public class NodeSettingsController {
     }
     lastNodeClick.getSpawners().add(
       new Spawner(startTime, endTime, Integer.parseInt(spawnerRate.getText())));
-    mainController.updateMapView();
+    mainController.getViewUpdater()
+            .updateMapView(mainController.getEditOperationManager());
   }
 
   @FXML
