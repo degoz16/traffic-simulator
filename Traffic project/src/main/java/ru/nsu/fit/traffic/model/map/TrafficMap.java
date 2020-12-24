@@ -1,5 +1,6 @@
-package ru.nsu.fit.traffic.model;
+package ru.nsu.fit.traffic.model.map;
 
+import ru.nsu.fit.traffic.model.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.Street;

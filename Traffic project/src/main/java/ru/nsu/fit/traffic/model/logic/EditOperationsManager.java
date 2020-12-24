@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.model.logic;
 
 import ru.nsu.fit.traffic.model.*;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.RoadHighLight;

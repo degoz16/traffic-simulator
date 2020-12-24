@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
-import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.Street;

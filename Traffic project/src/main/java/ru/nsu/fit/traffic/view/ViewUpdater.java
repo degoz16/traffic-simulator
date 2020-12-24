@@ -2,8 +2,9 @@ package ru.nsu.fit.traffic.view;
 
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
-import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 
@@ -42,16 +43,31 @@ public class ViewUpdater {
             currMap.forEachPlaceOfInterest(placeOfInterest -> {
                 Shape placeOfInterestShape = objectPainter.paintPlaceOfInterest(placeOfInterest);
                 poiObserver.action(placeOfInterest, placeOfInterestShape);
+                mainPane.getChildren().add(placeOfInterestShape);
             });
 
             currMap.forEachRoad(road -> {
                 List<List<Shape>> roadShape = objectPainter.paintRoad(
                         road, editOperationsManager.getCurrentOperation() == EditOperation.REPORT_SHOWING);
-                roadObserver.action(road, roadShape);
+                if (roadShape.size() != road.getLanesNum()) {
+                    System.err.println(roadShape.size() + "!=" + road.getLanesNum());
+                    throw new RuntimeException();
+                }
+                for (int i = 0; i < road.getLanesNum(); i++) {
+                    int finalI = i;
+                    roadShape.get(i).forEach(shape -> {
+                        roadObserver.action(road, shape, finalI);
+                        mainPane.getChildren().add(shape);
+                    });
+                }
             });
             currMap.forEachNode(node -> {
                 Shape nodeShape = objectPainter.paintNode(node);
+                if (node.getPlaceOfInterest() != null && node.getSpawners() == null) {
+                    nodeShape.setFill(Paint.valueOf("#303030"));
+                }
                 nodeObserver.action(node, nodeShape);
+                mainPane.getChildren().add(nodeShape);
             });
         });
     }

@@ -5,7 +5,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 
 import java.util.function.UnaryOperator;
 

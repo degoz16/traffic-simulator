@@ -17,7 +17,7 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.jsonParse.MapJsonStruct;
-import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 
 public class MenuBarController {
   @FXML private MenuItem saveAs;
