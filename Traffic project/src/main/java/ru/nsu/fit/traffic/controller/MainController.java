@@ -35,7 +35,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.congestion.ReportStruct;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
@@ -54,44 +54,26 @@ import ru.nsu.fit.traffic.view.ViewUpdater;
  */
 public class MainController {
 
+    @FXML private Pane statistics;
+    @FXML private ScrollPane mainScrollPane;
+    @FXML private Pane mainPane;
+    @FXML private AnchorPane basePane;
+    @FXML private Pane numberOfLanesPane;
+    @FXML private Pane roadSignPane;
+    @FXML private TextField backLanesTextField;
+    @FXML private TextField forwardLanesTextField;
+    @FXML private ComboBox<Integer> speedComboBox;
+    @FXML private Group scrollPaneContent;
+    @FXML private VBox centeredField;
+    @FXML private BuildingController buildingSettingsController;
+    @FXML private TrafficLightController trafficLightController;
+    @FXML private MenuBarController menuBarController;
+    @FXML private RoadSettingsController roadSettingsController;
+    @FXML private StatisticsController statisticsController;
+    @FXML private NodeSettingsController nodeSettingsController;
+    @FXML private Slider timeLineSlider;
 
     private final TrafficMap currMap = new TrafficMap();
-    @FXML
-    private Pane statistics;
-    @FXML
-    private ScrollPane mainScrollPane;
-    @FXML
-    private Pane mainPane;
-    @FXML
-    private AnchorPane basePane;
-    @FXML
-    private Pane numberOfLanesPane;
-    @FXML
-    private Pane roadSignPane;
-    @FXML
-    private TextField backLanesTextField;
-    @FXML
-    private TextField forwardLanesTextField;
-    @FXML
-    private ComboBox<Integer> speedComboBox;
-    @FXML
-    private Group scrollPaneContent;
-    @FXML
-    private VBox centeredField;
-    @FXML
-    private BuildingController buildingSettingsController;
-    @FXML
-    private TrafficLightController trafficLightController;
-    @FXML
-    private MenuBarController menuBarController;
-    @FXML
-    private RoadSettingsController roadSettingsController;
-    @FXML
-    private StatisticsController statisticsController;
-    @FXML
-    private NodeSettingsController nodeSettingsController;
-    @FXML
-    private Slider timeLineSlider;
     private Road lastRoadClicked = null;
     private Node lastNodeClicked = null;
     private PlaceOfInterest lastPOIClicked = null;
@@ -422,37 +404,23 @@ public class MainController {
     }
 
     private void nodeObserver(Node node, Shape nodeShape) {
-        if (node.getPlaceOfInterest() != null && node.getSpawners() == null) {
-            nodeShape.setFill(Paint.valueOf("#303030"));
-        }
         nodeShape.setOnMouseClicked(event -> {
             onNodeClick(node, event);
         });
-        mainPane.getChildren().add(nodeShape);
     }
 
-    private void roadObserver(Road road, List<List<Shape>> roadShape) {
-        if (roadShape.size() != road.getLanesNum()) {
-            System.err.println(roadShape.size() + "!=" + road.getLanesNum());
-            throw new RuntimeException();
-        }
-        for (int i = 0; i < road.getLanesNum(); i++) {
-            int finalI = i;
-            roadShape.get(i).forEach(shape -> {
-                shape.setOnMouseClicked(event -> onRoadClick(road, finalI, event));
-                mainPane.getChildren().add(shape);
-            });
-        }
+    private void roadObserver(Road road, Shape roadShape, int i) {
+        roadShape.setOnMouseClicked(event ->
+                onRoadClick(road, i, event));
     }
 
     private void poiObserver(PlaceOfInterest placeOfInterest, Shape placeOfInterestShape) {
         placeOfInterestShape.setOnMouseClicked(event -> {
-            onPOIClicked(event, placeOfInterest);
+            onPoiClicked(event, placeOfInterest);
         });
-        mainPane.getChildren().add(placeOfInterestShape);
     }
 
-    private void onPOIClicked(MouseEvent event, PlaceOfInterest placeOfInterest) {
+    private void onPoiClicked(MouseEvent event, PlaceOfInterest placeOfInterest) {
         lastPOIClicked = placeOfInterest;
         switch (event.getButton()) {
             case PRIMARY -> {
@@ -501,12 +469,9 @@ public class MainController {
                 }
             }
 
-            case SECONDARY -> {
-                stopOperation();
-            }
+            case SECONDARY -> stopOperation();
         }
     }
-
 
     private void onNodeClick(Node node, MouseEvent event) {
         System.out.println("NODE CLICK");
@@ -550,8 +515,6 @@ public class MainController {
         }
         //todo другие операции
     }
-    //todo другие функции
-
 
     /**
      * Обработка драга на поле
@@ -583,10 +546,9 @@ public class MainController {
         }
     }
 
-
-    private void onRoadClick(Road road, int finalI, MouseEvent event) {
+    private void onRoadClick(Road road, int i, MouseEvent event) {
         System.out.println("ROAD CLICK");
-        Lane lane = road.getLane(finalI);
+        Lane lane = road.getLane(i);
         switch (event.getButton()) {
             case PRIMARY -> {
                 switch (editOperationsManager.getCurrentOperation()) {

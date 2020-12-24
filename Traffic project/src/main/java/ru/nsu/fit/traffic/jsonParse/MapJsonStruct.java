@@ -1,11 +1,10 @@
 package ru.nsu.fit.traffic.jsonParse;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import ru.nsu.fit.traffic.model.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.TrafficMap;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.node.Spawner;
 import ru.nsu.fit.traffic.model.road.Lane;
