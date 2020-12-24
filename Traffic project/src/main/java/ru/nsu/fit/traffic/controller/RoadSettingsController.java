@@ -111,7 +111,7 @@ public class RoadSettingsController {
            // System.out.println(currStreet);
         }
         roadSettingsPane.setVisible(false);
-        mainController.UpdateStatistics();
+        mainController.updateStatistics();
     }
 
     public void updateRoad(Road road) {

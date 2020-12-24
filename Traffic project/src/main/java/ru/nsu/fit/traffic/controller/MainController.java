@@ -155,7 +155,7 @@ public class MainController {
         return viewUpdater;
     }
 
-    public void UpdateStatistics() {
+    public void updateStatistics() {
         statisticsController.updateStatistics();
     }
 
@@ -291,6 +291,7 @@ public class MainController {
                         double width = Math.abs(event.getX() - lastClickX);
                         double height = Math.abs(event.getY() - lastClickY);
                         editOperationsManager.addPlaceOfInterest(x, y, width, height);
+                        statisticsController.updateStatistics();
                     }
                 }
             }
@@ -487,7 +488,7 @@ public class MainController {
                     case ROAD_CREATION -> {
                         event.consume();
                         editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
-                        UpdateStatistics();
+                        updateStatistics();
                     }
                     case SIGN_CREATION -> {
                         event.consume();
@@ -516,7 +517,7 @@ public class MainController {
                 switch (editOperationsManager.getCurrentOperation()) {
                     case ROAD_CREATION -> {
                         editOperationsManager.buildRoadOnNode(node);
-                        UpdateStatistics();
+                        updateStatistics();
                     }
                     case TRAFFIC_LIGHT_CREATION -> {
                         if (node.getRoadsInNum() <= 2) {
@@ -542,7 +543,7 @@ public class MainController {
                             nodeSettingsController.getNodeSettingPane().setLayoutY(lastYbase);
                             nodeSettingsController.getNodeSettingPane().setVisible(true);
                         }
-                        UpdateStatistics();
+                        updateStatistics();
                     }
                 }
             }
@@ -577,7 +578,6 @@ public class MainController {
                         selectRect.setTranslateY(0);
                         selectRect.setHeight(height);
                     }
-                    statisticsController.updateStatistics();
                 }
             }
         }
