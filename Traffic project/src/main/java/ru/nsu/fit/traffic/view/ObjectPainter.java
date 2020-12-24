@@ -180,18 +180,8 @@ public class ObjectPainter {
                 placeOfInterest.getY(),
                 placeOfInterest.getWidth(),
                 placeOfInterest.getHeight());
-        building.setFill(Color.valueOf("#bbbbbb"));
-        building.setStroke(Color.valueOf("#656565"));
-        building.setStrokeWidth(4);
-        StringBuilder style = new StringBuilder();
-        style
-                .append("{")
-                .append("-fx-stroke-width: 7;")
-                .append("-fx-stroke-dash-array: 12 2 4 2;")
-                .append("-fx-stroke-dash-offset: 6;")
-                .append("-fx-stroke-line-cap: butt;")
-                .append("}");
-        building.setStyle(style.toString());
+        Image img = new Image(getClass().getResource("../view/Images/building.png").toExternalForm());
+        building.setFill(new ImagePattern(img));
         return building;
     }
 }
