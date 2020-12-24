@@ -7,6 +7,8 @@ import javafx.scene.layout.Pane;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.Street;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 public class RoadSettingsController {
@@ -38,7 +40,6 @@ public class RoadSettingsController {
     public Pane getRoadSettingsPane() {
         return roadSettingsPane;
     }
-
     @FXML
     public void deleteRoad() {
         if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
@@ -108,7 +109,7 @@ public class RoadSettingsController {
             }
             currStreet.addRoad(lastRoadClicked);
             lastRoadClicked.setCurrStreet(currStreet);
-           // System.out.println(currStreet);
+            // System.out.println(currStreet);
         }
         roadSettingsPane.setVisible(false);
         mainController.updateStatistics();
@@ -134,7 +135,8 @@ public class RoadSettingsController {
         UnaryOperator<TextFormatter.Change> integerFilter = change -> {
             String input = change.getText();
             int text_size = change.getControlNewText().length();
-
+            lanesTextField.setStyle("-fx-control-inner-background: #454545;" + "-fx-text-inner-color: white;");
+            streetName.setStyle("-fx-control-inner-background: #454545;" + "-fx-text-inner-color: white;");
             if (text_size <= 14) {
                 return change;
             }
@@ -143,6 +145,4 @@ public class RoadSettingsController {
 
         streetName.setTextFormatter(new TextFormatter<Object>(integerFilter));
     }
-
-
 }

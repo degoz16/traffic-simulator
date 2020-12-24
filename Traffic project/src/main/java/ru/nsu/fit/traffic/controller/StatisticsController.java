@@ -12,6 +12,9 @@ import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.Street;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class StatisticsController {
     @FXML
@@ -32,12 +35,17 @@ public class StatisticsController {
     private ScrollPane scrollView;
     private MainController mainController;
     private TrafficMap trafficMap;
-
+    private DFS dfs = new DFS();
     @FXML
     public void initialize() {
         scrollView.setStyle("-fx-background: #454545;\n -fx-background-color: #454545");
-        scrollView.setHbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        scrollView.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        scrollView.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        scrollView.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        carSpawners.setFill(Paint.valueOf("white"));
+        streets.setFill(Paint.valueOf("white"));
+        roads.setFill(Paint.valueOf("white"));
+        buildings.setFill(Paint.valueOf("white"));
+        connectivity.setFill(Paint.valueOf("white"));
     }
 
     public void setMainController(MainController mainController) {
@@ -73,6 +81,59 @@ public class StatisticsController {
             }
         }
         carSpawners.setText(String.valueOf(car));
+        connectivity.setText(String.valueOf(dfs.find_comps()));
+    }
 
+    private class DFS {
+        int n;
+        int[][] g;
+        boolean[] used;
+        List<Integer> comp;
+
+        void dfs(int v) {
+            used[v] = true;
+            comp.add(v);
+            for (int i = 0; i < g[v].length; ++i) {
+                int to = g[v][i];
+                if (!used[to])
+                    dfs(to);
+            }
+        }
+
+        void createG() {
+            int i = 0;
+            g = new int[trafficMap.getRoads().size()][];
+            for (Road r : mainController.getCurrMap().getRoads()) {
+                g[i] = new int[r.getTo().getRoadsOutNum() + r.getFrom().getRoadsInNum()];
+                int j = 0;
+                for (Object r_to : (r.getTo().getRoadOutStream().toArray())) {
+                    g[i][j++] = mainController.getCurrMap().getRoads().indexOf(r_to);
+                }
+                for (Object r_to : (r.getFrom().getRoadInStream().toArray())) {
+                    g[i][j++] = mainController.getCurrMap().getRoads().indexOf(r_to);
+                }
+                i++;
+            }
+            /*for (i = 0; i < g.length; ++i){
+                System.out.println(Arrays.toString(g[i]));
+            }*/
+        }
+
+        int find_comps() {
+            if (mainController.getCurrMap().getRoads().size() == 0) return 0;
+            createG();
+            int comps_number = 0;
+            n = trafficMap.getRoadCount();
+            used = new boolean[n];
+            comp = new ArrayList<>();
+            for (int i = 0; i < n; ++i)
+                if (!used[i]) {
+                    comp.clear();
+                    comps_number++;
+                    dfs(i);
+                }
+            System.out.println(comp.toString());
+            return comps_number;
+        }
     }
 }
