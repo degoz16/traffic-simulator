@@ -1,26 +1,21 @@
-package ru.nsu.fit.traffic.controller;
+package ru.nsu.fit.traffic.javafx.controller.settings;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.model.map.TrafficMap;
+import ru.nsu.fit.traffic.controller.settings.BuildingSettingsControl;
+
 
 import java.util.function.UnaryOperator;
 
 public class BuildingController {
-    @FXML
-    private Slider slider;
+    @FXML private Slider slider;
+    @FXML private Pane pane;
+    @FXML private TextField parkingPlaces;
 
-    @FXML
-    private Pane pane;
-
-    @FXML
-    private TextField parkingPlaces;
-
-    private TrafficMap map;
-    private MainController mainController;
+    private BuildingSettingsControl buildingSettingsControl;
 
     public Pane getPane() {
         return pane;
@@ -34,9 +29,8 @@ public class BuildingController {
         return slider;
     }
 
-    public void setMainController(MainController mainController) {
-        this.mainController = mainController;
-        map = mainController.getCurrMap();
+    public void setBuildingSettingsControl(BuildingSettingsControl buildingSettingsControl) {
+        this.buildingSettingsControl = buildingSettingsControl;
     }
 
     @FXML
@@ -60,23 +54,26 @@ public class BuildingController {
 
     @FXML
     public void closeSettings() {
-        pane.setVisible(false);
+//        pane.setVisible(false);
+        buildingSettingsControl.closeSettings();
     }
 
     @FXML
     public void confirmSettings() {
-        mainController.getLastPOIClicked().setWeight(slider.getValue());
-        mainController.getLastPOIClicked().setNumberOfParkingPlaces(Integer.parseInt(parkingPlaces.getText()));
-        pane.setVisible(false);
-        mainController.updateStatistics();
+//        pane.setVisible(false);
+//        mainController.getLastPOIClicked().setWeight(slider.getValue());
+//        mainController.getLastPOIClicked().setNumberOfParkingPlaces(Integer.parseInt(parkingPlaces.getText()));
+//        mainController.updateStatistics();
+        buildingSettingsControl.confirmSettings(slider.getValue(), Integer.parseInt(parkingPlaces.getText()));
     }
 
     @FXML
     public void deleteBuilding() {
-        map.removePOI(mainController.getLastPOIClicked());
-        mainController.getViewUpdater()
-                .updateMapView(mainController.getEditOperationManager());
-        pane.setVisible(false);
-        mainController.updateStatistics();
+//        map.removePOI(mainController.getLastPOIClicked());
+//        mainController.getViewUpdater()
+//                .updateMapView(mainController.getEditOperationManager());
+//        pane.setVisible(false);
+//        mainController.updateStatistics();
+        buildingSettingsControl.deleteBuilding();
     }
 }

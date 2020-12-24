@@ -1,6 +1,6 @@
 package ru.nsu.fit.traffic.model.node;
 
-import ru.nsu.fit.traffic.model.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
 

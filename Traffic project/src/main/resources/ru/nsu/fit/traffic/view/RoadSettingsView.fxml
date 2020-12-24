@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="roadSettingsHelperPane" maxHeight="0.0" maxWidth="0.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" stylesheets="@MainViewStyleSheets/backgroundMenu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.controller.RoadSettingsController">
+<Pane fx:id="roadSettingsHelperPane" maxHeight="0.0" maxWidth="0.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="0.0" stylesheets="@MainViewStyleSheets/backgroundMenu.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.settings.RoadSettingsController">
    <children>
       <AnchorPane fx:id="roadSettingsPane" maxHeight="106.0" maxWidth="167.0" minHeight="82.0" minWidth="100.0" prefHeight="106.0" prefWidth="167.0" stylesheets="@MainViewStyleSheets/middle_grey.css">
          <children>

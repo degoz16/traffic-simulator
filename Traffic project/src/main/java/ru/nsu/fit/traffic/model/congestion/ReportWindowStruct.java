@@ -3,24 +3,24 @@ package ru.nsu.fit.traffic.model.congestion;
 import java.util.List;
 
 public class ReportWindowStruct {
-    private int start;
-    private int end;
+    private long start;
+    private long end;
     private List<CongestionStruct> congestionList;
     private List<Integer> congestionListFilled;
 
-    public int getStart() {
+    public long getStart() {
         return start;
     }
 
-    public void setStart(int start) {
+    public void setStart(long start) {
         this.start = start;
     }
 
-    public int getEnd() {
+    public long getEnd() {
         return end;
     }
 
-    public void setEnd(int end) {
+    public void setEnd(long end) {
         this.end = end;
     }
 

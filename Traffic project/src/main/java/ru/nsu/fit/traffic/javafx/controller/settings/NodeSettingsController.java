@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.controller;
+package ru.nsu.fit.traffic.javafx.controller.settings;
 
 import com.jfoenix.controls.JFXTimePicker;
 import java.time.LocalTime;
@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import ru.nsu.fit.traffic.controller.settings.NodeSettingsControl;
+import ru.nsu.fit.traffic.javafx.controller.edit.MainController;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.node.Spawner;
 
 public class NodeSettingsController {
-
-  private MainController mainController;
 
   @FXML
   private JFXTimePicker startTime;
@@ -22,8 +22,10 @@ public class NodeSettingsController {
   @FXML
   private TextField spawnerRate;
 
-  public void setMainController(MainController mainController) {
-    this.mainController = mainController;
+  private NodeSettingsControl nodeSettingsControl;
+
+  public void setNodeSettingsControl(NodeSettingsControl nodeSettingsControl) {
+    this.nodeSettingsControl = nodeSettingsControl;
   }
 
   public Pane getNodeSettingPane() {
@@ -44,23 +46,16 @@ public class NodeSettingsController {
 
   @FXML
   public void confirmSpawnerCreationAction() {
-    Node lastNodeClick = mainController.getLastNodeClicked();
     String startTime =
-      this.startTime.getValue() != null
-        ? this.startTime.getValue().toString()
-        : LocalTime.now().toString();
+            this.startTime.getValue() != null
+                    ? this.startTime.getValue().toString()
+                    : LocalTime.now().toString();
     String endTime =
-      this.endTime.getValue() != null
-        ? this.endTime.getValue().toString()
-        : LocalTime.now().toString();
-    if (lastNodeClick.getSpawners() == null) {
-      lastNodeClick.setSpawners(new ArrayList<>());
-    }
-    lastNodeClick.getSpawners().add(
-      new Spawner(startTime, endTime, Integer.parseInt(spawnerRate.getText())));
-    nodeSettingPane.setVisible(false);
-    mainController.getViewUpdater()
-            .updateMapView(mainController.getEditOperationManager());
+            this.endTime.getValue() != null
+                    ? this.endTime.getValue().toString()
+                    : LocalTime.now().toString();
+    nodeSettingsControl.confirmSpawnerCreationAction(
+            startTime, endTime, Integer.parseInt(spawnerRate.getText()));
   }
 
   @FXML

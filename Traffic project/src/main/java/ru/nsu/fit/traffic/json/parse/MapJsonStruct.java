@@ -1,9 +1,9 @@
-package ru.nsu.fit.traffic.jsonParse;
+package ru.nsu.fit.traffic.json.parse;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import ru.nsu.fit.traffic.model.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.node.Spawner;

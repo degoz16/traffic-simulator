@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="trafficLightPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="89.0" prefWidth="125.0" style="-fx-background-color: #353535;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.controller.TrafficLightController">
+<Pane fx:id="trafficLightPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="89.0" prefWidth="125.0" style="-fx-background-color: #353535;" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.settings.TrafficLightController">
    <children>
       <AnchorPane prefHeight="91.0" prefWidth="126.0">
          <children>

@@ -1,6 +1,4 @@
-package ru.nsu.fit.traffic.model;
-
-import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
+package ru.nsu.fit.traffic.model.logic;
 
 public interface UpdateObserver {
     void update(EditOperationsManager editOperationsManager);

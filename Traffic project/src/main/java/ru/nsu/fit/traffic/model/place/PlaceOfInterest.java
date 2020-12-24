@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.model;
+package ru.nsu.fit.traffic.model.place;
 
 import ru.nsu.fit.traffic.model.node.Node;
 

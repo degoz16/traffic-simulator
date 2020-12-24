@@ -1,9 +1,9 @@
 package ru.nsu.fit.traffic.model.logic;
 
-import ru.nsu.fit.traffic.model.*;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.node.Node;
+import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.RoadHighLight;
 import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
@@ -26,8 +26,8 @@ public class EditOperationsManager {
     private final UpdateObserver updateView;
     private RoadSign currSign = new MainRoadSign();
 
-    public EditOperationsManager(TrafficMap map, UpdateObserver updateView) {
-        this.map = map;
+    public EditOperationsManager(UpdateObserver updateView) {
+        this.map = new TrafficMap();
         this.updateView = updateView;
     }
 

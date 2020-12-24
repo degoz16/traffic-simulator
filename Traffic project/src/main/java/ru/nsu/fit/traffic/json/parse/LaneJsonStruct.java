@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.jsonParse;
+package ru.nsu.fit.traffic.json.parse;
 
 import java.util.List;
 import java.util.Map;

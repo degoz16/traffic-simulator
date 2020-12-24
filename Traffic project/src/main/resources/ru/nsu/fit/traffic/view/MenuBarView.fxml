@@ -5,17 +5,17 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 
-<MenuBar prefHeight="3.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.controller.MenuBarController">
+<MenuBar prefHeight="3.0" prefWidth="634.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.menubar.MenuBarController">
    <menus>
       <Menu mnemonicParsing="false" text="File">
          <items>
-            <MenuItem fx:id="newProject" mnemonicParsing="false" text="New" />
-            <MenuItem fx:id="openProject" mnemonicParsing="false" text="Open…" />
+            <MenuItem fx:id="newProject" mnemonicParsing="false" onAction="#onNewProject" text="New" />
+            <MenuItem fx:id="openProject" mnemonicParsing="false" onAction="#onOpenProject" text="Open…" />
             <Menu mnemonicParsing="false" text="Open Recent" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Close" />
-            <MenuItem fx:id="save" mnemonicParsing="false" text="Save" />
-            <MenuItem fx:id="saveAs" mnemonicParsing="false" text="Save As…" />
+            <MenuItem fx:id="save" mnemonicParsing="false" onAction="#onSave" text="Save" />
+            <MenuItem fx:id="saveAs" mnemonicParsing="false" onAction="#onSaveAs" text="Save As…" />
             <MenuItem mnemonicParsing="false" text="Revert" />
             <SeparatorMenuItem mnemonicParsing="false" />
             <MenuItem mnemonicParsing="false" text="Preferences…" />

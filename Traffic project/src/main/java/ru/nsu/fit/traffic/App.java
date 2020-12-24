@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import ru.nsu.fit.traffic.controller.MainController;
+import ru.nsu.fit.traffic.javafx.controller.edit.MainController;
 
 public class App extends Application {
 

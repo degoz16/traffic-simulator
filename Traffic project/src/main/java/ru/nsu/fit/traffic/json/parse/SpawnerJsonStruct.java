@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.jsonParse;
+package ru.nsu.fit.traffic.json.parse;
 
 public class SpawnerJsonStruct {
   private String start;

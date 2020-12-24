@@ -1,9 +1,13 @@
 package ru.nsu.fit.traffic.view;
 
 import javafx.application.Platform;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
+import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
@@ -42,7 +46,7 @@ public class ViewUpdater {
 
             currMap.forEachPlaceOfInterest(placeOfInterest -> {
                 Shape placeOfInterestShape = objectPainter.paintPlaceOfInterest(placeOfInterest);
-                poiObserver.action(placeOfInterest, placeOfInterestShape);
+                poiObserver.action(placeOfInterestShape, placeOfInterest);
                 mainPane.getChildren().add(placeOfInterestShape);
             });
 
@@ -56,7 +60,7 @@ public class ViewUpdater {
                 for (int i = 0; i < road.getLanesNum(); i++) {
                     int finalI = i;
                     roadShape.get(i).forEach(shape -> {
-                        roadObserver.action(road, shape, finalI);
+                        roadObserver.action(shape, road, finalI);
                         mainPane.getChildren().add(shape);
                     });
                 }
@@ -66,7 +70,7 @@ public class ViewUpdater {
                 if (node.getPlaceOfInterest() != null && node.getSpawners() == null) {
                     nodeShape.setFill(Paint.valueOf("#303030"));
                 }
-                nodeObserver.action(node, nodeShape);
+                nodeObserver.action(nodeShape, node);
                 mainPane.getChildren().add(nodeShape);
             });
         });

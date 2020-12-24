@@ -7,7 +7,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 
