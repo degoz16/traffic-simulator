@@ -11,9 +11,7 @@ import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.Street;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class StatisticsController {
@@ -30,7 +28,7 @@ public class StatisticsController {
     @FXML
     private VBox streetsView;
     @FXML
-    private Pane statistics, s;
+    private Pane statistics;
     @FXML
     private ScrollPane scrollView;
     private MainController mainController;
@@ -86,31 +84,31 @@ public class StatisticsController {
 
     private class DFS {
         int n;
-        int[][] g;
+        int[][] graph;
         boolean[] used;
         List<Integer> comp;
 
         void dfs(int v) {
             used[v] = true;
             comp.add(v);
-            for (int i = 0; i < g[v].length; ++i) {
-                int to = g[v][i];
+            for (int i = 0; i < graph[v].length; ++i) {
+                int to = graph[v][i];
                 if (!used[to])
                     dfs(to);
             }
         }
 
-        void createG() {
+        void createGraph() {
             int i = 0;
-            g = new int[trafficMap.getRoads().size()][];
+            graph = new int[trafficMap.getRoads().size()][];
             for (Road r : mainController.getCurrMap().getRoads()) {
-                g[i] = new int[r.getTo().getRoadsOutNum() + r.getFrom().getRoadsInNum()];
+                graph[i] = new int[r.getTo().getRoadsOutNum() + r.getFrom().getRoadsInNum()];
                 int j = 0;
-                for (Object r_to : (r.getTo().getRoadOutStream().toArray())) {
-                    g[i][j++] = mainController.getCurrMap().getRoads().indexOf(r_to);
+                for (Object roadTo : (r.getTo().getRoadOutStream().toArray())) {
+                    graph[i][j++] = mainController.getCurrMap().getRoads().indexOf(roadTo);
                 }
-                for (Object r_to : (r.getFrom().getRoadInStream().toArray())) {
-                    g[i][j++] = mainController.getCurrMap().getRoads().indexOf(r_to);
+                for (Object roadTo : (r.getFrom().getRoadInStream().toArray())) {
+                    graph[i][j++] = mainController.getCurrMap().getRoads().indexOf(roadTo);
                 }
                 i++;
             }
@@ -121,19 +119,19 @@ public class StatisticsController {
 
         int find_comps() {
             if (mainController.getCurrMap().getRoads().size() == 0) return 0;
-            createG();
-            int comps_number = 0;
+            createGraph();
+            int numberOfComps = 0;
             n = trafficMap.getRoadCount();
             used = new boolean[n];
             comp = new ArrayList<>();
             for (int i = 0; i < n; ++i)
                 if (!used[i]) {
                     comp.clear();
-                    comps_number++;
+                    numberOfComps++;
                     dfs(i);
                 }
-            System.out.println(comp.toString());
-            return comps_number;
+            //System.out.println(comp.toString());
+            return numberOfComps;
         }
     }
 }
