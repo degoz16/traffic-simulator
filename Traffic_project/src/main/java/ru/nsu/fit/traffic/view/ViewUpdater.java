@@ -39,7 +39,6 @@ public class ViewUpdater {
      * Метод отрисовки текущего состояния карты
      */
     public void updateMapView(EditOperationsManager editOperationsManager) {
-
         Platform.runLater(() -> {
             mainPane.getChildren().clear();
             TrafficMap currMap = editOperationsManager.getMap();

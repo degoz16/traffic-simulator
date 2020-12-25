@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.javafx.controller.edit;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 
@@ -227,8 +228,11 @@ public class MainController {
                 public String toString(Double object) {
                     int id = (int) Math.round(object);
                     if (id < windowsListSize) {
-                        return String.valueOf(endGetter.apply(id));
-                        //todo отображение нормального времени
+                        String time = String.format("%02d:%02d",
+                                TimeUnit.MILLISECONDS.toHours(endGetter.apply(id)),
+                                TimeUnit.MILLISECONDS.toMinutes(endGetter.apply(id)) -
+                                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(endGetter.apply(id)))); // The change is in this line
+                        return time;
                     }
                     return "";
                 }

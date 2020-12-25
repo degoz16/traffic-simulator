@@ -7,15 +7,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
-import java.io.StringWriter;
 import java.time.LocalTime;
 import java.util.List;
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.engine.EngineController;
 import ru.nsu.fit.traffic.controller.saveload.SaveLoadControl;
-import ru.nsu.fit.traffic.controller.settings.NodeSettingsControl;
-import ru.nsu.fit.traffic.controller.settings.RoadSettingsControl;
 import ru.nsu.fit.traffic.controller.statistic.StatisticControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
@@ -41,27 +38,24 @@ public class EditControl extends BaseControl {
   private Road lastRoadClicked = null;
   private Node lastNodeClicked = null;
   private PlaceOfInterest lastPOIClicked = null;
-  private StatisticControl statisticControl;
-  private SaveLoadControl saveLoadControl;
-  private NodeSettingsControl nodeSettingsControl;
-  private RoadSettingsControl roadSettingsControl;
-  private EngineController engineController;
+  private final StatisticControl statisticControl;
+  private final SaveLoadControl saveLoadControl;
+  private final EngineController engineController;
 
 
   public EditControl(SceneElementsControl sceneElementsControl,
                      StatisticControl statisticControl,
-                     SaveLoadControl saveLoadContol) {
+                     SaveLoadControl saveLoadControl) {
     super(sceneElementsControl);
     this.statisticControl = statisticControl;
-    sceneElementsControl.timeLineSliderInit(
-      reportStruct.getWindowList().size(),
-      i -> reportStruct.getWindowList().get(i).getEnd()
-    );
-    this.saveLoadControl = saveLoadContol;
+    this.saveLoadControl = saveLoadControl;
     engineController = new EngineController(
-      "D:\\Jaguar\\GitHub\\traffic-simulator\\Traffic project\\Engine.jar" //TODO
+      "D:\\Jaguar\\GitHub\\traffic-simulator\\Traffic_project\\Engine.jar" //TODO
     );
-
+    sceneElementsControl.timeLineSliderInit(
+            reportStruct.getWindowList().size(),
+            i -> reportStruct.getWindowList().get(i).getEnd()
+    );
   }
 
   public Road getLastRoadClicked() {
@@ -106,7 +100,8 @@ public class EditControl extends BaseControl {
 
   public void stopSimulation() {
     engineController.stopEngine();
-    File file = new File(engineController.getHeatMapPath());
+//    File file = new File(engineController.getHeatMapPath());
+    File file = new File("heatMap.json");
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     try {
       Reader fileReader = new FileReader(file);
@@ -121,10 +116,14 @@ public class EditControl extends BaseControl {
       }
       //timeLineSlider.setMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
       sceneElementsControl.timeLineSliderSetMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
+      sceneElementsControl.timeLineSliderInit(
+              reportStruct.getWindowList().size(),
+              i -> reportStruct.getWindowList().get(i).getEnd()
+      );
     } catch (FileNotFoundException e) {
       System.err.println(e.getMessage());
     }
-    editOperationsManager.setCurrentOperation(EditOperation.NONE);
+    //editOperationsManager.setCurrentOperation(EditOperation.NONE);
   }
 
   public void roadButtonClicked() {
@@ -216,7 +215,7 @@ public class EditControl extends BaseControl {
   }
 
   public void onTimeLineSliderChange(Number newValue) {
-    if (reportStruct.getWindowList().size() > (int) Math.round(newValue.doubleValue())) {
+    if (reportStruct.getWindowList().size() > (int)Math.round(newValue.doubleValue())) {
       editOperationsManager.updateCongestions(reportStruct.getWindowList().get((int) Math.round(newValue.doubleValue())));
     }
   }

@@ -60,19 +60,24 @@ public class EngineController {
   }
 
   public void startEngine() {
-    thread = new Thread(new Runnable() {
-      @Override
-      public void run() {
-        try {
-          engineProcess = Runtime.getRuntime().exec(
-            "java -jar " + '"' + enginePath + '"' + " " + '"' + mapPath + '"' + " " + '"' + heatMapPath + '"' + " " + '"' + carStatePath + '"');
-          System.out.println("START");
-          engineProcess.waitFor();
-          System.out.println("END");
-        } catch (InterruptedException | IOException e) {
-          System.err.println(e.getMessage());
-          assert false;
-        }
+    thread = new Thread(() -> {
+      try {
+        engineProcess = Runtime.getRuntime().exec(
+          "java -jar "
+                  + '"'
+                  + enginePath
+                  + '"' + " " + '"'
+                  + mapPath
+                  + '"' + " " + '"'
+                  + heatMapPath
+                  + '"' + " " + '"'
+                  + carStatePath + '"');
+        System.out.println("START");
+        engineProcess.waitFor();
+        System.out.println("END");
+      } catch (InterruptedException | IOException e) {
+        System.err.println(e.getMessage());
+        assert false;
       }
     });
     thread.start();

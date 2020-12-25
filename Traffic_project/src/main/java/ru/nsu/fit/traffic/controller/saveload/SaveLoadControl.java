@@ -6,8 +6,6 @@ import com.google.gson.GsonBuilder;
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
-import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
-import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 
 import java.io.*;
 
