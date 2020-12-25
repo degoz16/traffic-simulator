@@ -3,12 +3,12 @@ package ru.nsu.fit.traffic.json.parse;
 public class SpawnerJsonStruct {
   private String start;
   private String end;
-  private int spawnerRate;
+  private int spawnRate;
 
-  public SpawnerJsonStruct(String start, String end, int spawnerRate) {
+  public SpawnerJsonStruct(String start, String end, int spawnRate) {
     this.start = start;
     this.end = end;
-    this.spawnerRate = spawnerRate;
+    this.spawnRate = spawnRate;
   }
 
   public String getStart() {
@@ -20,6 +20,6 @@ public class SpawnerJsonStruct {
   }
 
   public int getSpawnerRate() {
-    return spawnerRate;
+    return spawnRate;
   }
 }

@@ -14,6 +14,11 @@ import java.io.*;
 public class SaveLoadControl extends BaseControl {
     private String pathToProjectDir;
 
+
+    public String getPathToProjectDir() {
+        return pathToProjectDir;
+    }
+
     public SaveLoadControl(
             SceneElementsControl sceneElementsControl) {
         super(sceneElementsControl);
@@ -70,9 +75,9 @@ public class SaveLoadControl extends BaseControl {
             try {
                 Reader fileReader = new FileReader(file);
                 MapJsonStruct mapJsonStruct = gson.fromJson(fileReader, MapJsonStruct.class);
-                File oldFile =
-                        new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
-                saveCurrentProject(oldFile);
+//                File oldFile =
+//                        new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
+//                saveCurrentProject(oldFile);
                 mapJsonStruct.toTrafficMap(editOperationsManager.getMap());
                 pathToProjectDir = file.getAbsolutePath();
             } catch (FileNotFoundException e) {
@@ -83,9 +88,9 @@ public class SaveLoadControl extends BaseControl {
     }
 
     public void onNewProject() {
-        File file =
-                new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
-        saveCurrentProject(file);
+//        File file =
+//                new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
+//        saveCurrentProject(file);
         editOperationsManager.getMap().clearMap();
         pathToProjectDir = getDocsPath();
         update.update(editOperationsManager);

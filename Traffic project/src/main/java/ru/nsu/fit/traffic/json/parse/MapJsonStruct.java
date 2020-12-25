@@ -15,7 +15,9 @@ import ru.nsu.fit.traffic.model.trafficlight.TrafficLightConfig;
 public class MapJsonStruct {
   private final List<NodeJsonStruct> nodes = new ArrayList<>();
   private final List<RoadJsonStruct> roads = new ArrayList<>();
-  private final List<PlaceOfInterestJsonStruct> pois = new ArrayList<>();
+  private final List<PlaceOfInterestJsonStruct> pointsOfInterest = new ArrayList<>();
+  private String start = "09:00";
+  private String end = "19:00";
 
   public MapJsonStruct(TrafficMap map) {
     map.forEachNode(
@@ -80,7 +82,7 @@ public class MapJsonStruct {
       poi -> {
         List<Integer> nodes = new ArrayList<>();
         poi.foreachNodeIn(node -> nodes.add(map.indexOfNode(node)));
-        pois.add(
+        pointsOfInterest.add(
           new PlaceOfInterestJsonStruct(
             poi.getX(),
             poi.getY(),
@@ -171,7 +173,7 @@ public class MapJsonStruct {
       }
     }
 
-    pois.forEach(
+    pointsOfInterest.forEach(
       poiJsonStruct -> {
         PlaceOfInterest place =
           new PlaceOfInterest(
