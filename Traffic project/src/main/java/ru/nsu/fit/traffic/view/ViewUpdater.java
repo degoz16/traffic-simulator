@@ -62,12 +62,14 @@ public class ViewUpdater {
                 }
             });
             currMap.forEachNode(node -> {
-                Shape nodeShape = objectPainter.paintNode(node);
-                if (node.getPlaceOfInterest() != null && node.getSpawners() == null) {
-                    nodeShape.setFill(Paint.valueOf("#303030"));
+                List<Shape> shape = objectPainter.paintNode(node);
+                for (Shape nodeShape: shape) {
+                    if (node.getPlaceOfInterest() != null && node.getSpawners() == null) {
+                        nodeShape.setFill(Paint.valueOf("#303030"));
+                    }
+                    nodeObserver.action(node, nodeShape);
+                    mainPane.getChildren().add(nodeShape);
                 }
-                nodeObserver.action(node, nodeShape);
-                mainPane.getChildren().add(nodeShape);
             });
         });
     }
