@@ -1,13 +1,9 @@
 package ru.nsu.fit.traffic.view;
 
 import javafx.application.Platform;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
-import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
-import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
@@ -17,11 +13,11 @@ import java.util.List;
 public class ViewUpdater {
     private final int NODE_SIZE = 10;
     private final int LANE_SIZE = 10;
-    private PoiObserver poiObserver;
-    private RoadObserver roadObserver;
-    private NodeObserver nodeObserver;
+    private final PoiObserver poiObserver;
+    private final RoadObserver roadObserver;
+    private final NodeObserver nodeObserver;
     private final ObjectPainter objectPainter = new ObjectPainter(LANE_SIZE, NODE_SIZE);
-    private Pane mainPane;
+    private final Pane mainPane;
 
 
     public ViewUpdater(

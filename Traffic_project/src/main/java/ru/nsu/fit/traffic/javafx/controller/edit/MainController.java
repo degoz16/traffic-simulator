@@ -79,7 +79,9 @@ public class MainController {
     @FXML
     private NodeSettingsController nodeSettingsController;
     @FXML
-    private Slider timeLineSlider;
+    private Slider timeLineReportSlider;
+    @FXML
+    private Slider timeLinePlaybackSlider;
 
     private Stage stage;
 
@@ -222,17 +224,16 @@ public class MainController {
         @Override
         public void timeLineSliderInit(int windowsListSize, Function<Integer, Long> endGetter) {
             //timeLineSlider.setMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
-            timeLineSlider.setMax(Math.max(windowsListSize - 1, 0));
-            timeLineSlider.setLabelFormatter(new StringConverter<>() {
+            timeLineReportSlider.setMax(Math.max(windowsListSize - 1, 0));
+            timeLineReportSlider.setLabelFormatter(new StringConverter<>() {
                 @Override
                 public String toString(Double object) {
                     int id = (int) Math.round(object);
                     if (id < windowsListSize) {
-                        String time = String.format("%02d:%02d",
+                        return String.format("%02d:%02d",
                                 TimeUnit.MILLISECONDS.toHours(endGetter.apply(id)),
                                 TimeUnit.MILLISECONDS.toMinutes(endGetter.apply(id)) -
-                                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(endGetter.apply(id)))); // The change is in this line
-                        return time;
+                                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(endGetter.apply(id))));
                     }
                     return "";
                 }
@@ -246,7 +247,39 @@ public class MainController {
 
         @Override
         public void timeLineSliderSetMax(double max) {
-            timeLineSlider.setMax(max);
+            timeLineReportSlider.setMax(max);
+        }
+
+        @Override
+        public void timeLineSliderAddValue(double val) {
+            if (timeLineReportSlider.getValue() + val < timeLineReportSlider.getMin()) {
+                timeLineReportSlider.setValue(timeLineReportSlider.getMin());
+            } else timeLineReportSlider.setValue(Math.min(timeLineReportSlider.getValue() + val, timeLineReportSlider.getMax()));
+        }
+
+        @Override
+        public void simulationProcessModeEnable() {
+
+        }
+
+        @Override
+        public void simulationEndModeEnable() {
+
+        }
+
+        @Override
+        public void editModeEnable() {
+
+        }
+
+        @Override
+        public void reportModeEnable() {
+
+        }
+
+        @Override
+        public void playBackModeEnable() {
+
         }
     };
 
@@ -355,9 +388,9 @@ public class MainController {
 
         mainScrollPane.setPannable(false);
 
-        timeLineSlider.setMin(0);
+        timeLineReportSlider.setMin(0);
 
-        timeLineSlider.valueProperty().addListener((observable, oldValue, newValue) ->
+        timeLineReportSlider.valueProperty().addListener((observable, oldValue, newValue) ->
                 editControl.onTimeLineSliderChange(newValue));
 
         mainScrollPane.setOnMousePressed(event -> {
@@ -409,7 +442,7 @@ public class MainController {
                         getMouseEventWrapper(event),
                         basePane.getWidth(),
                         basePane.getHeight(),
-                        100,100
+                        100, 100
                 ));
 
     }
@@ -420,13 +453,18 @@ public class MainController {
     }
 
     @FXML
-    public void pauseSimulation() {
-        editControl.pauseSimulation();
+    public void stopSimulation() {
+        editControl.stopSimulation();
     }
 
     @FXML
-    public void stopSimulation() {
-        editControl.stopSimulation();
+    public void rewindForward() {
+        editControl.rewindForward();
+    }
+
+    @FXML
+    public void rewindBack() {
+        editControl.rewindBack();
     }
 
     @FXML
@@ -445,8 +483,18 @@ public class MainController {
     }
 
     @FXML
-    public void carButtonClicked() {
-        editControl.carButtonClicked();
+    public void playbackButtonClicked() {
+        editControl.playbackClicked();
+    }
+
+    @FXML
+    public void reportButtonClicked() {
+
+    }
+
+    @FXML
+    public void editButtonClicked() {
+
     }
 
     @FXML
@@ -456,7 +504,6 @@ public class MainController {
 
     @FXML
     public void showStatistic() {
-        //statistics.setVisible(!statistics.isVisible());
         editControl.showStatistic();
     }
 

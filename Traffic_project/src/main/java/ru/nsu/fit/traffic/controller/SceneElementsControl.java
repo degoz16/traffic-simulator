@@ -34,5 +34,10 @@ public interface SceneElementsControl {
     void statisticSwitchVisible();
     void timeLineSliderInit(int windowsListSize, Function<Integer, Long> endGetter);
     void timeLineSliderSetMax(double max);
-
+    void timeLineSliderAddValue(double val);
+    void simulationProcessModeEnable();
+    void simulationEndModeEnable();
+    void editModeEnable();
+    void reportModeEnable();
+    void playBackModeEnable();
 }
