@@ -79,7 +79,7 @@ public class EngineController extends BaseControl {
         System.out.println("START");
         engineProcess.waitFor();
         //DEBUG
-        Thread.sleep(5000);
+        //Thread.sleep(5000);
         //DEBUG
         System.out.println("END");
         sceneElementsControl.simulationEndModeEnable();

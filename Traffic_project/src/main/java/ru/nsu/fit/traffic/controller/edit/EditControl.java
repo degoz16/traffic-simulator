@@ -32,7 +32,7 @@ import ru.nsu.fit.traffic.model.trafficsign.SignType;
 public class EditControl extends BaseControl {
   private final ReportStruct reportStruct = new ReportStruct();
   private final SignFactory signFactory = new SignFactory();
-  private final PlaybackStruct playbackStruct = new PlaybackStruct();
+  private PlaybackStruct playbackStruct;
   private final StatisticControl statisticControl;
   private final SaveLoadControl saveLoadControl;
   private final EngineController engineController;
@@ -166,6 +166,7 @@ public class EditControl extends BaseControl {
   public void playbackClicked() {
     editOperationsManager.setCurrentOperation(EditOperation.PLAYBACK_SHOWING);
     sceneElementsControl.playBackModeEnable();
+    playbackStruct = new PlaybackStruct(editOperationsManager.getMap());
     playbackStruct.fillInTimeMap(engineController.getCarStatePath());
     sceneElementsControl.playbackSliderInit(playbackStruct.getMaxTime(), playbackStruct.getMinTime());
     editOperationsManager.updateCarStates(playbackStruct.getCarStates(playbackStruct.getMinTime()));
@@ -173,7 +174,9 @@ public class EditControl extends BaseControl {
 
   public void reportClicked() {
     //DEBUG
-    File file = new File("heatMap.json");
+    //File file = new File("heatMap.json");
+    //DEBUG
+    File file = new File(engineController.getHeatMapPath());
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     try {
       Reader fileReader = new FileReader(file);

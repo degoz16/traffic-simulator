@@ -12,7 +12,6 @@ import java.io.*;
 public class SaveLoadControl extends BaseControl {
     private String pathToProjectDir;
 
-
     public String getPathToProjectDir() {
         return pathToProjectDir;
     }

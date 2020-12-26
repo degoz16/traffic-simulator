@@ -94,9 +94,9 @@ public class EditOperationsManager {
     }
 
     private void buildRoad(Node newNode, Node lastNode) {
-        Road newRoadTo = new Road(lanesNumLeft);
-        Road newRoadFrom = new Road(lanesNumRight);
-        newNode.connect(newRoadTo, newRoadFrom, lastNode);
+        Road newRoadTo = new Road(lanesNumRight);
+        Road newRoadFrom = new Road(lanesNumLeft);
+        newNode.connect(newRoadFrom, newRoadTo, lastNode);
         map.addRoad(newRoadTo);
         map.addRoad(newRoadFrom);
         if (lastNode.getRoadsOutNum() > 1) {

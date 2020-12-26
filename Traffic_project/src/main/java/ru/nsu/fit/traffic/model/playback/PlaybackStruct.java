@@ -3,6 +3,9 @@ package ru.nsu.fit.traffic.model.playback;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
+import ru.nsu.fit.traffic.model.road.Road;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,6 +20,11 @@ public class PlaybackStruct {
   private Map<Integer, List<CarState>> timeToCarStates = new HashMap<>();
   private Map<Integer, CarState> idToCurrentState = new HashMap<>();
   private int lastTime = 0;
+  private TrafficMap map;
+
+  public PlaybackStruct(TrafficMap map) {
+    this.map = map;
+  }
 
   private void addToMap(CarState carState) {
     int time = carState.getTime();
@@ -74,9 +82,10 @@ public class PlaybackStruct {
       List<CarState> carStates = gson.fromJson(
         fileReader, new TypeToken<List<CarState>>() {
         }.getType());
-      carStates.forEach(x -> {
-        x.setTime(x.getTime() / 1000);
-        addToMap(x);
+      carStates.forEach(carState -> {
+        carState.initCoords(map.getRoad(carState.getCurrentRoad()));
+        carState.setTime(carState.getTime() / 1000);
+        addToMap(carState);
       });
     } catch (FileNotFoundException e) {
       System.err.println(e.getMessage());
