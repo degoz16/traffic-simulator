@@ -119,4 +119,12 @@ public class Node {
   public int getRoadsInNum() {
     return roadsIn.size();
   }
+
+  public List<Road> getRoadsIn() {
+    return roadsIn;
+  }
+
+  public List<Road> getRoadsOut() {
+    return roadsOut;
+  }
 }
