@@ -11,15 +11,12 @@ import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -82,14 +79,31 @@ public class MainController {
     private Slider timeLineReportSlider;
     @FXML
     private Slider timeLinePlaybackSlider;
+    @FXML
+    private Button simulationStartButton;
+    @FXML
+    private Button simulationStopButton;
+    @FXML
+    private Button buttonBack;
+    @FXML
+    private Button buttonForward;
+    @FXML
+    private Button playbackButton;
+    @FXML
+    private Button reportButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private AnchorPane editButtonsPane;
+    @FXML
+    private HBox progressIndicator;
 
     private Stage stage;
 
     private double scaleValue = 1;
     private Rectangle selectRect;
-    private ControlsInitializer controlsInitializer;
     private EditControl editControl;
-    private SceneElementsControl sceneElementsControl = new SceneElementsControl() {
+    private final SceneElementsControl sceneElementsControl = new SceneElementsControl() {
         @Override
         public void updateStatistic(int carSpawnersCnt, int streetsCnt, int roadsCnt, int buildingCnt, int connectivity, List<String> streets) {
             statisticsController.getCarSpawners().setText(String.valueOf(carSpawnersCnt));
@@ -222,7 +236,7 @@ public class MainController {
         }
 
         @Override
-        public void timeLineSliderInit(int windowsListSize, Function<Integer, Long> endGetter) {
+        public void timeLineReportSliderInit(int windowsListSize, Function<Integer, Long> endGetter) {
             //timeLineSlider.setMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
             timeLineReportSlider.setMax(Math.max(windowsListSize - 1, 0));
             timeLineReportSlider.setLabelFormatter(new StringConverter<>() {
@@ -246,12 +260,12 @@ public class MainController {
         }
 
         @Override
-        public void timeLineSliderSetMax(double max) {
+        public void timeLineReportSliderSetMax(double max) {
             timeLineReportSlider.setMax(max);
         }
 
         @Override
-        public void timeLineSliderAddValue(double val) {
+        public void timeLineReportSliderAddValue(double val) {
             if (timeLineReportSlider.getValue() + val < timeLineReportSlider.getMin()) {
                 timeLineReportSlider.setValue(timeLineReportSlider.getMin());
             } else timeLineReportSlider.setValue(Math.min(timeLineReportSlider.getValue() + val, timeLineReportSlider.getMax()));
@@ -259,27 +273,109 @@ public class MainController {
 
         @Override
         public void simulationProcessModeEnable() {
-
+            simulationStopButton.setDisable(false);
+            simulationStartButton.setDisable(true);
+            editButton.setDisable(true);
+            playbackButton.setDisable(true);
+            reportButton.setDisable(true);
+            buttonForward.setDisable(true);
+            buttonBack.setDisable(true);
+            mainScrollPane.setDisable(true);
+            timeLinePlaybackSlider.setDisable(true);
+            timeLineReportSlider.setDisable(true);
+            timeLinePlaybackSlider.setVisible(false);
+            timeLineReportSlider.setVisible(false);
+            editButtonsPane.setDisable(true);
+            progressIndicator.setVisible(true);
         }
 
         @Override
         public void simulationEndModeEnable() {
-
+            simulationStopButton.setDisable(true);
+            simulationStartButton.setDisable(false);
+            editButton.setDisable(false);
+            playbackButton.setDisable(false);
+            reportButton.setDisable(false);
+            buttonForward.setDisable(true);
+            buttonBack.setDisable(true);
+            mainScrollPane.setDisable(false);
+            timeLinePlaybackSlider.setDisable(true);
+            timeLineReportSlider.setDisable(true);
+            timeLinePlaybackSlider.setVisible(false);
+            timeLineReportSlider.setVisible(false);
+            editButtonsPane.setDisable(true);
+            progressIndicator.setVisible(false);
+        }
+        @Override
+        public void simulationStopModeEnable() {
+            simulationStopButton.setDisable(true);
+            simulationStartButton.setDisable(false);
+            editButton.setDisable(false);
+            playbackButton.setDisable(true);
+            reportButton.setDisable(true);
+            buttonForward.setDisable(true);
+            buttonBack.setDisable(true);
+            mainScrollPane.setDisable(true);
+            timeLinePlaybackSlider.setDisable(true);
+            timeLineReportSlider.setDisable(true);
+            timeLinePlaybackSlider.setVisible(false);
+            timeLineReportSlider.setVisible(false);
+            editButtonsPane.setDisable(true);
+            progressIndicator.setVisible(true);
         }
 
         @Override
         public void editModeEnable() {
-
+            simulationStopButton.setDisable(true);
+            simulationStartButton.setDisable(false);
+            editButton.setDisable(true);
+            playbackButton.setDisable(true);
+            reportButton.setDisable(true);
+            buttonForward.setDisable(true);
+            buttonBack.setDisable(true);
+            mainScrollPane.setDisable(false);
+            timeLinePlaybackSlider.setDisable(true);
+            timeLineReportSlider.setDisable(true);
+            timeLinePlaybackSlider.setVisible(false);
+            timeLineReportSlider.setVisible(false);
+            editButtonsPane.setDisable(false);
+            progressIndicator.setVisible(false);
         }
 
         @Override
         public void reportModeEnable() {
-
+            simulationStopButton.setDisable(true);
+            simulationStartButton.setDisable(false);
+            editButton.setDisable(false);
+            playbackButton.setDisable(false);
+            reportButton.setDisable(true);
+            buttonForward.setDisable(false);
+            buttonBack.setDisable(false);
+            mainScrollPane.setDisable(false);
+            timeLinePlaybackSlider.setDisable(true);
+            timeLineReportSlider.setDisable(false);
+            timeLinePlaybackSlider.setVisible(false);
+            timeLineReportSlider.setVisible(true);
+            editButtonsPane.setDisable(true);
+            progressIndicator.setVisible(false);
         }
 
         @Override
         public void playBackModeEnable() {
-
+            simulationStopButton.setDisable(true);
+            simulationStartButton.setDisable(false);
+            editButton.setDisable(false);
+            playbackButton.setDisable(true);
+            reportButton.setDisable(false);
+            buttonForward.setDisable(false);
+            buttonBack.setDisable(false);
+            mainScrollPane.setDisable(false);
+            timeLinePlaybackSlider.setDisable(false);
+            timeLineReportSlider.setDisable(true);
+            timeLinePlaybackSlider.setVisible(true);
+            timeLineReportSlider.setVisible(false);
+            editButtonsPane.setDisable(true);
+            progressIndicator.setVisible(false);
         }
     };
 
@@ -338,7 +434,7 @@ public class MainController {
      */
     @FXML
     public void initialize() {
-        controlsInitializer = new ControlsInitializer(sceneElementsControl);
+        ControlsInitializer controlsInitializer = new ControlsInitializer(sceneElementsControl);
         editControl = controlsInitializer.getEditControl();
         ViewUpdater viewUpdater = new ViewUpdater(
                 (shape, placeOfInterest) ->
@@ -489,12 +585,12 @@ public class MainController {
 
     @FXML
     public void reportButtonClicked() {
-
+        editControl.reportClicked();
     }
 
     @FXML
     public void editButtonClicked() {
-
+        editControl.editClicked();
     }
 
     @FXML

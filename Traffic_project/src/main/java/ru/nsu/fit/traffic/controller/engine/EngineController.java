@@ -1,10 +1,13 @@
 package ru.nsu.fit.traffic.controller.engine;
 
+import ru.nsu.fit.traffic.controller.BaseControl;
+import ru.nsu.fit.traffic.controller.SceneElementsControl;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-public class EngineController {
+public class EngineController extends BaseControl {
 
   private String heatMapPath;
   private String carStatePath;
@@ -13,7 +16,8 @@ public class EngineController {
   private Process engineProcess;
   private Thread thread;
 
-  public EngineController(String enginePath) {
+  public EngineController(String enginePath, SceneElementsControl sceneElementsControl) {
+    super(sceneElementsControl);
     this.enginePath = enginePath;
   }
 
@@ -66,15 +70,19 @@ public class EngineController {
           "java -jar "
                   + '"'
                   + enginePath
-                  + '"' + " " + '"'
+                  + "\" \""
                   + mapPath
-                  + '"' + " " + '"'
+                  + "\" \""
                   + heatMapPath
-                  + '"' + " " + '"'
+                  + "\" \""
                   + carStatePath + '"');
         System.out.println("START");
         engineProcess.waitFor();
+        //DEBUG
+        Thread.sleep(5000);
+        //DEBUG
         System.out.println("END");
+        sceneElementsControl.simulationEndModeEnable();
       } catch (InterruptedException | IOException e) {
         System.err.println(e.getMessage());
         assert false;

@@ -46,17 +46,17 @@ public class EditControl extends BaseControl {
 
     public EditControl(SceneElementsControl sceneElementsControl,
                        StatisticControl statisticControl,
-                       SaveLoadControl saveLoadControl) {
+                       SaveLoadControl saveLoadControl,
+                       EngineController engineController) {
         super(sceneElementsControl);
         this.statisticControl = statisticControl;
         this.saveLoadControl = saveLoadControl;
-        engineController = new EngineController(
-                "D:\\Jaguar\\GitHub\\traffic-simulator\\Traffic_project\\Engine.jar" //TODO
-        );
-        sceneElementsControl.timeLineSliderInit(
+        this.engineController = engineController;
+        sceneElementsControl.timeLineReportSliderInit(
                 reportStruct.getWindowList().size(),
                 i -> reportStruct.getWindowList().get(i).getEnd()
         );
+        sceneElementsControl.editModeEnable();
     }
 
     public Road getLastRoadClicked() {
@@ -91,44 +91,25 @@ public class EditControl extends BaseControl {
         engineController.setCarStatePath(dirPath.substring(0, lastIndexOfDel) + delim + "carStateOut.json");
         engineController.setHeatMapPath(dirPath.substring(0, lastIndexOfDel) + delim + "heatMapOut.json");
         engineController.startEngine();
+        sceneElementsControl.simulationProcessModeEnable();
+        editOperationsManager.setCurrentOperation(EditOperation.SIMULATION);
     }
 
     public void stopSimulation() {
         engineController.stopEngine();
-        File file = new File("heatMap.json");
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try {
-            Reader fileReader = new FileReader(file);
-            List<ReportWindowStruct> reportWindowStructList = gson.fromJson(
-                    fileReader, new TypeToken<List<ReportWindowStruct>>() {
-                    }.getType());
-            reportStruct.setWindowList(reportWindowStructList);
-            reportStruct.fillCongestionList(editOperationsManager.getMap().getRoadCount());
-            editOperationsManager.setCurrentOperation(EditOperation.REPORT_SHOWING);
-            if (reportStruct.getWindowList().size() > 0) {
-                editOperationsManager.updateCongestions(reportStruct.getWindowList().get(0));
-            }
-            //timeLineSlider.setMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
-            sceneElementsControl.timeLineSliderSetMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
-            sceneElementsControl.timeLineSliderInit(
-                    reportStruct.getWindowList().size(),
-                    i -> reportStruct.getWindowList().get(i).getEnd()
-            );
-        } catch (FileNotFoundException e) {
-            System.err.println(e.getMessage());
-        }
+        sceneElementsControl.simulationStopModeEnable();
         //editOperationsManager.setCurrentOperation(EditOperation.NONE);
     }
 
     public void rewindForward() {
         if (editOperationsManager.getCurrentOperation() == EditOperation.REPORT_SHOWING) {
-            sceneElementsControl.timeLineSliderAddValue(1);
+            sceneElementsControl.timeLineReportSliderAddValue(1);
         }
     }
 
     public void rewindBack() {
         if (editOperationsManager.getCurrentOperation() == EditOperation.REPORT_SHOWING) {
-            sceneElementsControl.timeLineSliderAddValue(-1);
+            sceneElementsControl.timeLineReportSliderAddValue(-1);
         }
     }
 
@@ -177,7 +158,40 @@ public class EditControl extends BaseControl {
     }
 
     public void playbackClicked() {
-        System.out.println("машина");
+        editOperationsManager.setCurrentOperation(EditOperation.PLAYBACK_SHOWING);
+        sceneElementsControl.playBackModeEnable();
+    }
+
+    public void reportClicked() {
+        //DEBUG
+        File file = new File("heatMap.json");
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try {
+            Reader fileReader = new FileReader(file);
+            List<ReportWindowStruct> reportWindowStructList = gson.fromJson(
+                    fileReader, new TypeToken<List<ReportWindowStruct>>() {
+                    }.getType());
+            reportStruct.setWindowList(reportWindowStructList);
+            reportStruct.fillCongestionList(editOperationsManager.getMap().getRoadCount());
+            editOperationsManager.setCurrentOperation(EditOperation.REPORT_SHOWING);
+            if (reportStruct.getWindowList().size() > 0) {
+                editOperationsManager.updateCongestions(reportStruct.getWindowList().get(0));
+            }
+            //timeLineSlider.setMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
+            sceneElementsControl.timeLineReportSliderSetMax(Math.max(reportStruct.getWindowList().size() - 1, 0));
+            sceneElementsControl.timeLineReportSliderInit(
+                    reportStruct.getWindowList().size(),
+                    i -> reportStruct.getWindowList().get(i).getEnd()
+            );
+            sceneElementsControl.reportModeEnable();
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public void editClicked() {
+        editOperationsManager.setCurrentOperation(EditOperation.NONE);
+        sceneElementsControl.editModeEnable();
     }
 
     public void roadSignButtonClicked() {
