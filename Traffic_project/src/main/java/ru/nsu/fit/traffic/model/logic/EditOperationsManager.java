@@ -4,6 +4,7 @@ import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.playback.CarState;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.RoadHighLight;
 import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
@@ -17,7 +18,6 @@ import java.util.List;
 
 public class EditOperationsManager {
     private final int ROAD_LIMIT = 4;
-
     private final TrafficMap map;
     private EditOperation currentOperation = EditOperation.NONE;
     public Node lastNode = null;
@@ -25,6 +25,12 @@ public class EditOperationsManager {
     private int lanesNumRight = 1;
     private final UpdateObserver updateView;
     private RoadSign currSign = new MainRoadSign();
+
+    private List<CarState> carStates = new ArrayList<>();
+
+    public List<CarState> getCarStates() {
+        return carStates;
+    }
 
     public EditOperationsManager(UpdateObserver updateView) {
         this.map = new TrafficMap();
@@ -190,6 +196,11 @@ public class EditOperationsManager {
         for (int i = 0; i < Math.min(reportWindowStruct.getCongestionList().size(), map.getRoadCount()); i++) {
             map.getRoad(i).setCongestion(reportWindowStruct.getCongestionListFilled().get(i));
         }
+        updateView.update(this);
+    }
+
+    public void updateCarStates(List<CarState> carStates) {
+        this.carStates = carStates;
         updateView.update(this);
     }
 

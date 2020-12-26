@@ -32,9 +32,17 @@ public interface SceneElementsControl {
     void trafficLightSettingsSetPos(double x, double y);
     void trafficLightSettingsSetParams(int greenDelay, int redDelay);
     void statisticSwitchVisible();
+
     void timeLineReportSliderInit(int windowsListSize, Function<Integer, Long> endGetter);
     void timeLineReportSliderSetMax(double max);
     void timeLineReportSliderAddValue(double val);
+
+    void playbackSliderInit(double maxVal, double minVal);
+    void playBackSliderSetMax(double max);
+    void playBackSliderSetMin(double min);
+    void playbackSliderAddValue(double val);
+
+
     void simulationProcessModeEnable();
     void simulationEndModeEnable();
     void simulationStopModeEnable();
