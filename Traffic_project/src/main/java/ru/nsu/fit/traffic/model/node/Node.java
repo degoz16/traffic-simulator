@@ -78,6 +78,14 @@ public class Node {
     roadsOut.remove(road);
   }
 
+  public List<Road> getRoadsOut() {
+    return roadsOut;
+  }
+
+  public List<Road> getRoadsIn() {
+    return roadsIn;
+  }
+
   public void removeFromPlaceOfInterest() {
     if (placeOfInterest != null) {
       placeOfInterest.removeNode(this);
