@@ -177,6 +177,7 @@ public class EditControl extends BaseControl {
     //DEBUG
     //File file = new File("heatMap.json");
     //DEBUG
+    editOperationsManager.updateCarStates(new ArrayList<>());
     File file = new File(engineController.getHeatMapPath());
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
     try {
