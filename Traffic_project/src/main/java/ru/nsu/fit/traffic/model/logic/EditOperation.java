@@ -8,5 +8,6 @@ public enum EditOperation {
     POI_CREATION,
     REPORT_SHOWING,
     PLAYBACK_SHOWING,
-    SIMULATION
+    SIMULATION,
+    TIME_PICKING
 }

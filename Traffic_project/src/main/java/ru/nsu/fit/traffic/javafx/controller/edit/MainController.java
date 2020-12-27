@@ -1,11 +1,13 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
+import com.jfoenix.controls.JFXTimePicker;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import javafx.collections.FXCollections;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
@@ -16,6 +18,8 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
@@ -47,6 +51,8 @@ import ru.nsu.fit.traffic.view.ViewUpdater;
  */
 public class MainController {
 
+  @FXML
+  private JFXTimePicker simTimePicker;
   @FXML
   private Pane statistics;
   @FXML
@@ -646,6 +652,23 @@ public class MainController {
   @FXML
   public void reportButtonClicked() {
     editControl.reportClicked();
+  }
+
+  @FXML
+  public void simTimePickerEnterPressed(KeyEvent key) {
+      if (key.getCode() == KeyCode.ENTER) {
+        String time =
+          simTimePicker.getValue() != null
+            ? simTimePicker.getValue().toString()
+            : LocalTime.now().toString();
+        System.out.println(time);
+        editControl.startTimePicker(time);
+      }
+  }
+
+  @FXML
+  public void simTimePickerClicked(){
+    simTimePicker.set24HourView(true);
   }
 
   @FXML

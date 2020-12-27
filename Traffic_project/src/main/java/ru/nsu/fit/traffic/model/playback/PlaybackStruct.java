@@ -3,9 +3,6 @@ package ru.nsu.fit.traffic.model.playback;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import ru.nsu.fit.traffic.model.map.TrafficMap;
-import ru.nsu.fit.traffic.model.road.Road;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -14,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 
 
 public class PlaybackStruct {
@@ -46,6 +44,7 @@ public class PlaybackStruct {
     assert min != 999999999;
     return min;
   }
+
   public int getMaxTime() {
     int max = -1;
     for (Integer integer : timeToCarStates.keySet()) {
@@ -66,7 +65,11 @@ public class PlaybackStruct {
       if (timeToCarStates.containsKey(lastTime)) {
         List<CarState> carStates = timeToCarStates.get(lastTime);
         carStates.forEach(car -> {
-          idToCurrentState.put(car.getCarId(), car);
+          if (!car.isDraw()) {
+            idToCurrentState.remove(car.getCarId());
+          } else {
+            idToCurrentState.put(car.getCarId(), car);
+          }
         });
       }
     }

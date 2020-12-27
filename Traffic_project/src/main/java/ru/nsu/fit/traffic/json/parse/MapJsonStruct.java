@@ -20,6 +20,8 @@ public class MapJsonStruct {
   private String end = "19:00";
 
   public MapJsonStruct(TrafficMap map) {
+    start = map.getStart();
+    end = map.getEnd();
     map.forEachNode(
       node -> {
         List<Integer> roadsFrom = new ArrayList<>();
@@ -194,6 +196,8 @@ public class MapJsonStruct {
         mapPois.add(place);
       });
 
+    trafficMap.setEnd(end);
+    trafficMap.setStart(start);
     trafficMap.setNodes(mapNodes);
     trafficMap.setRoads(mapRoads);
     trafficMap.setPlacesOfInterest(mapPois);

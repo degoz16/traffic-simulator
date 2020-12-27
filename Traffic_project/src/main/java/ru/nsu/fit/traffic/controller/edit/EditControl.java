@@ -33,10 +33,10 @@ import ru.nsu.fit.traffic.model.trafficsign.SignType;
 public class EditControl extends BaseControl {
   private final ReportStruct reportStruct = new ReportStruct();
   private final SignFactory signFactory = new SignFactory();
-  private PlaybackStruct playbackStruct;
   private final StatisticControl statisticControl;
   private final SaveLoadControl saveLoadControl;
   private final EngineController engineController;
+  private PlaybackStruct playbackStruct;
   private double lastBaseX = 0d;
   private double lastBaseY = 0d;
   private double lastClickX = 0;
@@ -135,6 +135,16 @@ public class EditControl extends BaseControl {
         editOperationsManager.resetLastNode();
         editOperationsManager.setCurrentOperation(EditOperation.ROAD_CREATION);
       }
+    }
+  }
+
+  public void startTimePicker(String time) {
+    if (editOperationsManager.getCurrentOperation() == EditOperation.TIME_PICKING) {
+      editOperationsManager.setCurrentOperation(EditOperation.NONE);
+      editOperationsManager.setEndTime(time);
+    } else {
+      editOperationsManager.setCurrentOperation(EditOperation.TIME_PICKING);
+      editOperationsManager.setStartTime(time);
     }
   }
 

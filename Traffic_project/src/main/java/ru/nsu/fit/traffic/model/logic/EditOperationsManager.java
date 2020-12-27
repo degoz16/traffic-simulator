@@ -93,6 +93,14 @@ public class EditOperationsManager {
         updateView.update(this);
     }
 
+    public void setStartTime(String time) {
+        map.setStart(time);
+    }
+
+    public void setEndTime(String time) {
+        map.setEnd(time);
+    }
+
     private void buildRoad(Node newNode, Node lastNode) {
         Road newRoadTo = new Road(lanesNumRight);
         Road newRoadFrom = new Road(lanesNumLeft);
