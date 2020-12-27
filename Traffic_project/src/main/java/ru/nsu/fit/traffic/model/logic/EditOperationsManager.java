@@ -55,6 +55,9 @@ public class EditOperationsManager {
      * @param currentOperation - операция
      */
     public void setCurrentOperation(EditOperation currentOperation) {
+        if (currentOperation == EditOperation.ROAD_CREATION) {
+            lastNode = null;
+        }
         this.currentOperation = currentOperation;
         updateView.update(this);
     }
@@ -144,7 +147,7 @@ public class EditOperationsManager {
      * @param node нода, по которой кликнули
      */
     public void buildRoadOnNode(Node node) {
-        if (lanesNumLeft + lanesNumRight == 0) {
+        if (lanesNumLeft + lanesNumRight == 0 || lastNode == node) {
             return;
         }
         if (lastNode == null) {
