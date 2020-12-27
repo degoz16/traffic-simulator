@@ -186,7 +186,7 @@ public class ObjectPainter {
                 placeOfInterest.getY(),
                 placeOfInterest.getWidth(),
                 placeOfInterest.getHeight());
-        Image img = new Image(getClass().getResource("../view/Images/building.png").toExternalForm());
+        Image img = new Image(getClass().getResource("Images/building.png").toExternalForm());
         building.setFill(new ImagePattern(img));
         return building;
     }
