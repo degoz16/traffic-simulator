@@ -4,8 +4,10 @@ import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -85,6 +87,29 @@ public class Node {
   public List<Road> getRoadsIn() {
     return roadsIn;
   }
+
+
+  public List<Map.Entry<Road, Road>> getRoadPair(){
+    List<Map.Entry<Road, Road>> roads = new ArrayList<>();
+    for (Road r: roadsOut){
+      roads.add(new AbstractMap.SimpleEntry<Road, Road>(r, r.getBackRoad()));
+    }
+    for (Road r: roadsIn){
+      boolean inList = false;
+      for (Map.Entry entry: roads){
+        if (entry.getValue() == r){
+          inList = true;
+          break;
+        }
+      }
+      if (inList){
+        continue;
+      }
+      roads.add(new AbstractMap.SimpleEntry<>(null, r));
+    }
+    return roads;
+  }
+
 
   public void removeFromPlaceOfInterest() {
     if (placeOfInterest != null) {

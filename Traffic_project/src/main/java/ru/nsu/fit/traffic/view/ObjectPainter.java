@@ -1,7 +1,6 @@
 package ru.nsu.fit.traffic.view;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
@@ -13,13 +12,13 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import javafx.util.Pair;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.playback.CarState;
 import ru.nsu.fit.traffic.model.road.Lane;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
+
 
 public class ObjectPainter {
     private final int LANE_SIZE;
@@ -101,7 +100,7 @@ public class ObjectPainter {
                         vx + pointToX + i * vx,
                         vy + pointToY + i * vy);
                 line.setStroke(Color.WHITE);
-                line.setStrokeWidth(1);
+                line.setStrokeWidth(0);
                 roadGroup.add(line);
             }
 
@@ -154,7 +153,7 @@ public class ObjectPainter {
 
     public Shape paintNode(Node node) {
 
-        if (node.getRoadsOutNum() <= 1 && node.getRoadsInNum() <= 1) {
+        if (node.getRoadPair().size() <= 1) {
             int maxSize = Math.max(
                     node.getRoadInStream()
                             .map(road -> road.getLanesNum() + road.getBackRoad().getLanesNum())
@@ -169,51 +168,81 @@ public class ObjectPainter {
             shape.setFill(roadColor);
             return shape;
         }
-        List<Pair<Double, Double>> pointsInPolygon = new ArrayList<Pair<Double, Double>>();
-        List<Road> roads = new ArrayList<>(node.getRoadsIn());
-        roads.addAll(node.getRoadsOut());
-        for (int i = 0; i < roads.size(); ++i) {
-            Road r = roads.get(i);
-            double vx = r.getFrom().getY() - r.getTo().getY();
-            double vy = -r.getFrom().getX() + r.getTo().getX();
-            double vlen = Math.sqrt(Math.abs(vx * vx + vy * vy));
+        List<Map.Entry<Road, Road>> roadPairs = node.getRoadPair();
+        System.out.println(roadPairs);
+        double[] angles = new double[roadPairs.size()];
 
-            vx *= LANE_SIZE * r.getLanesNum() / vlen;
-            vy *= LANE_SIZE * r.getLanesNum() / vlen;
-
-            Node nodeTo = r.getTo();
-            Node nodeFrom = r.getFrom();
-            Pair<Double, Double> pointEdgeOut;
-            Line outLine = new Line(nodeFrom.getX() + vx,
-                    nodeFrom.getY() + vy,
-                    nodeTo.getX() + vx,
-                    nodeTo.getY() + vy);
-            pointEdgeOut = new Pair<>(node.getX() + vx, node.getY() + vy);
-            for (int j = i + 1; j < roads.size(); ++j) {
-                Road roadOut = roads.get(j);
-                if (roadOut == r || roadOut == r.getBackRoad()) {
-                    continue;
+        for (int i = 0; i < roadPairs.size(); ++i) {
+            Road currRoad = roadPairs.get(i).getKey();
+            angles[i] = getAngle(currRoad.getFrom().getX(), currRoad.getFrom().getY(),
+                    currRoad.getTo().getX(), currRoad.getTo().getY());
+        }
+        int minAngleIndex = -1;
+        double[] order = new double[roadPairs.size()];
+        System.out.println(Arrays.toString(angles));
+        for (int i = 0; i < roadPairs.size(); ++i) {
+            for (int j = 0; j < roadPairs.size(); ++j) {
+                if ((minAngleIndex == -1 && angles[j] != Double.MAX_VALUE) || (angles[minAngleIndex] > angles[j])) {
+                    minAngleIndex = j;
                 }
-                vx = roadOut.getFrom().getY() - roadOut.getTo().getY();
-                vy = -roadOut.getFrom().getX() + roadOut.getTo().getX();
-                vlen = Math.sqrt(Math.abs(vx * vx + vy * vy));
-
-                vx *= LANE_SIZE / vlen;
-                vy *= LANE_SIZE / vlen;
-                nodeTo = roadOut.getTo();
-                nodeFrom = roadOut.getFrom();
-                Line inLine = new Line(nodeFrom.getX() + vx * roadOut.getLanesNum(), nodeFrom.getY() + vy * roadOut.getLanesNum(),
-                        nodeTo.getX() + vx * roadOut.getLanesNum(), nodeTo.getY() + vy * roadOut.getLanesNum());
-                Pair<Double, Double> inter = calculateIntersectionPair(inLine, outLine);
-
-                if (inter == null)
-                    continue;
-                pointsInPolygon.add(inter);
             }
-            pointsInPolygon.add(pointEdgeOut);
+            order[i] = minAngleIndex;
+            angles[minAngleIndex] = Double.MAX_VALUE;
         }
 
-        Polygon shape = new Polygon(getConvexHull(pointsInPolygon));
+        List<Map.Entry<Double, Double>> polygonPoints = new ArrayList<>();
+
+        for (int i = 0; i < order.length; ++i) {
+            int currIndex = -1;
+            int nextIndex = -1;
+            for (int j = 0; j < order.length; ++j) {
+                if (order[j] == i) {
+                    currIndex = j;
+                }
+                if (order[j] == i + 1 || (i == order.length - 1 && order[j] == 0)) {
+                    nextIndex = j;
+                }
+            }
+            System.out.println(currIndex);
+            System.out.println(nextIndex);
+            Road currRoad = roadPairs.get(currIndex).getKey();
+            Road nextRoad = roadPairs.get(nextIndex).getValue();
+
+            double x1 = currRoad.getFrom().getY() - currRoad.getTo().getY();
+            double y1 = -currRoad.getFrom().getX() + currRoad.getTo().getX();
+            double len1 = Math.sqrt(Math.abs(x1 * x1 + y1 * y1));
+
+            x1 *= LANE_SIZE * currRoad.getLanesNum() / len1;
+            y1 *= LANE_SIZE * currRoad.getLanesNum() / len1;
+
+            Line line1 = new Line(currRoad.getFrom().getX() + x1,
+                    currRoad.getFrom().getY() + y1,
+                    currRoad.getTo().getX() + x1,
+                    currRoad.getTo().getY() + y1);
+
+            double x2 = nextRoad.getFrom().getY() - nextRoad.getTo().getY();
+            double y2 = -nextRoad.getFrom().getX() + nextRoad.getTo().getX();
+            double len2 = Math.sqrt(Math.abs(x2 * x2 + y2 * y2));
+
+            x2 *= LANE_SIZE * nextRoad.getLanesNum() / len2;
+            y2 *= LANE_SIZE * nextRoad.getLanesNum() / len2;
+
+            Line line2 = new Line(nextRoad.getTo().getX() + x2,
+                    nextRoad.getTo().getY() + y2,
+                    nextRoad.getFrom().getX() + x2,
+                    nextRoad.getFrom().getY() + y2);
+
+            Map.Entry<Double, Double> inter = calculateIntersectionPair(line1, line2);
+            System.out.println(line1.toString());
+            System.out.println(line2.toString());
+            System.out.println(inter.toString() + "inter");
+            ;
+            polygonPoints.add(new AbstractMap.SimpleEntry<>(inter.getKey(), inter.getValue()));
+            polygonPoints.add(new AbstractMap.SimpleEntry<>(line1.getStartX(), line1.getStartY()));
+            polygonPoints.add(new AbstractMap.SimpleEntry<>(line2.getStartX(), line2.getStartY()));
+        }
+
+
         //System.out.println(pointsInPolygon.size());
         //System.out.println(getConvexHull(pointsInPolygon).length);
        /* if (node.getSpawners() != null) {
@@ -230,62 +259,48 @@ public class ObjectPainter {
         }
         return shape;
     }*/
-
+        Shape shape = new Polygon(getConvexHull(polygonPoints));
+        System.out.println(shape.toString());
         //System.out.println(shape);
         shape.setFill(roadColor);
-        return /*new Polygon(point)*/ shape;
+        shape.setStroke(roadColor);
+        shape.setStrokeWidth(2);
+        return shape;
     }
 
-    private double calculateDistance(Pair<Double, Double> point1, Pair<Double, Double> point2) {
-        return Math.sqrt(Math.pow(point1.getKey() - point2.getKey(), 2) +
-                Math.pow(point1.getValue() - point2.getValue(), 2));
-    }
-
-    private boolean rotate(Pair<Double, Double> A, Pair<Double, Double> B, Pair<Double, Double> C) {
+    private boolean rotate(Map.Entry<Double, Double> A, Map.Entry<Double, Double> B, Map.Entry<Double, Double> C) {
         return (B.getKey() - A.getKey()) * (C.getValue() - B.getValue()) -
                 (B.getValue() - A.getValue()) * (C.getKey() - B.getKey()) > 0;
     }
 
-    private double[] getConvexHull(List<Pair<Double, Double>> input) {
+    private double[] getConvexHull(List<Map.Entry<Double, Double>> input) {
         int n = input.size();// число точек
-        int[] p = new int[n]; // список номеров точек
+        List<Integer> p = new LinkedList<>(); // список номеров точек
         for (int i = 0; i < n; ++i) {
-            p[i] = i;
+            p.add(i);
         }
-        for (int i = 1; i < n; ++i) {
-            if (input.get(p[i]).getKey() < input.get(p[0]).getKey()) {
-                int save = p[i];
-                p[i] = p[0];
-                p[0] = save;
-            }
-        }
-        for (int i = 2; i < n; ++i) {
-            int j = i;
-            while (j > 1 && !(rotate(input.get(p[0]), input.get(p[j - 1]), input.get(p[j])))) {
-                int save = p[j];
-                p[j] = p[j - 1];
-                p[j - 1] = save;
-                j -= 1;
+        for (int i = 0; i < n; ++i) {
+            if (input.get(p.get(i)).getKey() < input.get(p.get(0)).getKey()) {
+                Collections.swap(p, 0, i);
             }
         }
         List<Integer> stack = new ArrayList<>();
-        stack.add(p[0]);
-        stack.add(p[1]);
-        for (int i = 2; i < n; ++i) {
-            if (stack.size() > 1) {
-                System.out.println("input: " + input.toString());
-                System.out.println("stack: " + stack.toString());
-                while (!rotate(input.get(stack.get(stack.size() - 2)),
-                        input.get(stack.get(stack.size() - 1)),
-                        input.get(p[i]))) {
-                    System.out.println("stack: " + stack.toString());
-                    stack.remove(stack.size() - 2);
-                }
+        stack.add(p.remove(0));
+        p.add(stack.get(0));
+        while (true) {
+            int right = 0;
+            for (int i = 1; i < p.size(); ++i) {
+                if (rotate(input.get(stack.get(stack.size() - 1)), input.get(p.get(right)), input.get(p.get(i))))
+                    right = i;
             }
-            stack.add(p[i]);
+            if (p.get(right).equals(stack.get(0))) {
+                break;
+            } else {
+                stack.add(p.get(right));
+                p.remove(right);
+            }
         }
-
-        List<Pair<Double, Double>> output = new ArrayList<>();
+        List<Map.Entry<Double, Double>> output = new ArrayList<>();
         for (Integer i : stack) {
             output.add(input.get(i));
         }
@@ -298,31 +313,24 @@ public class ObjectPainter {
         return point;
     }
 
-    private Pair<Double, Double> calculateIntersectionPair(Line line1, Line line2) {
+    private Map.Entry<Double, Double> calculateIntersectionPair(Line line1, Line line2) {
+// параметры отрезков
+        double a1 = line1.getStartY() - line1.getEndY();
+        double b1 = line1.getEndX() - line1.getStartX();
+        double a2 = line2.getStartY() - line2.getEndY();
+        double b2 = line2.getEndX() - line2.getStartX();
 
-        double m1, m2;
-        double b1, b2;
-        return null;
-        /*m1 = (line1.getStartY() - line1.getEndY()) / (line1.getStartX() - line1.getEndX());
-        b1 = line1.getEndX() * m1 - line1.getEndY();
-
-        m2 = (line2.getStartY() - line2.getEndY()) / (line2.getStartX() - line2.getEndX());
-        b2 = line2.getEndX() * m2 - line2.getEndY();
-        if (Math.abs(m1 - m2) <= 0.00001) {
+        double d = a1 * b2 - a2 * b1;
+        if (d == 0) {
             return null;
         }
+        double c1 = line1.getEndY() * line1.getStartX() - line1.getEndX() * line1.getStartY();
+        double c2 = line2.getEndY() * line2.getStartX() - line2.getEndX() * line2.getStartY();
 
-        double x = (b2 - b1) / (m1 - m2);
-        double y = m1 * x + b1;
-        x = Math.abs(x);
-        y = Math.abs(y);
-        Pair<Double, Double> res = new Pair<>(Math.abs(x), Math.abs(y));
-        /*if (x > Math.max(line1.getStartX(), line1.getEndX()))
-            return null;
-        if (x < Math.min(line1.getStartX(), line1.getEndX()))
-            return null;*/
-
-        /*return res;*/
+        double x = (b1 * c2 - b2 * c1) / d;
+        double y = (a2 * c1 - a1 * c2) / d;
+        Map.Entry<Double, Double> res = new AbstractMap.SimpleEntry<>(x, y);
+        return res;
     }
 
     public Shape paintPlaceOfInterest(PlaceOfInterest placeOfInterest) {
@@ -336,14 +344,14 @@ public class ObjectPainter {
         return building;
     }
 
-    private double getAngle(double carX, double carY, double destX, double destY) {
+    private double getAngle(double startX, double startY, double endX, double endY) {
         // Получим косинус угла по формуле
-        double x = destX - carX;
-        double y = destY - carY;
+        double x = endX - startX;
+        double y = endY - startY;
         double cos = x / Math.sqrt(x * x + y * y);
         double angle = Math.acos(cos);
 // Вернем arccos полученного значения (в радианах!)
-        if (destY < carY) {
+        if (endY < startY) {
             angle = 2 * Math.PI - angle;
         }
         // в ГРАДУСЫ (сириусли, javafx?) pizdec blyat...
