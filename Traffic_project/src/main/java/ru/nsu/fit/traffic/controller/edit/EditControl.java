@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
@@ -204,6 +205,7 @@ public class EditControl extends BaseControl {
   public void editClicked() {
     editOperationsManager.setCurrentOperation(EditOperation.NONE);
     sceneElementsControl.editModeEnable();
+    editOperationsManager.updateCarStates(new ArrayList<>());
   }
 
   public void roadSignButtonClicked() {

@@ -201,7 +201,7 @@ public class ObjectPainter {
         if (destY < carY) {
             angle = 2 * Math.PI - angle;
         }
-        // в ГРАДУСЫ (сириусли, javafx?)
+        // в ГРАДУСЫ (сириусли, javafx?) pizdec blyat...
         return angle * 180d / Math.PI + 90d;
     }
 
