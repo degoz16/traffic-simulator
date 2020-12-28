@@ -65,11 +65,11 @@ public class PlaybackStruct {
       if (timeToCarStates.containsKey(lastTime)) {
         List<CarState> carStates = timeToCarStates.get(lastTime);
         carStates.forEach(car -> {
-          //if (!car.isDraw()) {
-          //  idToCurrentState.remove(car.getCarId());
-          //} else {
+          if (!car.isDraw()) {
+            idToCurrentState.remove(car.getCarId());
+          } else {
             idToCurrentState.put(car.getCarId(), car);
-          //}
+          }
         });
       }
     }
