@@ -8,8 +8,8 @@ import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 import ru.nsu.fit.traffic.model.node.Spawner;
 import java.util.ArrayList;
 
-public class NodeSettingsControl extends BaseControl {
-    private EditControl editControl;
+public class NodeSettingsControl extends BaseControl implements NodeSettingsControlInterface {
+    private final EditControl editControl;
 
     public NodeSettingsControl(
             SceneElementsControl sceneElementsControl,

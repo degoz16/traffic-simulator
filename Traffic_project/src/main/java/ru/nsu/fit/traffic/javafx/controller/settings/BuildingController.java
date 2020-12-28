@@ -5,7 +5,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.controller.settings.BuildingSettingsControl;
+import ru.nsu.fit.traffic.controller.settings.BuildingSettingsControlInterface;
 
 
 import java.util.function.UnaryOperator;
@@ -15,7 +15,7 @@ public class BuildingController {
     @FXML private Pane pane;
     @FXML private TextField parkingPlaces;
 
-    private BuildingSettingsControl buildingSettingsControl;
+    private BuildingSettingsControlInterface buildingSettingsControl;
 
     public Pane getPane() {
         return pane;
@@ -29,7 +29,7 @@ public class BuildingController {
         return slider;
     }
 
-    public void setBuildingSettingsControl(BuildingSettingsControl buildingSettingsControl) {
+    public void setBuildingSettingsControl(BuildingSettingsControlInterface buildingSettingsControl) {
         this.buildingSettingsControl = buildingSettingsControl;
     }
 

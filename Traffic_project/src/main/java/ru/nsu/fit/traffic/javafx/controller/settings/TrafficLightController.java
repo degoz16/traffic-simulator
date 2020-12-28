@@ -5,19 +5,21 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
 import ru.nsu.fit.traffic.controller.settings.TrafficLightSettingsControl;
+import ru.nsu.fit.traffic.controller.settings.TrafficLightSettingsControlInterface;
 import ru.nsu.fit.traffic.javafx.controller.edit.MainController;
 
 import java.util.function.UnaryOperator;
 
 public class TrafficLightController {
 
-    private TrafficLightSettingsControl trafficLightSettingsControl;
+    private TrafficLightSettingsControlInterface trafficLightSettingsControl;
 
     @FXML private TextField greenDelay;
     @FXML private Pane trafficLightPane;
     @FXML private TextField redDelay;
 
-    public void setTrafficLightSettingsControl(TrafficLightSettingsControl trafficLightSettingsControl) {
+    public void setTrafficLightSettingsControl(
+            TrafficLightSettingsControlInterface trafficLightSettingsControl) {
         this.trafficLightSettingsControl = trafficLightSettingsControl;
     }
 

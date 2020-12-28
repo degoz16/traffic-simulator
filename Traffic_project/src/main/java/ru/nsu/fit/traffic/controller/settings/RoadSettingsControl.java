@@ -9,7 +9,7 @@ import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 import ru.nsu.fit.traffic.model.road.Road;
 import ru.nsu.fit.traffic.model.road.Street;
 
-public class RoadSettingsControl extends BaseControl {
+public class RoadSettingsControl extends BaseControl implements RoadSettingsControlInterface {
     private final EditControl editControl;
     private final StatisticControl statisticControl;
     public RoadSettingsControl(
