@@ -89,8 +89,8 @@ public class EditControl extends BaseControl {
     engineController.setMapPath(dirPath);
     String delim = dirPath.contains("/") ? "/" : "\\";
     int lastIndexOfDel = dirPath.lastIndexOf(delim);
-    engineController.setCarStatePath(dirPath.substring(0, lastIndexOfDel) + delim + "carStateOut.json");
-    engineController.setHeatMapPath(dirPath.substring(0, lastIndexOfDel) + delim + "heatMapOut.json");
+    engineController.setCarStatePath("carStateOut.json");
+    engineController.setHeatMapPath("heatMapOut.json");
     engineController.startEngine();
     sceneElementsControl.simulationProcessModeEnable();
     editOperationsManager.setCurrentOperation(EditOperation.SIMULATION);
