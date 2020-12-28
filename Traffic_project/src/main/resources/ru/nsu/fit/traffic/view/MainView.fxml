@@ -149,7 +149,7 @@
             <fx:include fx:id="nodeSettings" source="NodeSettingsView.fxml" />
             <fx:include fx:id="buildingSettings" source="Building.fxml" />
             <fx:include fx:id="statistics" source="StatisticView.fxml" AnchorPane.rightAnchor="14.5" AnchorPane.topAnchor="0.0" />
-            <fx:include fx:id="notification" source="Notifications.fxml" AnchorPane.bottomAnchor="13.0" AnchorPane.rightAnchor="13.0" />
+            <fx:include fx:id="notification" source="Notifications.fxml" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.5" />
          </children>
       </AnchorPane>
     </children>

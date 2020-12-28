@@ -13,6 +13,7 @@ import java.util.List;
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.engine.EngineController;
+import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.controller.saveload.SaveLoadControl;
 import ru.nsu.fit.traffic.controller.statistic.StatisticControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
@@ -156,6 +157,9 @@ public class EditControl extends BaseControl implements EditControlInterface{
       }
       default -> {
         closeAllSettings();
+        sceneElementsControl.showNotification("Traffic light creation.",
+                "Click on crossroad \nwith 3 and more roads.",
+                NotificationType.INFORMATION);
         editOperationsManager.setCurrentOperation(EditOperation.TRAFFIC_LIGHT_CREATION);
       }
     }
@@ -168,6 +172,11 @@ public class EditControl extends BaseControl implements EditControlInterface{
         editOperationsManager.setCurrentOperation(EditOperation.NONE);
       }
       default -> {
+        sceneElementsControl.showNotification(
+                "Building creation",
+                "Click on field and drag\nto create building.",
+                NotificationType.INFORMATION
+        );
         closeAllSettings();
         editOperationsManager.setCurrentOperation(EditOperation.POI_CREATION);
       }
