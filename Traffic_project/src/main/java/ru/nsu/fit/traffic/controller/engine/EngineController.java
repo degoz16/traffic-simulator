@@ -117,9 +117,18 @@ public class EngineController extends BaseControl {
       public void run() {
 
         BufferedReader r = new BufferedReader(new InputStreamReader(engineProcess.getInputStream()));
+        BufferedReader err = new BufferedReader(new InputStreamReader(engineProcess.getErrorStream()));
+
         try {
           while (!Thread.interrupted()) {
-            System.out.println(r.readLine());
+            String string = err.readLine();
+            if (string != null) {
+              System.out.println(r.readLine());
+            }
+            string = err.readLine();
+            if (string != null) {
+              System.err.println(err.readLine());
+            }
           }
         } catch (IOException e) {
           e.printStackTrace();
