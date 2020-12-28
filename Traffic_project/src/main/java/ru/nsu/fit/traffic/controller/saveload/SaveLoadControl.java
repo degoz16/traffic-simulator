@@ -31,7 +31,7 @@ public class SaveLoadControl extends BaseControl implements SaveLoadControlInter
   }
 
   private String getDocsPath() {
-    String myDocuments = "./";
+    String myDocuments = "/";
     if (System.getProperty("os.name").startsWith("Windows")) {
       try {
         Process p =
