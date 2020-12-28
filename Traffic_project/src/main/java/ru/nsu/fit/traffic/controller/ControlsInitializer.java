@@ -28,7 +28,7 @@ public class ControlsInitializer {
                 sceneElementsControl
         );
         EngineController engineController = new EngineController(
-                "D:\\Jaguar\\GitHub\\traffic-simulator\\Traffic_project\\Engine.jar",
+                "Engine.jar",
                 sceneElementsControl
         );
         editControl = new EditControl(
