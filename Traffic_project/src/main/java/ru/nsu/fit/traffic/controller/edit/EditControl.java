@@ -85,10 +85,10 @@ public class EditControl extends BaseControl {
 
   public void startSimulation() {
     System.out.println(saveLoadControl.getPathToProjectDir());
-    String dirPath = saveLoadControl.getPathToProjectDir();
-    engineController.setMapPath(dirPath);
-    String delim = dirPath.contains("/") ? "/" : "\\";
-    int lastIndexOfDel = dirPath.lastIndexOf(delim);
+//    String dirPath = saveLoadControl.getPathToProjectDir();
+    engineController.setMapPath("");
+//    String delim = dirPath.contains("/") ? "/" : "\\";
+//    int lastIndexOfDel = dirPath.lastIndexOf(delim);
     engineController.setCarStatePath("carStateOut.json");
     engineController.setHeatMapPath("heatMapOut.json");
     engineController.startEngine();
