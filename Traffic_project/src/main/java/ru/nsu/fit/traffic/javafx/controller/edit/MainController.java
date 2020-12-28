@@ -36,6 +36,7 @@ import javafx.util.StringConverter;
 import ru.nsu.fit.traffic.controller.ControlsInitializer;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.edit.EditControl;
+import ru.nsu.fit.traffic.controller.edit.EditControlInterface;
 import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
@@ -451,7 +452,7 @@ public class MainController {
       progressIndicator.setVisible(false);
     }
   };
-  private EditControl editControl;
+  private EditControlInterface editControl;
 
   public Stage getStage() {
     return stage;

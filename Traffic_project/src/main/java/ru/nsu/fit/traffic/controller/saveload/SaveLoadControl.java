@@ -9,7 +9,7 @@ import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
 
 import java.io.*;
 
-public class SaveLoadControl extends BaseControl {
+public class SaveLoadControl extends BaseControl implements SaveLoadControlInterface {
     private String pathToProjectDir;
 
     public String getPathToProjectDir() {
