@@ -341,8 +341,13 @@ public class ObjectPainter {
                 placeOfInterest.getY(),
                 placeOfInterest.getWidth(),
                 placeOfInterest.getHeight());
-        Image img = new Image(getClass().getResource("Images/building.png").toExternalForm());
-        building.setFill(new ImagePattern(img));
+        Image img = new Image(getClass().getResource("Images/Building.png").toExternalForm());
+        if (img != null) {
+            building.setFill(new ImagePattern(img));
+        }
+        else {
+            building.setFill(Paint.valueOf("#101010"));
+        }
         return building;
     }
 
