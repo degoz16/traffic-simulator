@@ -132,6 +132,10 @@ public class MainController {
       });
     }
 
+    public SceneElementsControl getSceneElementControl(){
+      return sceneElementsControl;
+    }
+
     @Override
     public void removeSelectRect() {
       mainPane.getChildren().remove(selectRect);
