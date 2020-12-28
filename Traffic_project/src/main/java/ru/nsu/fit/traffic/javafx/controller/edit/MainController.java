@@ -256,9 +256,9 @@ public class MainController {
           int id = (int) Math.round(object);
           if (id < windowsListSize) {
             return String.format("%02d:%02d",
-              TimeUnit.MILLISECONDS.toHours(endGetter.apply(id)),
-              TimeUnit.MILLISECONDS.toMinutes(endGetter.apply(id)) -
-                TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(endGetter.apply(id))));
+              TimeUnit.SECONDS.toHours(endGetter.apply(id)),
+              TimeUnit.SECONDS.toMinutes(endGetter.apply(id)) -
+                TimeUnit.HOURS.toMinutes(TimeUnit.SECONDS.toHours(endGetter.apply(id))));
           }
           return "";
         }

@@ -65,11 +65,11 @@ public class PlaybackStruct {
       if (timeToCarStates.containsKey(lastTime)) {
         List<CarState> carStates = timeToCarStates.get(lastTime);
         carStates.forEach(car -> {
-          if (!car.isDraw()) {
-            idToCurrentState.remove(car.getCarId());
-          } else {
+          //if (!car.isDraw()) {
+          //  idToCurrentState.remove(car.getCarId());
+          //} else {
             idToCurrentState.put(car.getCarId(), car);
-          }
+          //}
         });
       }
     }
@@ -87,7 +87,6 @@ public class PlaybackStruct {
         }.getType());
       carStates.forEach(carState -> {
         carState.initCoords(map.getRoad(carState.getCurrentRoad()));
-        carState.setTime(carState.getTime() / 1000);
         addToMap(carState);
       });
     } catch (FileNotFoundException e) {

@@ -1,11 +1,12 @@
 package ru.nsu.fit.traffic.controller.engine;
 
-import ru.nsu.fit.traffic.controller.BaseControl;
-import ru.nsu.fit.traffic.controller.SceneElementsControl;
-
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import ru.nsu.fit.traffic.controller.BaseControl;
+import ru.nsu.fit.traffic.controller.SceneElementsControl;
 
 public class EngineController extends BaseControl {
 
@@ -15,6 +16,7 @@ public class EngineController extends BaseControl {
   private String mapPath;
   private Process engineProcess;
   private Thread thread;
+  private Thread rThread;
 
   public EngineController(String enginePath, SceneElementsControl sceneElementsControl) {
     super(sceneElementsControl);
@@ -67,20 +69,26 @@ public class EngineController extends BaseControl {
     thread = new Thread(() -> {
       try {
         engineProcess = Runtime.getRuntime().exec(
-          "java -jar "
-                  + '"'
-                  + enginePath
-                  + "\" \""
-                  + mapPath
-                  + "\" \""
-                  + heatMapPath
-                  + "\" \""
-                  + carStatePath + '"');
+          "java -jar \""
+            + enginePath
+            + "\" \""
+            + mapPath
+            + "\" \""
+            + heatMapPath
+            + "\" \""
+            + carStatePath + "\"");
         System.out.println("START");
+        System.out.println(enginePath);
+        System.out.println(mapPath);
+        System.out.println(heatMapPath);
+        System.out.println(carStatePath);
+        getCommands();
         engineProcess.waitFor();
         //DEBUG
         //Thread.sleep(5000);
         //DEBUG
+        rThread.interrupt();
+        rThread.join();
         System.out.println("END");
         sceneElementsControl.simulationEndModeEnable();
       } catch (InterruptedException | IOException e) {
@@ -102,6 +110,26 @@ public class EngineController extends BaseControl {
   public void stopEngine() {
     sendCommand(EngineCommand.STOP);
   }
+
+  private void getCommands() {
+    rThread = new Thread(new Runnable() {
+      @Override
+      public void run() {
+
+        BufferedReader r = new BufferedReader(new InputStreamReader(engineProcess.getInputStream()));
+        try {
+          while (!Thread.interrupted()) {
+            System.out.println(r.readLine());
+          }
+        } catch (IOException e) {
+          e.printStackTrace();
+
+        }
+      }
+    });
+    rThread.start();
+  }
+
 
   private void sendCommand(EngineCommand command) {
     if (engineProcess != null && engineProcess.isAlive()) {

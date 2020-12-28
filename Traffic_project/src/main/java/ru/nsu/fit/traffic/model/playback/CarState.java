@@ -5,7 +5,7 @@ import ru.nsu.fit.traffic.model.road.Road;
 public class CarState {
   public static final double CAR_WIDTH = 6;
   public static final double CAR_HEIGHT = 10;
-  private int speed;
+  private double speed;
   private int id;
   private double position = 0;
   private boolean draw;
@@ -67,7 +67,7 @@ public class CarState {
     yCoord -= y2 * 10 * (currentLane + 0.5);
   }
 
-  public int getSpeed() {
+  public double getSpeed() {
     return speed;
   }
 
