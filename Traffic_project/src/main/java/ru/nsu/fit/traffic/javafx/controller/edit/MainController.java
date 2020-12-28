@@ -39,6 +39,7 @@ import ru.nsu.fit.traffic.controller.edit.EditControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
 import ru.nsu.fit.traffic.javafx.controller.menubar.MenuBarController;
+import ru.nsu.fit.traffic.javafx.controller.notification.NotificationController;
 import ru.nsu.fit.traffic.javafx.controller.settings.BuildingController;
 import ru.nsu.fit.traffic.javafx.controller.settings.NodeSettingsController;
 import ru.nsu.fit.traffic.javafx.controller.settings.RoadSettingsController;
@@ -87,6 +88,8 @@ public class MainController {
   private StatisticsController statisticsController;
   @FXML
   private NodeSettingsController nodeSettingsController;
+  @FXML
+  private NotificationController notificationController;
   @FXML
   private Slider timeLineReportSlider;
   @FXML
