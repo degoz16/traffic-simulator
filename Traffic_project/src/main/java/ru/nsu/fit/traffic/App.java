@@ -17,15 +17,15 @@ public class App extends Application {
 
     stage.setTitle("Traffic simulator");
     stage.setScene(scene);
-    stage.setWidth(800);
-    stage.setHeight(520);
+    stage.setWidth(850);
+    stage.setHeight(540);
     stage.show();
 
     MainController controller = loader.getController();
     controller.setStage(stage);
 
-    stage.setMinWidth(800);
-    stage.setMinHeight(520);
+    stage.setMinWidth(850);
+    stage.setMinHeight(540);
   }
 
   @Override
