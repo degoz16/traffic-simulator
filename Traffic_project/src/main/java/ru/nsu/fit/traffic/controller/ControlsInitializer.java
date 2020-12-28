@@ -28,7 +28,7 @@ public class ControlsInitializer {
                 sceneElementsControl
         );
         EngineController engineController = new EngineController(
-                "Engine.jar",
+          System.getProperty("user.dir") + "/Engine.jar",
                 sceneElementsControl
         );
         editControl = new EditControl(
