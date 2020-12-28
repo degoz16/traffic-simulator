@@ -88,6 +88,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
     String dirPath = saveLoadControl.getPathToProjectDir();
     saveLoadControl.onSave();
     engineController.setMapPath(dirPath);
+    engineController.setMapPath(dirPath);
     String delim = dirPath.contains("/") ? "/" : "\\";
     int lastIndexOfDel = dirPath.lastIndexOf(delim);
     engineController.setCarStatePath(dirPath.substring(0, lastIndexOfDel) + "/carStateOut.json");
