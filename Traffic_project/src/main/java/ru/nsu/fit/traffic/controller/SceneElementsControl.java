@@ -1,5 +1,6 @@
 package ru.nsu.fit.traffic.controller;
 
+import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.model.congestion.ReportStruct;
 
 import java.time.LocalTime;
@@ -32,6 +33,7 @@ public interface SceneElementsControl {
     void trafficLightSettingsSetPos(double x, double y);
     void trafficLightSettingsSetParams(int greenDelay, int redDelay);
     void statisticSwitchVisible();
+    void showNotification(String title, String text, NotificationType notificationType);
 
     void timeLineReportSliderInit(int windowsListSize, Function<Integer, Long> endGetter);
     void timeLineReportSliderSetMax(double max);

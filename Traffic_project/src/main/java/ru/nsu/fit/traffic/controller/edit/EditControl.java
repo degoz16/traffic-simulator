@@ -30,7 +30,7 @@ import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.SignFactory;
 import ru.nsu.fit.traffic.model.trafficsign.SignType;
 
-public class EditControl extends BaseControl {
+public class EditControl extends BaseControl implements EditControlInterface{
   private final ReportStruct reportStruct = new ReportStruct();
   private final SignFactory signFactory = new SignFactory();
   private final StatisticControl statisticControl;

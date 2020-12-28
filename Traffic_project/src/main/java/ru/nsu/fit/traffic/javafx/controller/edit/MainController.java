@@ -36,6 +36,7 @@ import javafx.util.StringConverter;
 import ru.nsu.fit.traffic.controller.ControlsInitializer;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.edit.EditControl;
+import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
 import ru.nsu.fit.traffic.javafx.controller.menubar.MenuBarController;
@@ -51,7 +52,6 @@ import ru.nsu.fit.traffic.view.ViewUpdater;
  * Контроллер основной сцены, на которой располагаются все остальные.
  */
 public class MainController {
-
   @FXML
   private JFXTimePicker simTimePicker;
   @FXML
@@ -247,6 +247,11 @@ public class MainController {
     @Override
     public void statisticSwitchVisible() {
       statistics.setVisible(!statistics.isVisible());
+    }
+
+    @Override
+    public void showNotification(String title, String text, NotificationType notificationType) {
+      notificationController.showNotification(title, text, notificationType);
     }
 
     @Override

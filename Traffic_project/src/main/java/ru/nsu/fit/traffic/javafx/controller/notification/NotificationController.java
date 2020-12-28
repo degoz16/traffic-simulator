@@ -13,16 +13,13 @@ import ru.nsu.fit.traffic.controller.notification.NotificationType;
 
 public class NotificationController {
     @FXML
-    Text text;
-
+    private Text text;
     @FXML
-    Text title;
-
+    private Text title;
     @FXML
-    ImageView image;
-
+    private ImageView image;
     @FXML
-    Pane pane;
+    private Pane pane;
 
     private Image warning;
     private Image information;
@@ -30,27 +27,21 @@ public class NotificationController {
     private Text currTitle;
 
     public void showNotification(String title, String text, NotificationType type){
-        switch (type){
-            case ERROR:
-                image.setImage(warning);
-                break;
-            case CONFIRM:
-                image.setImage(information);
+        switch (type) {
+            case ERROR -> image.setImage(warning);
+            case CONFIRM -> image.setImage(information);
         }
         currTitle.setText(title);
         currText.setText(text);
         Platform.runLater(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        pane.setVisible(true);
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            pane.setVisible(false);
-                        }
+                () -> {
+                    pane.setVisible(true);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
                         pane.setVisible(false);
                     }
+                    pane.setVisible(false);
                 }
         );
     }
