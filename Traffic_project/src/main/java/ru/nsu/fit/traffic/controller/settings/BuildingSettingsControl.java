@@ -8,7 +8,7 @@ import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
 
-public class BuildingSettingsControl extends BaseControl {
+public class BuildingSettingsControl extends BaseControl implements BuildingSettingsControlInterface{
     private final StatisticControl statisticControl;
     private final EditControl editControl;
     public BuildingSettingsControl(

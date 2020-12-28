@@ -90,8 +90,8 @@ public class EditControl extends BaseControl implements EditControlInterface{
     engineController.setMapPath("");
 //    String delim = dirPath.contains("/") ? "/" : "\\";
 //    int lastIndexOfDel = dirPath.lastIndexOf(delim);
-    engineController.setCarStatePath("/carStateOut.json");
-    engineController.setHeatMapPath("/heatMapOut.json");
+    engineController.setCarStatePath("./carStateOut.json");
+    engineController.setHeatMapPath("./heatMapOut.json");
     engineController.startEngine();
     sceneElementsControl.simulationProcessModeEnable();
     editOperationsManager.setCurrentOperation(EditOperation.SIMULATION);

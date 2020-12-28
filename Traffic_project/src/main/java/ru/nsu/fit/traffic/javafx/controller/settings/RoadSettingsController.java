@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.controller.settings.RoadSettingsControl;
+import ru.nsu.fit.traffic.controller.settings.RoadSettingsControlInterface;
 
 import java.util.function.UnaryOperator;
 
@@ -18,9 +18,9 @@ public class RoadSettingsController {
     @FXML
     private TextField streetName;
 
-    private RoadSettingsControl roadSettingsControl;
+    private RoadSettingsControlInterface roadSettingsControl;
 
-    public void setRoadSettingsControl(RoadSettingsControl roadSettingsControl) {
+    public void setRoadSettingsControl(RoadSettingsControlInterface roadSettingsControl) {
         this.roadSettingsControl = roadSettingsControl;
     }
 

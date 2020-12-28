@@ -5,11 +5,11 @@ import java.io.File;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ru.nsu.fit.traffic.controller.saveload.SaveLoadControl;
+import ru.nsu.fit.traffic.controller.saveload.SaveLoadControlInterface;
 
 public class MenuBarController {
 
-  private SaveLoadControl saveLoadControl;
+  private SaveLoadControlInterface saveLoadControl;
 
   private Stage stage;
 
@@ -17,7 +17,7 @@ public class MenuBarController {
     this.stage = stage;
   }
 
-  public void setSaveLoadControl(SaveLoadControl saveLoadControl) {
+  public void setSaveLoadControl(SaveLoadControlInterface saveLoadControl) {
     this.saveLoadControl = saveLoadControl;
   }
 

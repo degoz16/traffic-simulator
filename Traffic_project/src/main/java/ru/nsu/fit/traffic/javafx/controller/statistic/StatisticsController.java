@@ -22,8 +22,6 @@ public class StatisticsController {
     @FXML
     private VBox streetsView;
     @FXML
-    private Pane statistics;
-    @FXML
     private ScrollPane scrollView;
 
     public Text getCarSpawners() {

@@ -21,10 +21,10 @@ public class StatisticControl extends BaseControl {
     }
 
     private class DFS {
-        int n;
-        int[][] graph;
-        boolean[] used;
-        List<Integer> comp;
+        private int n;
+        private int[][] graph;
+        private boolean[] used;
+        private List<Integer> comp;
 
         void dfs(int v) {
             used[v] = true;

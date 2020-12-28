@@ -6,7 +6,7 @@ import ru.nsu.fit.traffic.controller.edit.EditControl;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 
-public class TrafficLightSettingsControl extends BaseControl {
+public class TrafficLightSettingsControl extends BaseControl implements TrafficLightSettingsControlInterface{
 
     private final EditControl editControl;
 

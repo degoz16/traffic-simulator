@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import ru.nsu.fit.traffic.controller.settings.NodeSettingsControl;
+import ru.nsu.fit.traffic.controller.settings.NodeSettingsControlInterface;
 import ru.nsu.fit.traffic.javafx.controller.edit.MainController;
 import ru.nsu.fit.traffic.model.node.Node;
 import ru.nsu.fit.traffic.model.node.Spawner;
@@ -22,9 +23,9 @@ public class NodeSettingsController {
   @FXML
   private TextField spawnerRate;
 
-  private NodeSettingsControl nodeSettingsControl;
+  private NodeSettingsControlInterface nodeSettingsControl;
 
-  public void setNodeSettingsControl(NodeSettingsControl nodeSettingsControl) {
+  public void setNodeSettingsControl(NodeSettingsControlInterface nodeSettingsControl) {
     this.nodeSettingsControl = nodeSettingsControl;
   }
 
