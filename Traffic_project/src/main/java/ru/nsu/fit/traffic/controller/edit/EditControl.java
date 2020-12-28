@@ -31,7 +31,7 @@ import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
 import ru.nsu.fit.traffic.model.trafficsign.SignFactory;
 import ru.nsu.fit.traffic.model.trafficsign.SignType;
 
-public class EditControl extends BaseControl implements EditControlInterface{
+public class EditControl extends BaseControl implements EditControlInterface {
   private final ReportStruct reportStruct = new ReportStruct();
   private final SignFactory signFactory = new SignFactory();
   private final StatisticControl statisticControl;
@@ -85,13 +85,13 @@ public class EditControl extends BaseControl implements EditControlInterface{
   }
 
   public void startSimulation() {
-//    System.out.println(saveLoadControl.getPathToProjectDir());
-//    String dirPath = saveLoadControl.getPathToProjectDir();
-    engineController.setMapPath("");
-//    String delim = dirPath.contains("/") ? "/" : "\\";
-//    int lastIndexOfDel = dirPath.lastIndexOf(delim);
-    engineController.setCarStatePath("./carStateOut.json");
-    engineController.setHeatMapPath("./heatMapOut.json");
+    String dirPath = saveLoadControl.getPathToProjectDir();
+    saveLoadControl.onSave();
+    engineController.setMapPath(dirPath);
+    String delim = dirPath.contains("/") ? "/" : "\\";
+    int lastIndexOfDel = dirPath.lastIndexOf(delim);
+    engineController.setCarStatePath(dirPath.substring(0, lastIndexOfDel) + "/carStateOut.json");
+    engineController.setHeatMapPath(dirPath.substring(0, lastIndexOfDel) + "./heatMapOut.json");
     engineController.startEngine();
     sceneElementsControl.simulationProcessModeEnable();
     editOperationsManager.setCurrentOperation(EditOperation.SIMULATION);
@@ -158,8 +158,8 @@ public class EditControl extends BaseControl implements EditControlInterface{
       default -> {
         closeAllSettings();
         sceneElementsControl.showNotification("Traffic light creation.",
-                "Click on crossroad \nwith 3 and more roads.",
-                NotificationType.INFORMATION);
+          "Click on crossroad \nwith 3 and more roads.",
+          NotificationType.INFORMATION);
         editOperationsManager.setCurrentOperation(EditOperation.TRAFFIC_LIGHT_CREATION);
       }
     }
@@ -173,9 +173,9 @@ public class EditControl extends BaseControl implements EditControlInterface{
       }
       default -> {
         sceneElementsControl.showNotification(
-                "Building creation",
-                "Click on field and drag\nto create building.",
-                NotificationType.INFORMATION
+          "Building creation",
+          "Click on field and drag\nto create building.",
+          NotificationType.INFORMATION
         );
         closeAllSettings();
         editOperationsManager.setCurrentOperation(EditOperation.POI_CREATION);
