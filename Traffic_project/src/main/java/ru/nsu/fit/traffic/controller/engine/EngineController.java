@@ -87,6 +87,7 @@ public class EngineController extends BaseControl {
         //DEBUG
         //Thread.sleep(5000);
         //DEBUG
+        System.out.println(engineProcess.exitValue());
         rThread.interrupt();
         rThread.join();
         System.out.println("END");
@@ -121,14 +122,14 @@ public class EngineController extends BaseControl {
 
         try {
           while (!Thread.interrupted()) {
-            String string = err.readLine();
+            String string = r.readLine();
             if (string != null) {
               System.out.println(r.readLine());
             }
-            string = err.readLine();
-            if (string != null) {
-              System.err.println(err.readLine());
-            }
+//            string = err.readLine();
+//            if (string != null) {
+//              System.err.println(err.readLine());
+//            }
           }
         } catch (IOException e) {
           e.printStackTrace();
