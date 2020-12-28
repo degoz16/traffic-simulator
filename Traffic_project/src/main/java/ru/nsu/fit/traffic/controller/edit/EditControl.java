@@ -360,7 +360,12 @@ public class EditControl extends BaseControl implements EditControlInterface {
         switch (editOperationsManager.getCurrentOperation()) {
           case ROAD_CREATION -> {
             event.consume();
-            editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
+            int res = editOperationsManager.buildRoadOnEmpty(event.getX(), event.getY());
+            if (res == -1){
+              sceneElementsControl.showNotification("Road creation.",
+                      "There can be 4 or less\nroads in the crossroad.",
+                      NotificationType.WARNING);
+            }
             statisticControl.updateStatistics();
           }
           case SIGN_CREATION -> {
@@ -382,7 +387,11 @@ public class EditControl extends BaseControl implements EditControlInterface {
         event.consume();
         switch (editOperationsManager.getCurrentOperation()) {
           case ROAD_CREATION -> {
-            editOperationsManager.buildRoadOnNode(node);
+            if (editOperationsManager.buildRoadOnNode(node) == -1){
+              sceneElementsControl.showNotification("Road creation.",
+                      "There can be 4 or less\nroads in the crossroad.",
+                      NotificationType.WARNING);
+            }
             statisticControl.updateStatistics();
           }
           case TRAFFIC_LIGHT_CREATION -> {
@@ -442,7 +451,17 @@ public class EditControl extends BaseControl implements EditControlInterface {
         switch (editOperationsManager.getCurrentOperation()) {
           case ROAD_CREATION -> {
             event.consume();
-            editOperationsManager.buildRoadOnRoad(event.getX(), event.getY(), road);
+            int res = editOperationsManager.buildRoadOnRoad(event.getX(), event.getY(), road);
+            if (res == -1){
+              sceneElementsControl.showNotification("Road creation.",
+                      "There can be 4 or less\nroads in the crossroad.",
+                      NotificationType.WARNING);
+            }
+            if (res == -2){
+              sceneElementsControl.showNotification("Road creation.",
+                      "Road can't be places on road.",
+                      NotificationType.WARNING);
+            }
             statisticControl.updateStatistics();
           }
           case NONE -> {

@@ -31,7 +31,7 @@ public class NotificationController {
         currTitle.setText(title);
         currText.setText(text);
         pane.setVisible(true);
-        PauseTransition pause = new PauseTransition(Duration.seconds(2));
+        PauseTransition pause = new PauseTransition(Duration.seconds(1.5));
         pause.setOnFinished(e -> pane.setVisible(false));
         pause.play();
     }

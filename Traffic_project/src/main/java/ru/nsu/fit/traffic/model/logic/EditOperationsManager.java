@@ -1,5 +1,7 @@
 package ru.nsu.fit.traffic.model.logic;
 
+import ru.nsu.fit.traffic.controller.SceneElementsControl;
+import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.node.Node;
@@ -25,7 +27,6 @@ public class EditOperationsManager {
     private int lanesNumRight = 1;
     private final UpdateObserver updateView;
     private RoadSign currSign = new MainRoadSign();
-
     private List<CarState> carStates = new ArrayList<>();
 
     public List<CarState> getCarStates() {
@@ -80,20 +81,26 @@ public class EditOperationsManager {
      * @param x координата x
      * @param y координата y
      */
-    public void buildRoadOnEmpty(double x, double y) {
+    public int buildRoadOnEmpty(double x, double y) {
         if (lanesNumLeft + lanesNumRight == 0) {
-            return;
+            return 0;
         }
         Node newNode = new Node(x, y);
         map.addNode(newNode);
         if (lastNode != null) {
-            if (lastNode.getRoadsOutNum() >= ROAD_LIMIT) {
-                return;
+            if (lastNode.getRoadPair().size() >= ROAD_LIMIT) {
+                return -1;
             }
-            buildRoad(newNode, lastNode);
+            updateView.update(this);
+            if (buildRoad(newNode, lastNode) == 0){
+                lastNode = newNode;
+                return 0;
+            }
+            else return  -1;
         }
         lastNode = newNode;
         updateView.update(this);
+        return 0;
     }
 
     public void setStartTime(String time) {
@@ -104,7 +111,11 @@ public class EditOperationsManager {
         map.setEnd(time);
     }
 
-    private void buildRoad(Node newNode, Node lastNode) {
+    private int buildRoad(Node newNode, Node lastNode) {
+        if (newNode.getRoadPair().size() >= ROAD_LIMIT
+                || lastNode.getRoadPair().size() >= ROAD_LIMIT ){
+            return -1;
+        }
         Road newRoadTo = new Road(lanesNumRight);
         Road newRoadFrom = new Road(lanesNumLeft);
         newNode.connect(newRoadFrom, newRoadTo, lastNode);
@@ -113,6 +124,7 @@ public class EditOperationsManager {
         if (lastNode.getRoadsOutNum() > 1) {
             lastNode.removeFromPlaceOfInterest();
         }
+        return 0;
     }
 
     /**
@@ -121,13 +133,17 @@ public class EditOperationsManager {
      * @param x    координата
      * @param y    координата
      * @param road дорога, по которой было произведено нажатие
+     * @return: 0 - success.
+     *         -1 - too many roads in the node.
+     *         -2 - road places on the existing road.
      */
-    public void buildRoadOnRoad(double x, double y, Road road) {
+    public int buildRoadOnRoad(double x, double y, Road road) {
         if (lanesNumLeft + lanesNumRight == 0) {
-            return;
+            return 0;
         }
         if (lastNode == road.getFrom() || lastNode == road.getTo()) {
-            return;
+            updateView.update(this);
+            return -2;
         }
         Node nodeFrom = road.getFrom();
         Node nodeTo = road.getTo();
@@ -137,33 +153,41 @@ public class EditOperationsManager {
         road.disconnect();
         backRoad.disconnect();
 
-        buildRoadOnEmpty(x, y);
+        int res = buildRoadOnEmpty(x, y);
 
-        Road road1 = road.getCopyRoad();
-        Road backRoad1 = backRoad.getCopyRoad();
-        map.addRoad(road1);
-        map.addRoad(backRoad1);
+        if (res == 0) {
+            Road road1 = road.getCopyRoad();
+            Road backRoad1 = backRoad.getCopyRoad();
+            map.addRoad(road1);
+            map.addRoad(backRoad1);
 
-        nodeFrom.connect(road, backRoad, lastNode);
-        lastNode.connect(road1, backRoad1, nodeTo);
-        updateView.update(this);
+            nodeFrom.connect(road, backRoad, lastNode);
+            lastNode.connect(road1, backRoad1, nodeTo);
+            updateView.update(this);
+            System.out.println("road on road");
+            return 0;
+        }
+        else return -1;
     }
 
     /**
      * Случай клика по существующей ноде
      *
      * @param node нода, по которой кликнули
+     * @return: 0 - success.
+     *         -1 - too many roads in the node.
+     *         -2 - road places on the existing road.
      */
-    public void buildRoadOnNode(Node node) {
+    public int buildRoadOnNode(Node node) {
         if (lanesNumLeft + lanesNumRight == 0 || lastNode == node) {
-            return;
+            return 0;
         }
         if (lastNode == null) {
             lastNode = node;
-            return;
+            return 0;
         }
-        if (node.getRoadsOutNum() >= ROAD_LIMIT) {
-            return;
+        if (node.getRoadPair().size() >= ROAD_LIMIT) {
+            return -1;
         }
         boolean checkOverlap = lastNode.getRoadOutStream().anyMatch(road -> road.getTo() == node);
         if (!checkOverlap) {
@@ -175,6 +199,7 @@ public class EditOperationsManager {
         }
         node.setTrafficLight(null);
         updateView.update(this);
+        return 0;
     }
 
     public void buildRoadOnPlaceOfInterest(double x, double y, PlaceOfInterest placeOfInterest) {
@@ -215,7 +240,7 @@ public class EditOperationsManager {
         updateView.update(this);
     }
 
-    public List<Integer> findPairOfRoad(Node node){
+    public List<Integer> findPairOfRoad(Node node) {
         List<Double> k = new ArrayList<>();
         for (Iterator<Road> it = node.getRoadInStream().iterator(); it.hasNext(); ) {
             Road r = it.next();
@@ -227,26 +252,25 @@ public class EditOperationsManager {
         double d1 = d2;
         int curr = -1;
 
-        for (int i = 1; i < k.size(); ++i){
-            if (Math.abs(k.get(0) - k.get(i)) < d1){
+        for (int i = 1; i < k.size(); ++i) {
+            if (Math.abs(k.get(0) - k.get(i)) < d1) {
                 d1 = Math.abs(k.get(0) - k.get(i));
                 curr = i;
             }
         }
 
         int curr2 = -1;
-        for (int i = 1; i < k.size(); ++i){
-            if (curr != i && Math.abs(k.get(0) - k.get(i)) < d1){
+        for (int i = 1; i < k.size(); ++i) {
+            if (curr != i && Math.abs(k.get(0) - k.get(i)) < d1) {
                 d2 = Math.abs(k.get(0) - k.get(i));
                 curr2 = i;
             }
         }
         List<Integer> res = new ArrayList<>();
         res.add(curr);
-        if (d1 < d2){
+        if (d1 < d2) {
             res.add(0);
-        }
-        else {
+        } else {
             res.add(curr2);
         }
         return res;
@@ -288,10 +312,10 @@ public class EditOperationsManager {
         List<Road> roadsGreen = new ArrayList<>();
         List<Road> roadsRed = new ArrayList<>();
         List<Integer> roadsIndexes = findPairOfRoad(lastNodeClicked);
-        for (int i = 0; i < lastNodeClicked.getRoadsInNum(); ++i){
+        for (int i = 0; i < lastNodeClicked.getRoadsInNum(); ++i) {
             if (roadsIndexes.get(0) != i && roadsIndexes.get(1) != i)
-                roadsRed.add((Road)lastNodeClicked.getRoadInStream().toArray()[i]);
-            else roadsGreen.add((Road)lastNodeClicked.getRoadInStream().toArray()[i]);
+                roadsRed.add((Road) lastNodeClicked.getRoadInStream().toArray()[i]);
+            else roadsGreen.add((Road) lastNodeClicked.getRoadInStream().toArray()[i]);
         }
         TrafficLightConfig greenConfig = new TrafficLightConfig(greenDelay, roadsGreen);
         TrafficLightConfig redConfig = new TrafficLightConfig(redDelay, roadsRed);
