@@ -20,6 +20,9 @@ public class SaveLoadControl extends BaseControl {
             SceneElementsControl sceneElementsControl) {
         super(sceneElementsControl);
         pathToProjectDir = getDocsPath();
+        if (pathToProjectDir == null) {
+            pathToProjectDir = "";
+        }
     }
 
     private String getDocsPath() {
@@ -90,6 +93,9 @@ public class SaveLoadControl extends BaseControl {
 //        saveCurrentProject(file);
         editOperationsManager.getMap().clearMap();
         pathToProjectDir = getDocsPath();
+        if (pathToProjectDir == null) {
+            pathToProjectDir = "";
+        }
         update.update(editOperationsManager);
     }
 
