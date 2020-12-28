@@ -151,25 +151,36 @@ public class ObjectPainter {
         return paintedRoad;
     }
 
-    public Shape paintNode(Node node) {
+    public List<Shape> paintNode(Node node) {
 
+        Shape shape;
+        if (node.getRoadPair().size() == 0) {
+            return new ArrayList<>();
+        }
         if (node.getRoadPair().size() <= 1) {
-            int maxSize = Math.max(
-                    node.getRoadInStream()
-                            .map(road -> road.getLanesNum() + road.getBackRoad().getLanesNum())
-                            .max(Integer::compareTo)
-                            .orElse(0),
-                    node.getRoadOutStream()
-                            .map(road -> road.getLanesNum() + road.getBackRoad().getLanesNum())
-                            .max(Integer::compareTo)
-                            .orElse(0));
-            double rad = (double) maxSize / 2 * NODE_SIZE;
-            Shape shape = new Circle(node.getX(), node.getY(), rad);
+
+            Road currRoad = node.getRoadsIn().get(0);
+            double rad = (double) (currRoad.getLanesNum() + currRoad.getBackRoad().getLanesNum()) * LANE_SIZE / 2;
+            double x1 = currRoad.getFrom().getY() - currRoad.getTo().getY();
+            double y1 = -currRoad.getFrom().getX() + currRoad.getTo().getX();
+            double len1 = Math.sqrt(Math.abs(x1 * x1 + y1 * y1));
+
+            x1 *= LANE_SIZE * currRoad.getLanesNum() / len1;
+            y1 *= LANE_SIZE * currRoad.getLanesNum() / len1;
+
+            shape = new Circle(node.getX() + x1 * currRoad.getLanesNum() - currRoad.getBackRoad().getLanesNum() * x1,
+                    node.getY() + y1 * currRoad.getLanesNum() - currRoad.getBackRoad().getLanesNum() * y1, rad);
             shape.setFill(roadColor);
-            return shape;
+
+            if (node.getSpawners() != null) {
+                Image img = new Image(getClass().getResource("../view/Images/spawner.png").toExternalForm());
+                shape.setFill(new ImagePattern(img));
+            }
+            List<Shape> res = new ArrayList<>();
+            res.add(shape);
+            return res;
         }
         List<Map.Entry<Road, Road>> roadPairs = node.getRoadPair();
-        System.out.println(roadPairs);
         double[] angles = new double[roadPairs.size()];
 
         for (int i = 0; i < roadPairs.size(); ++i) {
@@ -179,7 +190,6 @@ public class ObjectPainter {
         }
         int minAngleIndex = -1;
         double[] order = new double[roadPairs.size()];
-        System.out.println(Arrays.toString(angles));
         for (int i = 0; i < roadPairs.size(); ++i) {
             for (int j = 0; j < roadPairs.size(); ++j) {
                 if ((minAngleIndex == -1 && angles[j] != Double.MAX_VALUE) || (angles[minAngleIndex] > angles[j])) {
@@ -203,8 +213,6 @@ public class ObjectPainter {
                     nextIndex = j;
                 }
             }
-            System.out.println(currIndex);
-            System.out.println(nextIndex);
             Road currRoad = roadPairs.get(currIndex).getKey();
             Road nextRoad = roadPairs.get(nextIndex).getValue();
 
@@ -233,39 +241,28 @@ public class ObjectPainter {
                     nextRoad.getFrom().getY() + y2);
 
             Map.Entry<Double, Double> inter = calculateIntersectionPair(line1, line2);
-            System.out.println(line1.toString());
-            System.out.println(line2.toString());
-            System.out.println(inter.toString() + "inter");
-            ;
+
             polygonPoints.add(new AbstractMap.SimpleEntry<>(inter.getKey(), inter.getValue()));
             polygonPoints.add(new AbstractMap.SimpleEntry<>(line1.getStartX(), line1.getStartY()));
             polygonPoints.add(new AbstractMap.SimpleEntry<>(line2.getStartX(), line2.getStartY()));
         }
 
-
-        //System.out.println(pointsInPolygon.size());
-        //System.out.println(getConvexHull(pointsInPolygon).length);
-       /* if (node.getSpawners() != null) {
-            if (node.getTrafficLight() == null) {
-                Image img = new Image(getClass().getResource("../view/Images/spawner.png").toExternalForm());
-                shape.setFill(new ImagePattern(img));
-            } else {
-                Image img = new Image(getClass().getResource("../view/Images/spawner_trafficlight.png").toExternalForm());
-                shape.setFill(new ImagePattern(img));
-            }
-        } else if (node.getTrafficLight() != null) {
-            Image img = new Image(getClass().getResource("../view/Images/trafficlight.png").toExternalForm());
-            shape.setFill(new ImagePattern(img));
-        }
-        return shape;
-    }*/
-        Shape shape = new Polygon(getConvexHull(polygonPoints));
-        System.out.println(shape.toString());
-        //System.out.println(shape);
+        double[] points = getConvexHull(polygonPoints);
+        shape = new Polygon(points);
         shape.setFill(roadColor);
         shape.setStroke(roadColor);
         shape.setStrokeWidth(2);
-        return shape;
+
+        List<Shape> res = new ArrayList<>();
+        res.add(shape);
+
+        if (node.getTrafficLight() != null) {
+            shape = new Circle(node.getX(), node.getY(), LANE_SIZE/1.5);
+            Image img = new Image(getClass().getResource("../view/Images/traffic_light.png").toExternalForm());
+            shape.setFill(new ImagePattern(img));
+            res.add(shape);
+        }
+        return res;
     }
 
     private boolean rotate(Map.Entry<Double, Double> A, Map.Entry<Double, Double> B, Map.Entry<Double, Double> C) {
@@ -273,6 +270,12 @@ public class ObjectPainter {
                 (B.getValue() - A.getValue()) * (C.getKey() - B.getKey()) > 0;
     }
 
+    /**
+     * This method create convex hull using Jarvis march.
+     *
+     * @param input - Map with points.
+     * @return array with coordinates. [2*i] - x, [2*i+1] - y. For creating Polygon.
+     */
     private double[] getConvexHull(List<Map.Entry<Double, Double>> input) {
         int n = input.size();// число точек
         List<Integer> p = new LinkedList<>(); // список номеров точек
@@ -309,7 +312,6 @@ public class ObjectPainter {
             point[i * 2] = output.get(i).getKey();
             point[i * 2 + 1] = output.get(i).getValue();
         }
-        System.out.println("----------------------------------------------");
         return point;
     }
 

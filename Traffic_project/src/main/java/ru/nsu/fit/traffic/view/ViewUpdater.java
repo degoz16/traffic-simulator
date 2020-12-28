@@ -61,12 +61,14 @@ public class ViewUpdater {
         }
       });
       currMap.forEachNode(node -> {
-        Shape nodeShape = objectPainter.paintNode(node);
-        if (node.getPlaceOfInterest() != null && node.getSpawners() == null) {
-          nodeShape.setFill(Paint.valueOf("#303030"));
+        List<Shape> shape = objectPainter.paintNode(node);
+        for (Shape nodeShape: shape) {
+          if (node.getPlaceOfInterest() != null && node.getSpawners() == null) {
+            nodeShape.setFill(Paint.valueOf("#303030"));
+          }
+          nodeObserver.action(nodeShape, node);
+          mainPane.getChildren().add(nodeShape);
         }
-        nodeObserver.action(nodeShape, node);
-        mainPane.getChildren().add(nodeShape);
       });
       List<CarState> carStates = editOperationsManager.getCarStates();
       carStates.forEach(carState -> {
