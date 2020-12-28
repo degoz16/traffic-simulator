@@ -460,7 +460,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
             }
             if (res == -2){
               sceneElementsControl.showNotification("Road creation.",
-                      "Road can't be places on road.",
+                      "Road can't be places\non road.",
                       NotificationType.WARNING);
             }
             statisticControl.updateStatistics();
