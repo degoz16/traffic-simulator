@@ -1,6 +1,4 @@
-package ru.nsu.fit.traffic.model.place;
-
-import ru.nsu.fit.traffic.model.node.Node;
+package ru.nsu.fit.traffic.model.map;
 
 import java.util.ArrayList;
 import java.util.List;

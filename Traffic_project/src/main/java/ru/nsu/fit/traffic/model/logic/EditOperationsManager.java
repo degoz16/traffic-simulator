@@ -1,18 +1,16 @@
 package ru.nsu.fit.traffic.model.logic;
 
-import ru.nsu.fit.traffic.controller.SceneElementsControl;
-import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
-import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.map.Node;
+import ru.nsu.fit.traffic.model.map.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.playback.CarState;
-import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.road.RoadHighLight;
-import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
-import ru.nsu.fit.traffic.model.trafficlight.TrafficLightConfig;
-import ru.nsu.fit.traffic.model.trafficsign.MainRoadSign;
-import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
+import ru.nsu.fit.traffic.model.map.Road;
+import ru.nsu.fit.traffic.model.map.RoadHighLight;
+import ru.nsu.fit.traffic.model.map.TrafficLight;
+import ru.nsu.fit.traffic.model.map.TrafficLightConfig;
+import ru.nsu.fit.traffic.model.map.MainRoadSign;
+import ru.nsu.fit.traffic.model.map.RoadSign;
 
 import java.util.ArrayList;
 import java.util.Iterator;

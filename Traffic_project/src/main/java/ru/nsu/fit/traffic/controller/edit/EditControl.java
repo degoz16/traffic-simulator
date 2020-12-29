@@ -18,18 +18,19 @@ import ru.nsu.fit.traffic.controller.saveload.SaveLoadControl;
 import ru.nsu.fit.traffic.controller.statistic.StatisticControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
+import ru.nsu.fit.traffic.interfaces.control.EditControlInterface;
 import ru.nsu.fit.traffic.model.congestion.ReportStruct;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.UpdateObserver;
-import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.map.Node;
+import ru.nsu.fit.traffic.model.map.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.playback.PlaybackStruct;
-import ru.nsu.fit.traffic.model.road.Lane;
-import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
-import ru.nsu.fit.traffic.model.trafficsign.SignFactory;
-import ru.nsu.fit.traffic.model.trafficsign.SignType;
+import ru.nsu.fit.traffic.model.map.Lane;
+import ru.nsu.fit.traffic.model.map.Road;
+import ru.nsu.fit.traffic.model.map.RoadSign;
+import ru.nsu.fit.traffic.model.map.SignFactory;
+import ru.nsu.fit.traffic.model.map.SignType;
 
 public class EditControl extends BaseControl implements EditControlInterface {
   private final ReportStruct reportStruct = new ReportStruct();

@@ -3,9 +3,8 @@ package ru.nsu.fit.traffic.controller.settings;
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.edit.EditControl;
-import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
-import ru.nsu.fit.traffic.model.logic.UpdateObserver;
-import ru.nsu.fit.traffic.model.node.Spawner;
+import ru.nsu.fit.traffic.interfaces.control.NodeSettingsControlInterface;
+import ru.nsu.fit.traffic.model.map.Spawner;
 import java.util.ArrayList;
 
 public class NodeSettingsControl extends BaseControl implements NodeSettingsControlInterface {

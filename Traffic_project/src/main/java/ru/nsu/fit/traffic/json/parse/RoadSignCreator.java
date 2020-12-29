@@ -1,10 +1,10 @@
 package ru.nsu.fit.traffic.json.parse;
 
 import java.util.Map;
-import ru.nsu.fit.traffic.model.trafficsign.MainRoadSign;
-import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
-import ru.nsu.fit.traffic.model.trafficsign.SignType;
-import ru.nsu.fit.traffic.model.trafficsign.SpeedLimitSign;
+import ru.nsu.fit.traffic.model.map.MainRoadSign;
+import ru.nsu.fit.traffic.model.map.RoadSign;
+import ru.nsu.fit.traffic.model.map.SignType;
+import ru.nsu.fit.traffic.model.map.SpeedLimitSign;
 
 class RoadSignCreator {
 

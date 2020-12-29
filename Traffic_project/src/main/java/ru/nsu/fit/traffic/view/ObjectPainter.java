@@ -12,12 +12,12 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
-import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.map.Node;
+import ru.nsu.fit.traffic.model.map.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.playback.CarState;
-import ru.nsu.fit.traffic.model.road.Lane;
-import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.trafficsign.RoadSign;
+import ru.nsu.fit.traffic.model.map.Lane;
+import ru.nsu.fit.traffic.model.map.Road;
+import ru.nsu.fit.traffic.model.map.RoadSign;
 
 
 public class ObjectPainter {

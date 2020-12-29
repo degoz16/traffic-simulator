@@ -4,11 +4,9 @@ import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.edit.EditControl;
 import ru.nsu.fit.traffic.controller.statistic.StatisticControl;
-import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
-import ru.nsu.fit.traffic.model.logic.UpdateObserver;
-import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
+import ru.nsu.fit.traffic.interfaces.control.BuildingSettingsControlInterface;
 
-public class BuildingSettingsControl extends BaseControl implements BuildingSettingsControlInterface{
+public class BuildingSettingsControl extends BaseControl implements BuildingSettingsControlInterface {
     private final StatisticControl statisticControl;
     private final EditControl editControl;
     public BuildingSettingsControl(

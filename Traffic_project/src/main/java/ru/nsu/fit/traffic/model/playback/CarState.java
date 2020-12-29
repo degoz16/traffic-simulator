@@ -1,6 +1,6 @@
 package ru.nsu.fit.traffic.model.playback;
 
-import ru.nsu.fit.traffic.model.road.Road;
+import ru.nsu.fit.traffic.model.map.Road;
 
 public class CarState {
   public static final double CAR_WIDTH = 6;

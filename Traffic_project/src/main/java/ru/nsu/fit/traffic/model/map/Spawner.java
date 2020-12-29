@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.model.node;
+package ru.nsu.fit.traffic.model.map;
 
 import java.text.DateFormat;
 import java.text.ParseException;

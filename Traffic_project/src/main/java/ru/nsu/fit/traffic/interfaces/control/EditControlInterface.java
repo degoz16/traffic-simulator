@@ -1,9 +1,9 @@
-package ru.nsu.fit.traffic.controller.edit;
+package ru.nsu.fit.traffic.interfaces.control;
 
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
-import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.road.Road;
+import ru.nsu.fit.traffic.model.map.Node;
+import ru.nsu.fit.traffic.model.map.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.map.Road;
 
 public interface EditControlInterface {
     void startSimulation();

@@ -5,7 +5,7 @@ import java.io.File;
 import javafx.fxml.FXML;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import ru.nsu.fit.traffic.controller.saveload.SaveLoadControlInterface;
+import ru.nsu.fit.traffic.interfaces.control.SaveLoadControlInterface;
 
 public class MenuBarController {
 

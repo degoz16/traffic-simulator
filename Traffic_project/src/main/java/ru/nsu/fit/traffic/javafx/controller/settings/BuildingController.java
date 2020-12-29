@@ -5,7 +5,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.controller.settings.BuildingSettingsControlInterface;
+import ru.nsu.fit.traffic.interfaces.control.BuildingSettingsControlInterface;
 
 
 import java.util.function.UnaryOperator;

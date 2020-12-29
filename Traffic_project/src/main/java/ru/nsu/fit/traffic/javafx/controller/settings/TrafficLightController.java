@@ -4,9 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.controller.settings.TrafficLightSettingsControl;
-import ru.nsu.fit.traffic.controller.settings.TrafficLightSettingsControlInterface;
-import ru.nsu.fit.traffic.javafx.controller.edit.MainController;
+import ru.nsu.fit.traffic.interfaces.control.TrafficLightSettingsControlInterface;
 
 import java.util.function.UnaryOperator;
 

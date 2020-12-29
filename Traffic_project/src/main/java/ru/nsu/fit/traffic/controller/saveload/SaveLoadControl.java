@@ -12,6 +12,7 @@ import java.io.Reader;
 import java.io.Writer;
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
+import ru.nsu.fit.traffic.interfaces.control.SaveLoadControlInterface;
 import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
 
 public class SaveLoadControl extends BaseControl implements SaveLoadControlInterface {

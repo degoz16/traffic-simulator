@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.controller.saveload;
+package ru.nsu.fit.traffic.interfaces.control;
 
 import java.io.File;
 

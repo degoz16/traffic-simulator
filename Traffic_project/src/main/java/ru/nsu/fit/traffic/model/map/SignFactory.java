@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.model.trafficsign;
+package ru.nsu.fit.traffic.model.map;
 
 public class SignFactory {
     public RoadSign getMainRoadSign() {

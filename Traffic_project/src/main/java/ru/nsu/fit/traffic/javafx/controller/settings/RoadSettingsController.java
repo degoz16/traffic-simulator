@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.controller.settings.RoadSettingsControlInterface;
+import ru.nsu.fit.traffic.interfaces.control.RoadSettingsControlInterface;
 
 import java.util.function.UnaryOperator;
 

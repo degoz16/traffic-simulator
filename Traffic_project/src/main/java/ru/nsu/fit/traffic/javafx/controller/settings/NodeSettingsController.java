@@ -2,15 +2,11 @@ package ru.nsu.fit.traffic.javafx.controller.settings;
 
 import com.jfoenix.controls.JFXTimePicker;
 import java.time.LocalTime;
-import java.util.ArrayList;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import ru.nsu.fit.traffic.controller.settings.NodeSettingsControl;
-import ru.nsu.fit.traffic.controller.settings.NodeSettingsControlInterface;
-import ru.nsu.fit.traffic.javafx.controller.edit.MainController;
-import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.node.Spawner;
+import ru.nsu.fit.traffic.interfaces.control.NodeSettingsControlInterface;
 
 public class NodeSettingsController {
 

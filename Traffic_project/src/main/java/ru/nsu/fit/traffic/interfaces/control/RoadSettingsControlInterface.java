@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.controller.settings;
+package ru.nsu.fit.traffic.interfaces.control;
 
 public interface RoadSettingsControlInterface {
     void deleteRoad();

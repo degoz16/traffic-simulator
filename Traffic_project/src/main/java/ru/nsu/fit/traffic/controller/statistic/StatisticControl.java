@@ -2,10 +2,8 @@ package ru.nsu.fit.traffic.controller.statistic;
 
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
-import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
-import ru.nsu.fit.traffic.model.logic.UpdateObserver;
-import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.road.Road;
+import ru.nsu.fit.traffic.model.map.Node;
+import ru.nsu.fit.traffic.model.map.Road;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,10 +8,11 @@ import ru.nsu.fit.traffic.controller.settings.NodeSettingsControl;
 import ru.nsu.fit.traffic.controller.settings.RoadSettingsControl;
 import ru.nsu.fit.traffic.controller.settings.TrafficLightSettingsControl;
 import ru.nsu.fit.traffic.controller.statistic.StatisticControl;
+import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 
-public class ControlsInitializer {
+public class ControlsInitializer implements ControlInitializerInterface {
     private final EditControl editControl;
     private final SaveLoadControl saveLoadControl;
     private final BuildingSettingsControl buildingSettingsControl;

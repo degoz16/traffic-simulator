@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.model.road;
+package ru.nsu.fit.traffic.model.map;
 
 public enum RoadHighLight {
     NONE,

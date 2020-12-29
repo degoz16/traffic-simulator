@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.model.trafficsign;
+package ru.nsu.fit.traffic.model.map;
 
 import java.util.Map;
 import java.util.TreeMap;

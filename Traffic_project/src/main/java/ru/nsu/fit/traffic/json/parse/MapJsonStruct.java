@@ -3,14 +3,14 @@ package ru.nsu.fit.traffic.json.parse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import ru.nsu.fit.traffic.model.place.PlaceOfInterest;
+import ru.nsu.fit.traffic.model.map.PlaceOfInterest;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
-import ru.nsu.fit.traffic.model.node.Node;
-import ru.nsu.fit.traffic.model.node.Spawner;
-import ru.nsu.fit.traffic.model.road.Lane;
-import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.trafficlight.TrafficLight;
-import ru.nsu.fit.traffic.model.trafficlight.TrafficLightConfig;
+import ru.nsu.fit.traffic.model.map.Node;
+import ru.nsu.fit.traffic.model.map.Spawner;
+import ru.nsu.fit.traffic.model.map.Lane;
+import ru.nsu.fit.traffic.model.map.Road;
+import ru.nsu.fit.traffic.model.map.TrafficLight;
+import ru.nsu.fit.traffic.model.map.TrafficLightConfig;
 
 public class MapJsonStruct {
   private final List<NodeJsonStruct> nodes = new ArrayList<>();

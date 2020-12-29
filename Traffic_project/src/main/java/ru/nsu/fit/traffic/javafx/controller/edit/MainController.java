@@ -36,7 +36,8 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import ru.nsu.fit.traffic.controller.ControlsInitializer;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
-import ru.nsu.fit.traffic.controller.edit.EditControlInterface;
+import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
+import ru.nsu.fit.traffic.interfaces.control.EditControlInterface;
 import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
@@ -509,7 +510,7 @@ public class MainController {
      */
     @FXML
     public void initialize() {
-        ControlsInitializer controlsInitializer = new ControlsInitializer(sceneElementsControl);
+        ControlInitializerInterface controlsInitializer = new ControlsInitializer(sceneElementsControl);
         editControl = controlsInitializer.getEditControl();
         ViewUpdater viewUpdater = new ViewUpdater(
                 (shape, placeOfInterest) ->

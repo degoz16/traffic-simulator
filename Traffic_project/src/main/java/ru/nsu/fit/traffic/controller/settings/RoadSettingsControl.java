@@ -4,10 +4,9 @@ import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.edit.EditControl;
 import ru.nsu.fit.traffic.controller.statistic.StatisticControl;
-import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
-import ru.nsu.fit.traffic.model.logic.UpdateObserver;
-import ru.nsu.fit.traffic.model.road.Road;
-import ru.nsu.fit.traffic.model.road.Street;
+import ru.nsu.fit.traffic.interfaces.control.RoadSettingsControlInterface;
+import ru.nsu.fit.traffic.model.map.Road;
+import ru.nsu.fit.traffic.model.map.Street;
 
 public class RoadSettingsControl extends BaseControl implements RoadSettingsControlInterface {
     private final EditControl editControl;

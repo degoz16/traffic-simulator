@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.model.trafficlight;
+package ru.nsu.fit.traffic.model.map;
 
 import java.util.ArrayList;
 import java.util.List;
