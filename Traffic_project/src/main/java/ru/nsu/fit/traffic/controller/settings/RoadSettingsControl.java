@@ -9,88 +9,90 @@ import ru.nsu.fit.traffic.model.map.Road;
 import ru.nsu.fit.traffic.model.map.Street;
 
 public class RoadSettingsControl extends BaseControl implements RoadSettingsControlInterface {
-    private final EditControl editControl;
-    private final StatisticControl statisticControl;
-    public RoadSettingsControl(
-            SceneElementsControl sceneElementsControl,
-            EditControl editControl,
-            StatisticControl statisticControl) {
-        super(sceneElementsControl);
-        this.editControl = editControl;
-        this.statisticControl = statisticControl;
-    }
+  private final EditControl editControl;
+  private final StatisticControl statisticControl;
 
-    public void deleteRoad() {
-        Road lastRoadClicked = editControl.getLastRoadClicked();
-        if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
-            if (lastRoadClicked.getFrom().getRoadsOutNum() <= 1) {
-                lastRoadClicked.getFrom().removeFromPlaceOfInterest();
-                editOperationsManager.getMap().removeNode(lastRoadClicked.getFrom());
-            }
-            if (lastRoadClicked.getTo().getRoadsInNum() <= 1) {
-                lastRoadClicked.getTo().removeFromPlaceOfInterest();
-                editOperationsManager.getMap().removeNode(lastRoadClicked.getTo());
-            }
-            lastRoadClicked.getBackRoad().disconnect();
-            editOperationsManager.getMap().removeRoad(lastRoadClicked.getBackRoad());
-            lastRoadClicked.disconnect();
-            editOperationsManager.getMap().removeRoad(lastRoadClicked);
-        } else {
-            lastRoadClicked.clearLanes();
-        }
-        lastRoadClicked.getTo().setTrafficLight(null);
-        update.update(editOperationsManager);
-        statisticControl.updateStatistics();
-    }
+  public RoadSettingsControl(
+      SceneElementsControl sceneElementsControl,
+      EditControl editControl,
+      StatisticControl statisticControl) {
+    super(sceneElementsControl);
+    this.editControl = editControl;
+    this.statisticControl = statisticControl;
+  }
 
-    public void confirmRoadSettings(int newLanesNum, String streetName) {
-        Road lastRoadClicked = editControl.getLastRoadClicked();
-
-        int oldLanesNum = lastRoadClicked.getLanesNum();
-        //int newLanesNum = Integer.parseInt(lanesTextField.getText());
-        if (newLanesNum > 0) {
-            if (newLanesNum < oldLanesNum) {
-                for (int i = newLanesNum; i < oldLanesNum; i++) {
-                    lastRoadClicked.removeLane(i);
-                }
-            } else {
-                for (int i = oldLanesNum; i < newLanesNum; i++) {
-                    lastRoadClicked.addLane(i);
-                }
-            }
-            update.update(editOperationsManager);
-        } else {
-            deleteRoad();
-            return;
-        }
-        if (streetName.equals("") && lastRoadClicked.getStreet() != null) {
-            lastRoadClicked.disconnectWithStreet();
-        } else if (!streetName.equals("")) {
-            if (lastRoadClicked.getStreet() != null && !streetName.equals(lastRoadClicked.getStreet().getName())) {
-                lastRoadClicked.disconnectWithStreet();
-            }
-            Street currStreet = null;
-            for (Street s : editOperationsManager.getMap().getStreets()) {
-                if (s.getName().equals(streetName)) {
-                    currStreet = s;
-                    break;
-                }
-            }
-            if (currStreet == null) {
-                currStreet = new Street(streetName);
-                editOperationsManager.getMap().getStreets().add(currStreet);
-            }
-            if (lastRoadClicked.getBackRoad() != null) {
-                lastRoadClicked.getBackRoad().disconnectWithStreet();
-                currStreet.addRoad(lastRoadClicked.getBackRoad());
-                lastRoadClicked.getBackRoad().setCurrStreet(currStreet);
-            }
-            currStreet.addRoad(lastRoadClicked);
-            lastRoadClicked.setCurrStreet(currStreet);
-            // System.out.println(currStreet);
-        }
-        sceneElementsControl.roadSettingsSetVisible(false);
-        update.update(editOperationsManager);
-        statisticControl.updateStatistics();
+  public void deleteRoad() {
+    Road lastRoadClicked = editControl.getLastRoadClicked();
+    if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
+      if (lastRoadClicked.getFrom().getRoadsOutNum() <= 1) {
+        lastRoadClicked.getFrom().removeFromPlaceOfInterest();
+        editOperationsManager.getMap().removeNode(lastRoadClicked.getFrom());
+      }
+      if (lastRoadClicked.getTo().getRoadsInNum() <= 1) {
+        lastRoadClicked.getTo().removeFromPlaceOfInterest();
+        editOperationsManager.getMap().removeNode(lastRoadClicked.getTo());
+      }
+      lastRoadClicked.getBackRoad().disconnect();
+      editOperationsManager.getMap().removeRoad(lastRoadClicked.getBackRoad());
+      lastRoadClicked.disconnect();
+      editOperationsManager.getMap().removeRoad(lastRoadClicked);
+    } else {
+      lastRoadClicked.clearLanes();
     }
+    lastRoadClicked.getTo().setTrafficLight(null);
+    update.update(editOperationsManager);
+    statisticControl.updateStatistics();
+  }
+
+  public void confirmRoadSettings(int newLanesNum, String streetName) {
+    Road lastRoadClicked = editControl.getLastRoadClicked();
+
+    int oldLanesNum = lastRoadClicked.getLanesNum();
+    // int newLanesNum = Integer.parseInt(lanesTextField.getText());
+    if (newLanesNum > 0) {
+      if (newLanesNum < oldLanesNum) {
+        for (int i = newLanesNum; i < oldLanesNum; i++) {
+          lastRoadClicked.removeLane(i);
+        }
+      } else {
+        for (int i = oldLanesNum; i < newLanesNum; i++) {
+          lastRoadClicked.addLane(i);
+        }
+      }
+      update.update(editOperationsManager);
+    } else {
+      deleteRoad();
+      return;
+    }
+    if (streetName.equals("") && lastRoadClicked.getStreet() != null) {
+      lastRoadClicked.disconnectWithStreet();
+    } else if (!streetName.equals("")) {
+      if (lastRoadClicked.getStreet() != null
+          && !streetName.equals(lastRoadClicked.getStreet().getName())) {
+        lastRoadClicked.disconnectWithStreet();
+      }
+      Street currStreet = null;
+      for (Street s : editOperationsManager.getMap().getStreets()) {
+        if (s.getName().equals(streetName)) {
+          currStreet = s;
+          break;
+        }
+      }
+      if (currStreet == null) {
+        currStreet = new Street(streetName);
+        editOperationsManager.getMap().getStreets().add(currStreet);
+      }
+      if (lastRoadClicked.getBackRoad() != null) {
+        lastRoadClicked.getBackRoad().disconnectWithStreet();
+        currStreet.addRoad(lastRoadClicked.getBackRoad());
+        lastRoadClicked.getBackRoad().setCurrStreet(currStreet);
+      }
+      currStreet.addRoad(lastRoadClicked);
+      lastRoadClicked.setCurrStreet(currStreet);
+      // System.out.println(currStreet);
+    }
+    sceneElementsControl.roadSettingsSetVisible(false);
+    update.update(editOperationsManager);
+    statisticControl.updateStatistics();
+  }
 }
