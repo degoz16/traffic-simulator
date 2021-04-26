@@ -12,11 +12,11 @@ public class RegionsMap {
     regions.put(region.getName(), region);
   }
 
-  public List<RectRegion> getRegions() {
+  public Map<String, RectRegion> getRegions() {
     return regions;
   }
 
-  public void setRegions(List<RectRegion> regions) {
+  public void setRegions(Map<String, RectRegion> regions) {
     this.regions = regions;
   }
 }
