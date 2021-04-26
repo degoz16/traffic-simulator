@@ -11,4 +11,12 @@ public class RegionsMap {
   public void addRegion(RectRegion region) {
     regions.put(region.getName(), region);
   }
+
+  public List<RectRegion> getRegions() {
+    return regions;
+  }
+
+  public void setRegions(List<RectRegion> regions) {
+    this.regions = regions;
+  }
 }
