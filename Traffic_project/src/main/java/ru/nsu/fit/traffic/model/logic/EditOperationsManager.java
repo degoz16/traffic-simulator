@@ -162,7 +162,6 @@ public class EditOperationsManager {
             nodeFrom.connect(road, backRoad, lastNode);
             lastNode.connect(road1, backRoad1, nodeTo);
             updateView.update(this);
-            System.out.println("road on road");
             return 0;
         }
         else return -1;

@@ -26,4 +26,8 @@ public class RectRegion {
     this.width = width;
     this.height = height;
   }
+
+  public String getName() {
+    return name;
+  }
 }

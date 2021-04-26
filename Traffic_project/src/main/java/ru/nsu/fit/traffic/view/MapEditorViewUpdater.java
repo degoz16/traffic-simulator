@@ -9,8 +9,11 @@ import ru.nsu.fit.traffic.model.logic.EditOperation;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.playback.CarState;
+import ru.nsu.fit.traffic.view.elements.observers.NodeObserver;
+import ru.nsu.fit.traffic.view.elements.observers.PoiObserver;
+import ru.nsu.fit.traffic.view.elements.observers.RoadObserver;
 
-public class ViewUpdater {
+public class MapEditorViewUpdater {
   private final int NODE_SIZE = 10;
   private final int LANE_SIZE = 10;
   private final PoiObserver poiObserver;
@@ -20,7 +23,7 @@ public class ViewUpdater {
   private final Pane mainPane;
 
 
-  public ViewUpdater(
+  public MapEditorViewUpdater(
     PoiObserver poiObserver,
     RoadObserver roadObserver,
     NodeObserver nodeObserver,

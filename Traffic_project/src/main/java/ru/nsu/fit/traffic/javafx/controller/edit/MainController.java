@@ -32,7 +32,7 @@ import ru.nsu.fit.traffic.javafx.controller.settings.NodeSettingsController;
 import ru.nsu.fit.traffic.javafx.controller.settings.RoadSettingsController;
 import ru.nsu.fit.traffic.javafx.controller.settings.TrafficLightController;
 import ru.nsu.fit.traffic.javafx.controller.statistic.StatisticsController;
-import ru.nsu.fit.traffic.view.ViewUpdater;
+import ru.nsu.fit.traffic.view.MapEditorViewUpdater;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -500,7 +500,7 @@ public class MainController {
     public void initialize() {
         ControlInitializerInterface controlsInitializer = new ControlsInitializer(sceneElementsControl);
         editControl = controlsInitializer.getEditControl();
-        ViewUpdater viewUpdater = new ViewUpdater(
+        MapEditorViewUpdater viewUpdater = new MapEditorViewUpdater(
                 (shape, placeOfInterest) ->
                         shape.setOnMouseClicked(event ->
                                 editControl

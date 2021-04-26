@@ -1,12 +1,14 @@
 package ru.nsu.fit.traffic.model.globalmap;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RegionsMap {
-  private List<RectRegion> regions = new ArrayList<>();
+  private Map<String, RectRegion> regions = new HashMap<>();
 
   public void addRegion(RectRegion region) {
-    regions.add(region);
+    regions.put(region.getName(), region);
   }
 }

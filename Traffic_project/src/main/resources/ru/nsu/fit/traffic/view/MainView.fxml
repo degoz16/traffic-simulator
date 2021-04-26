@@ -24,12 +24,22 @@
 <?import javafx.scene.text.Text?>
 
 <VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.edit.MainController">
-    <children>
+   <children>
       <fx:include fx:id="menuBar" source="MenuBarView.fxml" VBox.vgrow="NEVER" />
       <AnchorPane fx:id="basePane" depthTest="DISABLE" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
             <ScrollPane fx:id="mainScrollPane" layoutX="10.0" layoutY="10.0" pannable="true" prefHeight="375.0" prefWidth="646.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-
+               <content>
+                  <VBox fx:id="centeredField" alignment="CENTER" prefHeight="2000.0" prefWidth="2000.0">
+                     <children>
+                        <Group fx:id="scrollPaneContent" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Pane fx:id="mainPane" layoutX="14.0" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #b1bbbb;" stylesheets="@MainViewStyleSheets/background.css" />
+                           </children>
+                        </Group>
+                     </children>
+                  </VBox>
+               </content>
             </ScrollPane>
             <HBox fx:id="progressIndicator" alignment="CENTER" layoutY="-70.5531234741211" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -142,5 +152,5 @@
             <fx:include fx:id="notification" source="Notifications.fxml" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.5" />
          </children>
       </AnchorPane>
-    </children>
+   </children>
 </VBox>
