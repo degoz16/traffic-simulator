@@ -22,7 +22,7 @@ public class GlobalMapApp extends Application {
         stage.show();
 
         GlobalMapController controller = loader.getController();
-       // controller.setStage(stage);
+        controller.setStage(stage);
 
         stage.setMinWidth(850);
         stage.setMinHeight(540);

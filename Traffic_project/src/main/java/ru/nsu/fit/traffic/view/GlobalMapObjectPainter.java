@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalMapObjectPainter {
-  private final int NODE_SIZE = 10;
-  private final int LANE_SIZE = 10;
 
   public List<Shape> paintRegion(RectRegion region) {
     List<Shape> res = new ArrayList<>();
@@ -35,6 +33,7 @@ public class GlobalMapObjectPainter {
 
   public Shape paintConnector(RoadConnector connector) {
     Circle circle = new Circle();
+    circle.setRadius(10);
     circle.setCenterX(connector.getX() + connector.getRectRegion().getX());
     circle.setCenterY(connector.getY() + connector.getRectRegion().getY());
     Image img = new Image(getClass().getResource("Images/connector_on_map.png").toExternalForm());
@@ -44,5 +43,17 @@ public class GlobalMapObjectPainter {
       circle.setFill(Paint.valueOf("#101010"));
     }
     return circle;
+  }
+
+  public Shape paintPreFragment(double x, double y){
+    Rectangle rect = new Rectangle();
+    rect.setX(x);
+    rect.setY(y);
+    rect.setHeight(1);
+    rect.setWidth(1);
+    rect.setStrokeWidth(6);
+    rect.setFill(Color.valueOf("transparent"));
+    rect.setStroke(Color.valueOf("#708090"));
+    return rect;
   }
 }
