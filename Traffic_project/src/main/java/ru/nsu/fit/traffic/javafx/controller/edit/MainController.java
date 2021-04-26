@@ -1,29 +1,13 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
 import com.jfoenix.controls.JFXTimePicker;
-
-import java.time.LocalTime;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -36,11 +20,11 @@ import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import ru.nsu.fit.traffic.controller.ControlsInitializer;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
-import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
-import ru.nsu.fit.traffic.interfaces.control.EditControlInterface;
 import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
+import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
+import ru.nsu.fit.traffic.interfaces.control.EditControlInterface;
 import ru.nsu.fit.traffic.javafx.controller.menubar.MenuBarController;
 import ru.nsu.fit.traffic.javafx.controller.notification.NotificationController;
 import ru.nsu.fit.traffic.javafx.controller.settings.BuildingController;
@@ -49,6 +33,12 @@ import ru.nsu.fit.traffic.javafx.controller.settings.RoadSettingsController;
 import ru.nsu.fit.traffic.javafx.controller.settings.TrafficLightController;
 import ru.nsu.fit.traffic.javafx.controller.statistic.StatisticsController;
 import ru.nsu.fit.traffic.view.ViewUpdater;
+
+import java.time.LocalTime;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * Контроллер основной сцены, на которой располагаются все остальные.
@@ -116,7 +106,8 @@ public class MainController {
     private HBox progressIndicator;
 
     private Stage stage;
-
+    private EditControlInterface editControl;
+    private boolean timePickerFlag = false;
     private double scaleValue = 1;
     private Rectangle selectRect;
     private final SceneElementsControl sceneElementsControl = new SceneElementsControl() {
@@ -453,7 +444,7 @@ public class MainController {
             progressIndicator.setVisible(false);
         }
     };
-    private EditControlInterface editControl;
+
 
     public Stage getStage() {
         return stage;
@@ -468,15 +459,12 @@ public class MainController {
         selectRect.setFill(Color.TRANSPARENT);
         selectRect.setStroke(Color.valueOf("#656565"));
         selectRect.setStrokeWidth(4);
-        StringBuilder style = new StringBuilder();
-        style
-                .append("{")
-                .append("-fx-stroke-width: 7;")
-                .append("-fx-stroke-dash-array: 12 2 4 2;")
-                .append("-fx-stroke-dash-offset: 6;")
-                .append("-fx-stroke-line-cap: butt;")
-                .append("}");
-        selectRect.setStyle(style.toString());
+        String style =
+            "-fx-stroke-width: 7;" +
+            "-fx-stroke-dash-array: 12 2 4 2;" +
+            "-fx-stroke-dash-offset: 6;" +
+            "-fx-stroke-line-cap: butt;";
+        selectRect.setStyle(style);
         return selectRect;
     }
 
@@ -668,11 +656,9 @@ public class MainController {
         editControl.reportClicked();
     }
 
-    private boolean etoMoyKostyl = false;
-
     @FXML
     public void simTimePickerEnterPressed(KeyEvent key) {
-        if (!etoMoyKostyl) {
+        if (!timePickerFlag) {
             if (key.getCode() == KeyCode.ENTER) {
                 String time =
                         simTimePicker.getValue() != null
@@ -683,11 +669,11 @@ public class MainController {
                 sceneElementsControl.showNotification("Simulation time",
                         "Now set time of simulation\nfinish and press Enter",
                         NotificationType.INFORMATION);
-                etoMoyKostyl = true;
+                timePickerFlag = true;
             }
         }
         else{
-            etoMoyKostyl = false;
+            timePickerFlag = false;
             simTimePicker.set24HourView(false);
             sceneElementsControl.showNotification("Simulation time",
                     "Simulation time set",
