@@ -18,25 +18,36 @@ public class GlobalMapObjectPainter {
   public List<Shape> paintRegion(RectRegion region) {
     List<Shape> res = new ArrayList<>();
     Rectangle rect = new Rectangle();
-    rect.setStroke(Color.valueOf("#506070"));
+    rect.setStroke(Color.valueOf("#707070"));
     rect.setHeight(region.getHeight());
     rect.setWidth(region.getWidth());
     rect.setX(region.getX());
     rect.setY(region.getY());
     rect.setStrokeWidth(10);
     rect.setFill(Color.valueOf("transparent"));
+    res.add(rect);
     for (RoadConnector road : region.getConnectorList()) {
-      res.add(paintConnector(road));
+      res.add(paintConnector(road, true));
     }
     return res;
   }
 
-  public Shape paintConnector(RoadConnector connector) {
+  public Shape paintConnector(RoadConnector connector, boolean isSet) {
     Circle circle = new Circle();
-    circle.setRadius(10);
+    if (isSet) {
+      circle.setRadius(10);
+    }
+    else{
+      circle.setRadius(8);
+    }
     circle.setCenterX(connector.getX() + connector.getRectRegion().getX());
     circle.setCenterY(connector.getY() + connector.getRectRegion().getY());
-    Image img = new Image(getClass().getResource("Images/connector_on_map.png").toExternalForm());
+    Image img;
+    if (isSet) {
+      img = new Image(getClass().getResource("Images/connector_on_map.png").toExternalForm());
+    }else{
+      img = new Image(getClass().getResource("Images/pre_road_connector.png").toExternalForm());
+    }
     if (img != null) {
       circle.setFill(new ImagePattern(img));
     } else {

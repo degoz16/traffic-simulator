@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RectRegion {
+
+  //TODO: show notification on width/height less then min size
+  private final int MIN_REGION_SIZE = 40;
   private String name;
   private double x;
   private double y;
@@ -15,16 +18,24 @@ public class RectRegion {
     this.name = name;
     this.x = x;
     this.y = y;
-    this.width = width;
-    this.height = height;
+    if (width > MIN_REGION_SIZE) {
+      this.width = width;
+    }
+    if (height > MIN_REGION_SIZE) {
+      this.height = height;
+    }
   }
 
   public RectRegion(double x, double y, double width, double height) {
     this.name = "";
     this.x = x;
     this.y = y;
-    this.width = width;
-    this.height = height;
+    if (width > MIN_REGION_SIZE) {
+      this.width = width;
+    }
+    if (height > MIN_REGION_SIZE) {
+      this.height = height;
+    }
   }
 
   public String getName() {
