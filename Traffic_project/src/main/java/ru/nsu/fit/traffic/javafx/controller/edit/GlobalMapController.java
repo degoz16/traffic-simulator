@@ -1,11 +1,12 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
-import javafx.scene.input.DragEvent;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
@@ -14,11 +15,11 @@ import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 import ru.nsu.fit.traffic.view.GlobalMapObjectPainter;
 
-import java.beans.EventHandler;
 import java.util.AbstractMap;
 import java.util.Map;
 
 public class GlobalMapController {
+  @FXML private ScrollPane mainScrollPane;
   private Stage stage;
 
   public Stage getStage() {
