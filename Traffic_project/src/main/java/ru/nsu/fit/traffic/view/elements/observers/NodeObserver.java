@@ -4,5 +4,5 @@ import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.model.map.Node;
 
 public interface NodeObserver {
-    void action(Shape shape, Node node);
+    void action(Shape shape, int id);
 }

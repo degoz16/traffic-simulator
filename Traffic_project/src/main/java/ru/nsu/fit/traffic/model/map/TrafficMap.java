@@ -39,7 +39,7 @@ public class TrafficMap {
         nodes.clear();
         roads.clear();
         streets.clear();
-        placesOfInterest.clear(); //TODO Каждую сущность, которую добавили в мап - добавьте в clear
+        placesOfInterest.clear();
     }
 
     public void addNode(Node node) {
@@ -52,6 +52,14 @@ public class TrafficMap {
 
     public int getRoadCount() {
         return roads.size();
+    }
+
+    public int getPoiCount() {
+        return placesOfInterest.size();
+    }
+
+    public int getNodesCount() {
+        return nodes.size();
     }
 
     public Road getRoad(int i) {
@@ -110,8 +118,12 @@ public class TrafficMap {
         this.placesOfInterest = placesOfInterest;
     }
 
-    public List<PlaceOfInterest> getPlaceOfInterest() {
-        return placesOfInterest;
+    public PlaceOfInterest getPlaceOfInterest(int i) {
+        return placesOfInterest.get(i);
+    }
+
+    public Node getNode(int id) {
+        return nodes.get(id);
     }
 
     public List<Node> getNodes() {

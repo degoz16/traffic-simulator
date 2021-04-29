@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.model.globalmap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class RectRegion {
 
@@ -36,6 +37,22 @@ public class RectRegion {
     if (height > MIN_REGION_SIZE) {
       this.height = height;
     }
+  }
+
+  public RoadConnector getConnector(int id) {
+    return connectorList.get(id);
+  }
+
+  public void addConnector(RoadConnector connector) {
+    connectorList.add(connector);
+  }
+
+  public void foreachConnector(Consumer<RoadConnector> consumer) {
+    connectorList.forEach(consumer);
+  }
+
+  public int getConnectorsCount() {
+    return connectorList.size();
   }
 
   public String getName() {

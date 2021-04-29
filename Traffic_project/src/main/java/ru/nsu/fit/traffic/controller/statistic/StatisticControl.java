@@ -90,7 +90,7 @@ public class StatisticControl extends BaseControl {
         });
         roadsCnt = editOperationsManager.getMap().getRoadCount() / 2;
         //this.roads.setText(String.valueOf(roads));
-        buildingCnt = editOperationsManager.getMap().getPlaceOfInterest().size();
+        buildingCnt = editOperationsManager.getMap().getPoiCount();
         //buildings.setText(String.valueOf(trafficMap.getPlaceOfInterest().size()));
         for (Node n : editOperationsManager.getMap().getNodes()) {
             if (n.getSpawners() != null && n.getSpawners().size() != 0) {

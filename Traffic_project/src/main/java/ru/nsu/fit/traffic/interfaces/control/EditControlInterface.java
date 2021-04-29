@@ -55,13 +55,13 @@ public interface EditControlInterface {
 
   void onMainPanePressed(MouseEventWrapper event);
 
-  void onPoiClicked(PlaceOfInterest placeOfInterest, MouseEventWrapper event);
+  void onPoiClicked(int id, MouseEventWrapper event);
 
   void onMainPaneClicked(MouseEventWrapper event);
 
-  void onNodeClick(Node node, MouseEventWrapper event);
+  void onNodeClick(int id, MouseEventWrapper event);
 
   void onMainPaneDrag(MouseEventWrapper event);
 
-  void onRoadClick(Road road, int i, MouseEventWrapper event);
+  void onRoadClick(int id, int i, MouseEventWrapper event);
 }

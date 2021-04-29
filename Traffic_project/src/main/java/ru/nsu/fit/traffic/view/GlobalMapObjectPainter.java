@@ -15,8 +15,7 @@ import java.util.List;
 
 public class GlobalMapObjectPainter {
 
-  public List<Shape> paintRegion(RectRegion region) {
-    List<Shape> res = new ArrayList<>();
+  public Rectangle paintRegion(RectRegion region) {
     Rectangle rect = new Rectangle();
     rect.setStroke(Color.valueOf("#707070"));
     rect.setHeight(region.getHeight());
@@ -25,14 +24,11 @@ public class GlobalMapObjectPainter {
     rect.setY(region.getY());
     rect.setStrokeWidth(10);
     rect.setFill(Color.valueOf("transparent"));
-    res.add(rect);
-    for (RoadConnector road : region.getConnectorList()) {
-      res.add(paintConnector(road, true));
-    }
-    return res;
+
+    return rect;
   }
 
-  public Shape paintConnector(RoadConnector connector, boolean isSet) {
+  public Circle paintConnector(RoadConnector connector, boolean isSet) {
     Circle circle = new Circle();
     if (isSet) {
       circle.setRadius(10);
@@ -40,13 +36,13 @@ public class GlobalMapObjectPainter {
     else{
       circle.setRadius(8);
     }
-    circle.setCenterX(connector.getX() + connector.getRectRegion().getX());
-    circle.setCenterY(connector.getY() + connector.getRectRegion().getY());
+    circle.setCenterX(connector.getX());
+    circle.setCenterY(connector.getY());
     Image img;
     if (isSet) {
-      img = new Image(getClass().getResource("Images/connector_on_map.png").toExternalForm());
+      img = new Image("ru/nsu/fit/traffic/view/Images/connector_on_map.png");
     }else{
-      img = new Image(getClass().getResource("Images/pre_road_connector.png").toExternalForm());
+      img = new Image("ru/nsu/fit/traffic/view/Images/pre_road_connector.png");
     }
     if (img != null) {
       circle.setFill(new ImagePattern(img));
@@ -54,17 +50,5 @@ public class GlobalMapObjectPainter {
       circle.setFill(Paint.valueOf("#101010"));
     }
     return circle;
-  }
-
-  public Shape paintPreFragment(double x, double y){
-    Rectangle rect = new Rectangle();
-    rect.setX(x);
-    rect.setY(y);
-    rect.setHeight(1);
-    rect.setWidth(1);
-    rect.setStrokeWidth(6);
-    rect.setFill(Color.valueOf("transparent"));
-    rect.setStroke(Color.valueOf("#708090"));
-    return rect;
   }
 }

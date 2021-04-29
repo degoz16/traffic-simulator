@@ -4,5 +4,5 @@ import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.model.map.Road;
 
 public interface RoadObserver {
-    void action(Shape shape, Road road, int i);
+    void setRoadClickHandler(Shape shape, int id, int i);
 }

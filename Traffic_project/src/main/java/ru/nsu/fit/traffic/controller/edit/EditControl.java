@@ -83,6 +83,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
     editOperationsManager.setCurrentOperation(EditOperation.NONE);
     sceneElementsControl.numberOfLanesPaneSetVisible(false);
     sceneElementsControl.nodeSettingsSetVisible(false);
+    sceneElementsControl.setSelectRectVisible(false);
   }
 
   public void startSimulation() {
@@ -97,12 +98,14 @@ public class EditControl extends BaseControl implements EditControlInterface {
     engineController.startEngine();
     sceneElementsControl.simulationProcessModeEnable();
     editOperationsManager.setCurrentOperation(EditOperation.SIMULATION);
+    sceneElementsControl.setSelectRectVisible(false);
   }
 
   public void stopSimulation() {
     engineController.stopEngine();
     sceneElementsControl.simulationStopModeEnable();
     //editOperationsManager.setCurrentOperation(EditOperation.NONE);
+    sceneElementsControl.setSelectRectVisible(false);
   }
 
   public void rewindForward() {
@@ -125,6 +128,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
 
   public void roadButtonClicked() {
     closeAllSettings();
+    sceneElementsControl.setSelectRectVisible(false);
     switch (editOperationsManager.getCurrentOperation()) {
       case ROAD_CREATION -> {
         //numberOfLanesPane.setVisible(false);
@@ -142,6 +146,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
   }
 
   public void startTimePicker(String time) {
+    sceneElementsControl.setSelectRectVisible(false);
     if (editOperationsManager.getCurrentOperation() == EditOperation.TIME_PICKING) {
       editOperationsManager.setCurrentOperation(EditOperation.NONE);
       editOperationsManager.setEndTime(time);
@@ -152,7 +157,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
   }
 
   public void trafficLightButtonClicked() {
-    System.out.println("OUTED");
+    sceneElementsControl.setSelectRectVisible(false);
     switch (editOperationsManager.getCurrentOperation()) {
       case TRAFFIC_LIGHT_CREATION -> {
         editOperationsManager.setCurrentOperation(EditOperation.NONE);
@@ -169,6 +174,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
 
   public void buildingButtonClicked() {
     closeAllSettings();
+    sceneElementsControl.setSelectRectVisible(true);
     switch (editOperationsManager.getCurrentOperation()) {
       case POI_CREATION -> {
         editOperationsManager.setCurrentOperation(EditOperation.NONE);
@@ -186,6 +192,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
   }
 
   public void playbackClicked() {
+    sceneElementsControl.setSelectRectVisible(false);
     editOperationsManager.setCurrentOperation(EditOperation.PLAYBACK_SHOWING);
     sceneElementsControl.playBackModeEnable();
     playbackStruct = new PlaybackStruct(editOperationsManager.getMap());
@@ -195,9 +202,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
   }
 
   public void reportClicked() {
-    //DEBUG
-    //File file = new File("heatMap.json");
-    //DEBUG
+    sceneElementsControl.setSelectRectVisible(false);
     editOperationsManager.updateCarStates(new ArrayList<>());
     File file = new File(engineController.getHeatMapPath());
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -225,6 +230,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
   }
 
   public void editClicked() {
+    sceneElementsControl.setSelectRectVisible(false);
     editOperationsManager.setCurrentOperation(EditOperation.NONE);
     sceneElementsControl.editModeEnable();
     editOperationsManager.updateCarStates(new ArrayList<>());
@@ -232,6 +238,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
 
   public void roadSignButtonClicked() {
     closeAllSettings();
+    sceneElementsControl.setSelectRectVisible(false);
     switch (editOperationsManager.getCurrentOperation()) {
       case SIGN_CREATION:
         //roadSignPane.setVisible(false);
@@ -251,14 +258,17 @@ public class EditControl extends BaseControl implements EditControlInterface {
   }
 
   public void showStatistic() {
+    sceneElementsControl.setSelectRectVisible(false);
     sceneElementsControl.statisticSwitchVisible();
   }
 
   public void setSpeedSign(int speed) {
+    sceneElementsControl.setSelectRectVisible(false);
     editOperationsManager.setCurrSign(signFactory.getSpeedLimitSign(speed));
   }
 
   public void setMainRoad() {
+    sceneElementsControl.setSelectRectVisible(false);
     editOperationsManager.setCurrSign(signFactory.getMainRoadSign());
   }
 
@@ -271,12 +281,14 @@ public class EditControl extends BaseControl implements EditControlInterface {
   }
 
   public void onTimeLineSliderChange(Number newValue) {
+    sceneElementsControl.setSelectRectVisible(false);
     if (reportStruct.getWindowList().size() > (int) Math.round(newValue.doubleValue())) {
       editOperationsManager.updateCongestions(reportStruct.getWindowList().get((int) Math.round(newValue.doubleValue())));
     }
   }
 
   public void onPlaybackLineSliderChange(Number newVal) {
+    sceneElementsControl.setSelectRectVisible(false);
     editOperationsManager.updateCarStates(playbackStruct.getCarStates((int) Math.round(newVal.doubleValue())));
   }
 
@@ -305,7 +317,6 @@ public class EditControl extends BaseControl implements EditControlInterface {
           editOperationsManager.addPlaceOfInterest(x, y, width, height);
           //statisticsController.updateStatistics();
           //mainPane.getChildren().remove(selectRect);
-          sceneElementsControl.removeSelectRect();
           statisticControl.updateStatistics();
         }
       }
@@ -317,19 +328,12 @@ public class EditControl extends BaseControl implements EditControlInterface {
       case PRIMARY -> {
         lastClickX = event.getX();
         lastClickY = event.getY();
-        switch (editOperationsManager.getCurrentOperation()) {
-          case POI_CREATION -> {
-            //selectRect.setX(event.getX());
-            //selectRect.setY(event.getY());
-            //mainPane.getChildren().add(selectRect);
-            sceneElementsControl.addSelectRect(event.getX(), event.getY());
-          }
-        }
       }
     }
   }
 
-  public void onPoiClicked(PlaceOfInterest placeOfInterest, MouseEventWrapper event) {
+  public void onPoiClicked(int id, MouseEventWrapper event) {
+    PlaceOfInterest placeOfInterest = editOperationsManager.getMap().getPlaceOfInterest(id);
     lastPOIClicked = placeOfInterest;
     switch (event.getButton()) {
       case PRIMARY -> {
@@ -358,7 +362,6 @@ public class EditControl extends BaseControl implements EditControlInterface {
   public void onMainPaneClicked(MouseEventWrapper event) {
     switch (event.getButton()) {
       case PRIMARY -> {
-        System.out.println("MAIN PANE CLICK");
         switch (editOperationsManager.getCurrentOperation()) {
           case ROAD_CREATION -> {
             event.consume();
@@ -373,16 +376,21 @@ public class EditControl extends BaseControl implements EditControlInterface {
           case SIGN_CREATION -> {
             event.consume();
             editOperationsManager.setCurrentOperation(EditOperation.NONE);
+            sceneElementsControl.setSelectRectVisible(false);
             sceneElementsControl.roadSignMenuSetVisible(false);
           }
           case NONE -> sceneElementsControl.roadSettingsSetVisible(false);
         }
       }
-      case SECONDARY -> stopOperation();
+      case SECONDARY -> {
+        stopOperation();
+        sceneElementsControl.setSelectRectVisible(false);
+      }
     }
   }
 
-  public void onNodeClick(Node node, MouseEventWrapper event) {
+  public void onNodeClick(int id, MouseEventWrapper event) {
+    Node node = editOperationsManager.getMap().getNode(id);
     lastNodeClicked = node;
     switch (event.getButton()) {
       case PRIMARY -> {
@@ -434,19 +442,16 @@ public class EditControl extends BaseControl implements EditControlInterface {
   }
 
   /**
-   * Обработка драга на поле
+   * Обработка перетаскивания на поле
    *
    * @param event событие
    */
   public void onMainPaneDrag(MouseEventWrapper event) {
-    if (event.getButton() == MouseEventWrapperButton.PRIMARY) {
-      switch (editOperationsManager.getCurrentOperation()) {
-        case POI_CREATION -> sceneElementsControl.resizeSelectRect(event.getX(), event.getY());
-      }
-    }
+
   }
 
-  public void onRoadClick(Road road, int i, MouseEventWrapper event) {
+  public void onRoadClick(int id, int i, MouseEventWrapper event) {
+    Road road = editOperationsManager.getMap().getRoad(id);
     Lane lane = road.getLane(i);
     switch (event.getButton()) {
       case PRIMARY -> {
@@ -490,7 +495,6 @@ public class EditControl extends BaseControl implements EditControlInterface {
         }
       }
     }
-    //todo другие операции
   }
 
   private void closeAllSettings() {
@@ -500,5 +504,6 @@ public class EditControl extends BaseControl implements EditControlInterface {
     sceneElementsControl.roadSettingsSetVisible(false);
     sceneElementsControl.trafficLightSettingsSetVisible(false);
     sceneElementsControl.roadSignMenuSetVisible(false);
+    sceneElementsControl.setSelectRectVisible(false);
   }
 }

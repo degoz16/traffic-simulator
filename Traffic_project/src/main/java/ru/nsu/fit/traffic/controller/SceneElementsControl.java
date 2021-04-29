@@ -15,11 +15,7 @@ public interface SceneElementsControl {
       int connectivity,
       List<String> streets);
 
-  void removeSelectRect();
-
-  void addSelectRect(double x, double y);
-
-  void resizeSelectRect(double x, double y);
+  void setSelectRectVisible(boolean visible);
 
   void buildingSettingsSetVisible(boolean status);
 

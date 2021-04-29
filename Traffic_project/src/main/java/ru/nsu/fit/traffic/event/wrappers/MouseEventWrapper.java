@@ -1,5 +1,7 @@
 package ru.nsu.fit.traffic.event.wrappers;
 
+import javafx.scene.input.MouseEvent;
+
 public abstract class MouseEventWrapper {
     private final double x;
     private final double y;
@@ -22,4 +24,28 @@ public abstract class MouseEventWrapper {
     }
     public abstract void consume();
 
+    public static MouseEventWrapperButton getWrapperButton(MouseEvent event) {
+        switch (event.getButton()) {
+            case NONE -> {
+                return MouseEventWrapperButton.NONE;
+            }
+            case PRIMARY -> {
+                return MouseEventWrapperButton.PRIMARY;
+            }
+            case SECONDARY -> {
+                return MouseEventWrapperButton.SECONDARY;
+            }
+        }
+        return MouseEventWrapperButton.NONE;
+    }
+
+    public static MouseEventWrapper getMouseEventWrapper(MouseEvent event) {
+        return new MouseEventWrapper(
+            event.getX(), event.getY(), getWrapperButton(event)) {
+            @Override
+            public void consume() {
+                event.consume();
+            }
+        };
+    }
 }

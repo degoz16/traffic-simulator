@@ -12,7 +12,7 @@ import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 
-public class ControlsInitializer implements ControlInitializerInterface {
+public class FragmentEditControlsInitializer implements ControlInitializerInterface {
     private final EditControl editControl;
     private final SaveLoadControl saveLoadControl;
     private final BuildingSettingsControl buildingSettingsControl;
@@ -21,7 +21,7 @@ public class ControlsInitializer implements ControlInitializerInterface {
     private final TrafficLightSettingsControl trafficLightSettingsControl;
     private final StatisticControl statisticControl;
 
-    public ControlsInitializer(SceneElementsControl sceneElementsControl) {
+    public FragmentEditControlsInitializer(SceneElementsControl sceneElementsControl) {
         statisticControl = new StatisticControl(
                 sceneElementsControl
         );

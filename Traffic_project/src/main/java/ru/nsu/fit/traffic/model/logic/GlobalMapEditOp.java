@@ -1,7 +1,7 @@
 package ru.nsu.fit.traffic.model.logic;
 
 public enum GlobalMapEditOp {
-  REGION_SELECT,
-  ADD_CONNECTOR,
+  SET_CONNECTOR,
+  SET_REGION,
   NONE
 }
