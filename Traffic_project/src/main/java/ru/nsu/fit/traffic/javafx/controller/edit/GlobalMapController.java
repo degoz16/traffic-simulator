@@ -11,6 +11,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.controller.GlobalMapEditControlInitializer;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
+import ru.nsu.fit.traffic.controller.edit.GlobalMapEditControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapControlInitializerInterface;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
@@ -45,6 +46,10 @@ public class GlobalMapController {
 
   private void removeSelectRect() {
     UiPainter.removeSelectRect(selectRect, mainPane);
+  }
+
+  public Rectangle getSelectRect() {
+    return selectRect;
   }
 
   private void addSelectRect(double x, double y) {
@@ -91,6 +96,7 @@ public class GlobalMapController {
     GlobalMapControlInitializerInterface initializer =
         new GlobalMapEditControlInitializer(sceneElementsControl);
     editControl = initializer.getEditControl();
+    ((GlobalMapEditControl) editControl).setGlobalMapController(this);
     GlobalMapEditorViewUpdater viewUpdater =
         new GlobalMapEditorViewUpdater(
             ((rect, id, regW, regH) -> {
@@ -133,10 +139,10 @@ public class GlobalMapController {
 
     mainPane.setOnMouseReleased(
         event -> {
-          if (selectRect.getStroke() != UiPainter.incorrectFragment) {
-            editControl.onMainPaneReleased(MouseEventWrapper.getMouseEventWrapper(event));
-          }
+          editControl.onMainPaneReleased(MouseEventWrapper.getMouseEventWrapper(event));
           removeSelectRect();
+          selectRect.setHeight(0);
+          selectRect.setWidth(0);
         });
 
     mainPane.setOnMouseDragged(

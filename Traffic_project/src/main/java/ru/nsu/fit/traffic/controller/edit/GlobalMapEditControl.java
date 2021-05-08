@@ -1,8 +1,10 @@
 package ru.nsu.fit.traffic.controller.edit;
 
+import javafx.scene.shape.Rectangle;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
+import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOp;
@@ -14,8 +16,8 @@ import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_CONNECTOR;
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_REGION;
 
 public class GlobalMapEditControl implements GlobalMapEditControlInterface {
-  //private SceneElementsControl sceneElementsControl;
   private GlobalMapEditOpManager editOpManager = null;
+  private GlobalMapController globalMapController;
   private final GlobalMapSceneElementsControl sceneElementsControl;
   private GlobalMapUpdateObserver updateObserver = null;
   private double lastClickX = 0;
@@ -24,6 +26,10 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   public GlobalMapEditControl(GlobalMapSceneElementsControl sceneElementsControl) {
     this.sceneElementsControl = sceneElementsControl;
+  }
+
+  public void setGlobalMapController(GlobalMapController globalMapController) {
+    this.globalMapController = globalMapController;
   }
 
   public RegionsMap getCurrRegionsMap(){
@@ -63,7 +69,12 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
       case PRIMARY -> {
         switch (editOpManager.getCurrentOp()) {
           case SET_REGION -> {
-            editOpManager.addReg("Region", lastClickX, lastClickY, event.getX(), event.getY());
+            Rectangle rect = globalMapController.getSelectRect();
+            editOpManager.addReg("Region",
+                    rect.getX() + rect.getTranslateX(),
+                    rect.getY() + rect.getTranslateY(),
+                    rect.getWidth() + (rect.getX() + rect.getTranslateX()),
+                    rect.getHeight() + (rect.getY() + rect.getTranslateY()));
           }
         }
       }

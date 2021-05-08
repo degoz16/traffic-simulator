@@ -8,13 +8,12 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import org.w3c.dom.css.Rect;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 
 public class UiPainter {
   private static final Color correctFragment = Color.valueOf("#656565");
-  public static final Color incorrectFragment = Color.valueOf("#FF5555");
+  // public static final Color incorrectFragment = Color.valueOf("#FF5555");
 
   public static Rectangle getSelectRect() {
     Rectangle selectRect = new Rectangle(0, 0, 0, 0);
@@ -52,7 +51,6 @@ public class UiPainter {
   public static void addSelectRect(double x, double y, Rectangle selectRect, Pane mainPane) {
     selectRect.setX(x);
     selectRect.setY(y);
-    if (selectRect.getStroke() == incorrectFragment) return;
     mainPane.getChildren().add(selectRect);
   }
 
@@ -75,24 +73,25 @@ public class UiPainter {
     }
   }
 
-
   public static void checkResizeSelectedRect(
       double x, double y, Rectangle selectRect, RegionsMap map) {
-    resizeSelectRect(x, y, selectRect);
     selectRect.setStroke(correctFragment);
+    System.out.println(x + " " + y);
     for (int i = 0; i < map.getRegionCount(); ++i) {
       RectRegion reg = map.getRegion(i);
-      Rectangle rect = new Rectangle(reg.getX(), reg.getY(), reg.getWidth(), reg.getHeight());
-
-      if (selectRect.intersects(
-          reg.getX() - selectRect.getTranslateX(),
-          reg.getY() - selectRect.getTranslateY(),
+      Rectangle next =
+          new Rectangle(
+              selectRect.getX(), selectRect.getY(), selectRect.getWidth(), selectRect.getHeight());
+      resizeSelectRect(x, y, next);
+      if (next.intersects(
+          reg.getX() - next.getTranslateX(),
+          reg.getY() - next.getTranslateY(),
           reg.getWidth(),
           reg.getHeight())) {
-        selectRect.setStroke(incorrectFragment);
         return;
       }
     }
+    resizeSelectRect(x, y, selectRect);
   }
 
   public static void removeConnectorIcon(Shape icon, Pane mainPane) {
