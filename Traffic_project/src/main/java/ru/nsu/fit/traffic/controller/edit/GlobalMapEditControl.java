@@ -1,23 +1,15 @@
 package ru.nsu.fit.traffic.controller.edit;
 
-import javafx.scene.input.MouseEvent;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
-import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
-import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
-import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
+import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOp;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
-import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 import ru.nsu.fit.traffic.utils.Pair;
 
-import java.util.AbstractMap;
-import java.util.Map;
-
-import static ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton.*;
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_CONNECTOR;
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_REGION;
 
@@ -32,6 +24,10 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   public GlobalMapEditControl(GlobalMapSceneElementsControl sceneElementsControl) {
     this.sceneElementsControl = sceneElementsControl;
+  }
+
+  public RegionsMap getCurrRegionsMap(){
+    return editOpManager.getCurrRegMap();
   }
 
   @Override

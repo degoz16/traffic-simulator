@@ -23,27 +23,25 @@ public class GlobalMapController {
   private final Rectangle selectRect = UiPainter.getSelectRect();
   private final Circle connectorIcon = UiPainter.getConnectorIcon();
   private Stage stage;
-  @FXML
-  private ScrollPane mainScrollPane;
-  @FXML
-  private Group scrollPaneContent;
-  @FXML
-  private Pane mainPane;
+  @FXML private ScrollPane mainScrollPane;
+  @FXML private Group scrollPaneContent;
+  @FXML private Pane mainPane;
   private GlobalMapEditControlInterface editControl;
   private GlobalMapObjectPainter painter;
   private boolean isSelRectVisible = false;
   private boolean isConnectorIconVisible = false;
-  private final GlobalMapSceneElementsControl sceneElementsControl = new GlobalMapSceneElementsControl() {
-    @Override
-    public void setSelectRectVisible(boolean visible) {
-      isSelRectVisible = visible;
-    }
+  private final GlobalMapSceneElementsControl sceneElementsControl =
+      new GlobalMapSceneElementsControl() {
+        @Override
+        public void setSelectRectVisible(boolean visible) {
+          isSelRectVisible = visible;
+        }
 
-    @Override
-    public void setConnectorIconVisible(boolean visible) {
-      isConnectorIconVisible = visible;
-    }
-  };
+        @Override
+        public void setConnectorIconVisible(boolean visible) {
+          isConnectorIconVisible = visible;
+        }
+      };
 
   private void removeSelectRect() {
     UiPainter.removeSelectRect(selectRect, mainPane);
@@ -54,7 +52,7 @@ public class GlobalMapController {
   }
 
   private void resizeSelectRect(double x, double y) {
-    UiPainter.resizeSelectRect(x, y, selectRect);
+    UiPainter.checkResizeSelectedRect(x, y, selectRect, editControl.getCurrRegionsMap());
   }
 
   private void removeConnectorIcon() {
@@ -93,60 +91,79 @@ public class GlobalMapController {
     GlobalMapControlInitializerInterface initializer =
         new GlobalMapEditControlInitializer(sceneElementsControl);
     editControl = initializer.getEditControl();
-    GlobalMapEditorViewUpdater viewUpdater = new GlobalMapEditorViewUpdater(((rect, id, regW, regH) -> {
-      rect.setOnMouseMoved(event -> {
-        editControl.onRegionMouseMove(id, MouseEventWrapper.getMouseEventWrapper(event));
-        Pair<Double, Double> coords = editControl.getSideCoordinates(
-            event.getX(), event.getY(), rect.getX(), rect.getY(),
-            regW, regH);
-        if (isConnectorIconVisible) {
-          rePosConnectorIcon(coords.getFirst(), coords.getSecond());
-        }
-      });
-      rect.setOnMouseEntered(event -> {
-        Pair<Double, Double> coords = editControl.getSideCoordinates(
-            event.getX(), event.getY(), rect.getX(), rect.getY(),
-            regW, regH);
-        if (isConnectorIconVisible) {
-          addConnectorIcon(coords.getFirst(), coords.getSecond());
-        }
-      });
-      rect.setOnMouseExited(event -> removeConnectorIcon());
-      rect.setOnMouseClicked(event -> {
-        editControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
-      });
-    }), mainPane);
+    GlobalMapEditorViewUpdater viewUpdater =
+        new GlobalMapEditorViewUpdater(
+            ((rect, id, regW, regH) -> {
+              rect.setOnMouseMoved(
+                  event -> {
+                    editControl.onRegionMouseMove(
+                        id, MouseEventWrapper.getMouseEventWrapper(event));
+                    Pair<Double, Double> coords =
+                        editControl.getSideCoordinates(
+                            event.getX(), event.getY(), rect.getX(), rect.getY(), regW, regH);
+                    if (isConnectorIconVisible) {
+                      rePosConnectorIcon(coords.getFirst(), coords.getSecond());
+                    }
+                  });
+              rect.setOnMouseEntered(
+                  event -> {
+                    Pair<Double, Double> coords =
+                        editControl.getSideCoordinates(
+                            event.getX(), event.getY(), rect.getX(), rect.getY(), regW, regH);
+                    if (isConnectorIconVisible) {
+                      addConnectorIcon(coords.getFirst(), coords.getSecond());
+                    }
+                  });
+              rect.setOnMouseExited(event -> removeConnectorIcon());
+              rect.setOnMouseClicked(
+                  event -> {
+                    editControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
+                  });
+            }),
+            mainPane);
     initializer.initialize(viewUpdater::updateMapView);
-    mainPane.setOnMousePressed(event -> {
-      editControl.onMainPanePressed(MouseEventWrapper.getMouseEventWrapper(event));
-      if (isSelRectVisible && event.getButton() == MouseButton.PRIMARY) {
-        addSelectRect(event.getX(), event.getY());
-      }
-    });
-    mainPane.setOnMouseReleased(event -> {
-      editControl.onMainPaneReleased(MouseEventWrapper.getMouseEventWrapper(event));
-      removeSelectRect();
-    });
-    mainPane.setOnMouseDragged(event -> {
-      editControl.onMainPaneDrag(MouseEventWrapper.getMouseEventWrapper(event));
-      if (isSelRectVisible && event.getButton() == MouseButton.PRIMARY) {
-        resizeSelectRect(event.getX(), event.getY());
-      }
-    });
-    mainPane.setOnMouseClicked(event -> {
-      editControl.onMainPaneClicked(MouseEventWrapper.getMouseEventWrapper(event));
-    });
+
+    mainPane.setOnMousePressed(
+        event -> {
+          editControl.onMainPanePressed(MouseEventWrapper.getMouseEventWrapper(event));
+          if (isSelRectVisible && event.getButton() == MouseButton.PRIMARY) {
+            addSelectRect(event.getX(), event.getY());
+          }
+        });
+
+    mainPane.setOnMouseReleased(
+        event -> {
+          if (selectRect.getStroke() != UiPainter.incorrectFragment) {
+            editControl.onMainPaneReleased(MouseEventWrapper.getMouseEventWrapper(event));
+          }
+          removeSelectRect();
+        });
+
+    mainPane.setOnMouseDragged(
+        event -> {
+          editControl.onMainPaneDrag(MouseEventWrapper.getMouseEventWrapper(event));
+          if (isSelRectVisible && event.getButton() == MouseButton.PRIMARY) {
+            resizeSelectRect(event.getX(), event.getY());
+          }
+        });
+
+    mainPane.setOnMouseClicked(
+        event -> {
+          editControl.onMainPaneClicked(MouseEventWrapper.getMouseEventWrapper(event));
+        });
 
     mainScrollPane.setPannable(false);
-    mainScrollPane.setOnMousePressed(event -> {
-      if (event.getButton() == MouseButton.MIDDLE) {
-        mainScrollPane.setPannable(true);
-      }
-    });
-    mainScrollPane.setOnMouseReleased(event -> {
-      if (event.getButton() == MouseButton.MIDDLE) {
-        mainScrollPane.setPannable(false);
-      }
-    });
+    mainScrollPane.setOnMousePressed(
+        event -> {
+          if (event.getButton() == MouseButton.MIDDLE) {
+            mainScrollPane.setPannable(true);
+          }
+        });
+    mainScrollPane.setOnMouseReleased(
+        event -> {
+          if (event.getButton() == MouseButton.MIDDLE) {
+            mainScrollPane.setPannable(false);
+          }
+        });
   }
 }

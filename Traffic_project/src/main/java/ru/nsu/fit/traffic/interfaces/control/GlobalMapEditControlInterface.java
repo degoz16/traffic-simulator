@@ -1,9 +1,13 @@
 package ru.nsu.fit.traffic.interfaces.control;
 
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
+import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.utils.Pair;
 
 public interface GlobalMapEditControlInterface {
+
+  RegionsMap getCurrRegionsMap();
+
   void onMainPaneReleased(MouseEventWrapper event);
 
   void onMainPanePressed(MouseEventWrapper event);
