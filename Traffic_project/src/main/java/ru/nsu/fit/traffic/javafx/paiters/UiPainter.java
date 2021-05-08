@@ -8,6 +8,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import org.w3c.dom.css.Rect;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 
@@ -21,10 +22,10 @@ public class UiPainter {
     selectRect.setStroke(Color.valueOf("#656565"));
     selectRect.setStrokeWidth(4);
     String style =
-        "-fx-stroke-width: 7;" +
-            "-fx-stroke-dash-array: 12 2 4 2;" +
-            "-fx-stroke-dash-offset: 6;" +
-            "-fx-stroke-line-cap: butt;";
+        "-fx-stroke-width: 7;"
+            + "-fx-stroke-dash-array: 12 2 4 2;"
+            + "-fx-stroke-dash-offset: 6;"
+            + "-fx-stroke-line-cap: butt;";
     selectRect.setStyle(style);
     return selectRect;
   }
@@ -34,7 +35,7 @@ public class UiPainter {
 
     circle.setRadius(8);
 
-    //Image img = new Image(getResource("Images/pre_road_connector.png").toExternalForm());
+    // Image img = new Image(getResource("Images/pre_road_connector.png").toExternalForm());
     Image img = new Image("ru/nsu/fit/traffic/view/Images/pre_road_connector.png");
     if (img != null) {
       circle.setFill(new ImagePattern(img));
@@ -74,12 +75,25 @@ public class UiPainter {
     }
   }
 
-  public static void checkResizeSelectedRect(double x, double y, Rectangle selectRect, RegionsMap map) {
+  private static int count = 0;
+
+  public static void checkResizeSelectedRect(
+      double x, double y, Rectangle selectRect, RegionsMap map) {
     resizeSelectRect(x, y, selectRect);
     selectRect.setStroke(correctFragment);
-    for (int i = 0; i < map.getRegionCount(); ++i){
+    for (int i = 0; i < map.getRegionCount(); ++i) {
+      count++;
       RectRegion reg = map.getRegion(i);
-      if (selectRect.intersects(reg.getX(), reg.getY(), reg.getWidth(), reg.getHeight())){
+      Rectangle rect = new Rectangle(reg.getX(), reg.getY(), reg.getWidth(), reg.getHeight());
+
+      if (count == 100) {
+        System.out.println("pipiska");
+      }
+      if (selectRect.intersects(
+          reg.getX() - selectRect.getTranslateX(),
+          reg.getY() - selectRect.getTranslateY(),
+          reg.getWidth(),
+          reg.getHeight())) {
         selectRect.setStroke(incorrectFragment);
         return;
       }
