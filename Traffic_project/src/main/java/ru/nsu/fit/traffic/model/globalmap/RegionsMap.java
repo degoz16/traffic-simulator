@@ -42,7 +42,7 @@ public class RegionsMap {
     for (RectRegion region: this.regions){
 
       Rectangle rect = new Rectangle(region.getX(), region.getY(), region.getWidth(), region.getHeight());
-      if (rect.intersects(x - 20, y-20, 40, 40)){
+      if (rect.intersects(x - 5, y-5, 10, 10)){
         regions.add(region);
       }
     }

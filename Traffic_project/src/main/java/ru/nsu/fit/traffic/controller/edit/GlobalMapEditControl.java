@@ -1,6 +1,8 @@
 package ru.nsu.fit.traffic.controller.edit;
 
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
@@ -114,17 +116,14 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
         event.consume();
         switch (editOpManager.getCurrentOp()) {
           case SET_CONNECTOR -> {
-            RectRegion region = editOpManager.getCurrRegMap().getRegion(id);
-            Pair<Double, Double> coords = getSideCoordinates(event.getX(), event.getY(),
-                region.getX(), region.getY(), region.getWidth(), region.getHeight());
-            List<RectRegion> regionList = getCurrRegionsMap().getRegionsInThePoint(coords.getFirst(), coords.getSecond());
-            System.out.println(regionList);
-            if (!regionList.contains(region)){
-              regionList.add(region);
-            }
-            System.out.println(regionList);
-            editOpManager.addConnector(regionList,
-                    coords.getFirst(), coords.getSecond());
+            Circle connector = globalMapController.getConnectorIcon();
+            List<RectRegion> regionList = getCurrRegionsMap().getRegionsInThePoint(
+                    connector.getCenterX(),
+                    connector.getCenterY());
+            editOpManager.addConnector(
+                    regionList,
+                    connector.getCenterX(),
+                    connector.getCenterY());
           }
         }
       }

@@ -6,12 +6,9 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class GlobalMapObjectPainter {
 
@@ -22,7 +19,7 @@ public class GlobalMapObjectPainter {
     rect.setWidth(region.getWidth());
     rect.setX(region.getX());
     rect.setY(region.getY());
-    rect.setStrokeWidth(0);
+    rect.setStrokeWidth(5);
     rect.setFill(Color.valueOf("#808080"));
     return rect;
   }

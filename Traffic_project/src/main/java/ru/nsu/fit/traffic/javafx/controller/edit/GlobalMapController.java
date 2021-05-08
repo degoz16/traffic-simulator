@@ -31,6 +31,7 @@ public class GlobalMapController {
   private GlobalMapObjectPainter painter;
   private boolean isSelRectVisible = false;
   private boolean isConnectorIconVisible = false;
+
   private final GlobalMapSceneElementsControl sceneElementsControl =
       new GlobalMapSceneElementsControl() {
         @Override
@@ -50,6 +51,10 @@ public class GlobalMapController {
 
   public Rectangle getSelectRect() {
     return selectRect;
+  }
+
+  public Circle getConnectorIcon() {
+    return connectorIcon;
   }
 
   private void addSelectRect(double x, double y) {
@@ -108,7 +113,13 @@ public class GlobalMapController {
                         editControl.getSideCoordinates(
                             event.getX(), event.getY(), rect.getX(), rect.getY(), regW, regH);
                     if (isConnectorIconVisible) {
-                      rePosConnectorIcon(coords.getFirst(), coords.getSecond());
+                      if (editControl
+                              .getCurrRegionsMap()
+                              .getRegionsInThePoint(coords.getFirst(), coords.getSecond())
+                              .size()
+                          >= 2) {
+                        rePosConnectorIcon(coords.getFirst(), coords.getSecond());
+                      }
                     }
                   });
               rect.setOnMouseEntered(
@@ -117,7 +128,13 @@ public class GlobalMapController {
                         editControl.getSideCoordinates(
                             event.getX(), event.getY(), rect.getX(), rect.getY(), regW, regH);
                     if (isConnectorIconVisible) {
-                      addConnectorIcon(coords.getFirst(), coords.getSecond());
+                      if (editControl
+                              .getCurrRegionsMap()
+                              .getRegionsInThePoint(coords.getFirst(), coords.getSecond())
+                              .size()
+                          >= 2) {
+                        addConnectorIcon(coords.getFirst(), coords.getSecond());
+                      }
                     }
                   });
               rect.setOnMouseExited(event -> removeConnectorIcon());
