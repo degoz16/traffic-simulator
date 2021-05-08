@@ -1,6 +1,5 @@
 package ru.nsu.fit.traffic.model.logic;
 
-import javafx.scene.shape.Rectangle;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
@@ -29,9 +28,12 @@ public class GlobalMapEditOpManager {
   }
 
   // TODO: push to server, not local edit
-  public void addReg(String name, Rectangle reg) {
-    RectRegion region = new RectRegion(name, reg.getX() + reg.getTranslateX(),
-            reg.getY() + reg.getTranslateY(), reg.getWidth(), reg.getHeight());
+  public void addReg(String name, double x1, double y1, double x2, double y2) {
+    double xMin = Math.min(x1, x2);
+    double xMax = Math.max(x1, x2);
+    double yMin = Math.min(y1, y2);
+    double yMax = Math.max(y1, y2);
+    RectRegion region = new RectRegion(name, xMin, yMin, xMax - xMin, yMax - yMin);
     currRegMap.addRegion(region);
     updateObserver.update(this);
   }

@@ -38,14 +38,11 @@ public class RegionsMap {
   }
 
   public List<RectRegion> getRegionsInThePoint(double x, double y){
-    Rectangle rect = new Rectangle(x-20, y-20, 40,40);
-   /* System.out.println(String.valueOf(rect.getX())+" " +  String.valueOf(rect.getY())+" " +
-            String.valueOf((rect.getWidth() + rect.getX()))+ " " +String.valueOf((rect.getY() + rect.getHeight())));*/
     List<RectRegion> regions = new ArrayList<>();
     for (RectRegion region: this.regions){
-      /*System.out.println(String.valueOf(region.getX())+" " +  String.valueOf(region.getY())+" " +
-            String.valueOf((region.getWidth() + region.getX()))+ " " +String.valueOf((region.getY() + region.getHeight())));*/
-      if (rect.intersects(region.getX(), region.getY(), region.getHeight(), region.getWidth())){
+
+      Rectangle rect = new Rectangle(region.getX(), region.getY(), region.getWidth(), region.getHeight());
+      if (rect.intersects(x - 20, y-20, 40, 40)){
         regions.add(region);
       }
     }

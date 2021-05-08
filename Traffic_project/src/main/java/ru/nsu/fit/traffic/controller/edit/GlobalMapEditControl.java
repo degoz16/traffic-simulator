@@ -12,6 +12,8 @@ import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
 import ru.nsu.fit.traffic.utils.Pair;
 
+import java.util.List;
+
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_CONNECTOR;
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_REGION;
 
@@ -69,7 +71,12 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
       case PRIMARY -> {
         switch (editOpManager.getCurrentOp()) {
           case SET_REGION -> {
-            editOpManager.addReg("Region",globalMapController.getSelectRect());
+            Rectangle rect = globalMapController.getSelectRect();
+            editOpManager.addReg("Region",
+                    rect.getX() + rect.getTranslateX(),
+                    rect.getY() + rect.getTranslateY(),
+                    rect.getWidth() + (rect.getX() + rect.getTranslateX()),
+                    rect.getHeight() + (rect.getY() + rect.getTranslateY()));
           }
         }
       }
@@ -110,10 +117,14 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
             RectRegion region = editOpManager.getCurrRegMap().getRegion(id);
             Pair<Double, Double> coords = getSideCoordinates(event.getX(), event.getY(),
                 region.getX(), region.getY(), region.getWidth(), region.getHeight());
-            editOpManager.addConnector(getCurrRegionsMap().getRegionsInThePoint(coords.getFirst(), coords.getSecond()),
+            List<RectRegion> regionList = getCurrRegionsMap().getRegionsInThePoint(coords.getFirst(), coords.getSecond());
+            System.out.println(regionList);
+            if (!regionList.contains(region)){
+              regionList.add(region);
+            }
+            System.out.println(regionList);
+            editOpManager.addConnector(regionList,
                     coords.getFirst(), coords.getSecond());
-            //System.out.println(getCurrRegionsMap().getRegionsInThePoint(coords.getFirst(), coords.getSecond()));
-            //System.out.println(getCurrRegionsMap().getRegionsInThePoint(event.getX(), event.getY()));
           }
         }
       }
