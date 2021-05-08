@@ -75,20 +75,15 @@ public class UiPainter {
     }
   }
 
-  private static int count = 0;
 
   public static void checkResizeSelectedRect(
       double x, double y, Rectangle selectRect, RegionsMap map) {
     resizeSelectRect(x, y, selectRect);
     selectRect.setStroke(correctFragment);
     for (int i = 0; i < map.getRegionCount(); ++i) {
-      count++;
       RectRegion reg = map.getRegion(i);
       Rectangle rect = new Rectangle(reg.getX(), reg.getY(), reg.getWidth(), reg.getHeight());
 
-      if (count == 100) {
-        System.out.println("pipiska");
-      }
       if (selectRect.intersects(
           reg.getX() - selectRect.getTranslateX(),
           reg.getY() - selectRect.getTranslateY(),
