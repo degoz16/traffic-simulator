@@ -19,7 +19,7 @@ public class GlobalMapObjectPainter {
     rect.setWidth(region.getWidth());
     rect.setX(region.getX());
     rect.setY(region.getY());
-    rect.setStrokeWidth(10);
+    rect.setStrokeWidth(0);
     rect.setFill(Color.valueOf("#808080"));
     return rect;
   }

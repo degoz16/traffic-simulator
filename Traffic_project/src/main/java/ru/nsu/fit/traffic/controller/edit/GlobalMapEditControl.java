@@ -110,7 +110,10 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
             RectRegion region = editOpManager.getCurrRegMap().getRegion(id);
             Pair<Double, Double> coords = getSideCoordinates(event.getX(), event.getY(),
                 region.getX(), region.getY(), region.getWidth(), region.getHeight());
-            editOpManager.addConnector(region, coords.getFirst(), coords.getSecond());
+            editOpManager.addConnector(getCurrRegionsMap().getRegionsInThePoint(coords.getFirst(), coords.getSecond()),
+                    coords.getFirst(), coords.getSecond());
+            //System.out.println(getCurrRegionsMap().getRegionsInThePoint(coords.getFirst(), coords.getSecond()));
+            //System.out.println(getCurrRegionsMap().getRegionsInThePoint(event.getX(), event.getY()));
           }
         }
       }

@@ -76,7 +76,7 @@ public class UiPainter {
   public static void checkResizeSelectedRect(
       double x, double y, Rectangle selectRect, RegionsMap map) {
     selectRect.setStroke(correctFragment);
-    System.out.println(x + " " + y);
+    //System.out.println(x + " " + y);
     for (int i = 0; i < map.getRegionCount(); ++i) {
       RectRegion reg = map.getRegion(i);
       Rectangle next =
