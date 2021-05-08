@@ -6,25 +6,21 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class GlobalMapObjectPainter {
 
   public Rectangle paintRegion(RectRegion region) {
     Rectangle rect = new Rectangle();
-    rect.setStroke(Color.valueOf("#707070"));
+    rect.setStroke(Color.valueOf("#A0A0A0"));
     rect.setHeight(region.getHeight());
     rect.setWidth(region.getWidth());
     rect.setX(region.getX());
     rect.setY(region.getY());
     rect.setStrokeWidth(10);
-    rect.setFill(Color.valueOf("transparent"));
-
+    rect.setFill(Color.valueOf("#808080"));
     return rect;
   }
 

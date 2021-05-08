@@ -19,12 +19,8 @@ public class RectRegion {
     this.name = name;
     this.x = x;
     this.y = y;
-    if (width > MIN_REGION_SIZE) {
-      this.width = width;
-    }
-    if (height > MIN_REGION_SIZE) {
-      this.height = height;
-    }
+    this.height = height;
+    this.width = width;
   }
 
   public RectRegion(double x, double y, double width, double height) {

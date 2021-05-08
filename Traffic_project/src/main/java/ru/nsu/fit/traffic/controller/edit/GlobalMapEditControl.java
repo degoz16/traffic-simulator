@@ -69,12 +69,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
       case PRIMARY -> {
         switch (editOpManager.getCurrentOp()) {
           case SET_REGION -> {
-            Rectangle rect = globalMapController.getSelectRect();
-            editOpManager.addReg("Region",
-                    rect.getX() + rect.getTranslateX(),
-                    rect.getY() + rect.getTranslateY(),
-                    rect.getWidth() + (rect.getX() + rect.getTranslateX()),
-                    rect.getHeight() + (rect.getY() + rect.getTranslateY()));
+            editOpManager.addReg("Region",globalMapController.getSelectRect());
           }
         }
       }
