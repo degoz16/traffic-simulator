@@ -32,8 +32,8 @@ public class GlobalMapObjectPainter {
     else{
       circle.setRadius(8);
     }
-    circle.setCenterX(connector.getX());
-    circle.setCenterY(connector.getY());
+    circle.setCenterX(connector.getGlobalX());
+    circle.setCenterY(connector.getGlobalY());
     Image img;
     if (isSet) {
       img = new Image("ru/nsu/fit/traffic/view/Images/connector_on_map.png");

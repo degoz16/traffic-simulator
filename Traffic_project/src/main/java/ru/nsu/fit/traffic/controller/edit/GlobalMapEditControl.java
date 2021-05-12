@@ -1,12 +1,8 @@
 package ru.nsu.fit.traffic.controller.edit;
 
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
-import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOp;
@@ -14,30 +10,53 @@ import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
 import ru.nsu.fit.traffic.utils.Pair;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_CONNECTOR;
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_REGION;
 
 public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   private GlobalMapEditOpManager editOpManager = null;
-  private GlobalMapController globalMapController;
   private final GlobalMapSceneElementsControl sceneElementsControl;
   private GlobalMapUpdateObserver updateObserver = null;
+  private boolean restrictRegionSet = false;
   private double lastClickX = 0;
   private double lastClickY = 0;
+  private double currX = 0;
+  private double currY = 0;
 
 
   public GlobalMapEditControl(GlobalMapSceneElementsControl sceneElementsControl) {
     this.sceneElementsControl = sceneElementsControl;
   }
 
-  public void setGlobalMapController(GlobalMapController globalMapController) {
-    this.globalMapController = globalMapController;
-  }
-
   public RegionsMap getCurrRegionsMap(){
     return editOpManager.getCurrRegMap();
+  }
+
+  @Override
+  public double getCurrX() {
+    return currX;
+  }
+
+  @Override
+  public double getCurrY() {
+    return currY;
+  }
+
+  @Override
+  public boolean testRegionsBounds(double x, double y, int id) {
+    Pair<Double, Double> c = getSideCoordinates(x, y, editOpManager.getCurrRegMap().getRegion(id));
+    return editOpManager.getCurrRegMap()
+        .getRegionsInThePoint(c.getFirst(), c.getSecond(), false) != null
+        || editOpManager.getCurrRegMap()
+        .getRegionsInThePoint(c.getFirst(), c.getSecond(), true) != null;
+  }
+
+  private Pair<Double, Double> getSideCoordinates(double x, double y, RectRegion region) {
+    return getSideCoordinates(x, y, region.getX(), region.getY(), region.getWidth(), region.getHeight());
   }
 
   @Override
@@ -73,12 +92,11 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
       case PRIMARY -> {
         switch (editOpManager.getCurrentOp()) {
           case SET_REGION -> {
-            Rectangle rect = globalMapController.getSelectRect();
-            editOpManager.addReg("Region",
-                    rect.getX() + rect.getTranslateX(),
-                    rect.getY() + rect.getTranslateY(),
-                    rect.getWidth() + (rect.getX() + rect.getTranslateX()),
-                    rect.getHeight() + (rect.getY() + rect.getTranslateY()));
+            if (!restrictRegionSet) {
+              editOpManager.addReg("Region", lastClickX, lastClickY, currX, currY);
+            } else {
+              restrictRegionSet = false;
+            }
           }
         }
       }
@@ -91,6 +109,8 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
       case PRIMARY -> {
         lastClickX = event.getX();
         lastClickY = event.getY();
+        currX = lastClickX;
+        currY = lastClickY;
       }
     }
   }
@@ -106,7 +126,49 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   @Override
   public void onMainPaneDrag(MouseEventWrapper event) {
+    switch (event.getButton()) {
+      case PRIMARY -> {
+        double x = event.getX();
+        double yMin = Math.min(event.getY(), lastClickY);
+        double yMax = Math.max(event.getY(), lastClickY);
+        double yMinC = Math.min(currY, lastClickY);
+        double yMaxC = Math.max(currY, lastClickY);
+        double y = event.getY();
+        double xMin = Math.min(event.getX(), lastClickX);
+        double xMax = Math.max(event.getX(), lastClickX);
+        double xMinC = Math.min(currX, lastClickX);
+        double xMaxC = Math.max(currX, lastClickX);
+        Set<RectRegion> regions = new HashSet<>();
+        final Set<RectRegion> finalRegions = regions;
+        getCurrRegionsMap().foreachRegion(region -> {
+          boolean cond1 = Math.min(yMax, region.getY() + region.getHeight()) - Math.max(yMin, region.getY()) > 0
+              || (yMin < region.getY() && yMax > region.getY() + region.getHeight());
+          boolean cond2 = Math.min(xMaxC, region.getX() + region.getWidth()) - Math.max(xMinC, region.getX()) > 0
+              || (xMinC < region.getX() && xMaxC > region.getX() + region.getWidth());
+          if (cond1 && cond2) {
+            finalRegions.add(region);
+          }
+        });
+        if (regions.size() == 0) {
+          currY = y;
+        }
 
+        regions.clear();
+        final Set<RectRegion> finalRegions1 = regions;
+        getCurrRegionsMap().foreachRegion(region -> {
+          boolean cond1 = Math.min(yMaxC, region.getY() + region.getHeight()) - Math.max(yMinC, region.getY()) > 0
+              || (yMinC < region.getY() && yMaxC > region.getY() + region.getHeight());
+          boolean cond2 = Math.min(xMax, region.getX() + region.getWidth()) - Math.max(xMin, region.getX()) > 0
+              || (xMin < region.getX() && xMax > region.getX() + region.getWidth());
+          if (cond1 && cond2) {
+            finalRegions1.add(region);
+          }
+        });
+        if (regions.size() == 0) {
+          currX = x;
+        }
+      }
+    }
   }
 
   @Override
@@ -116,18 +178,28 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
         event.consume();
         switch (editOpManager.getCurrentOp()) {
           case SET_CONNECTOR -> {
-            Circle connector = globalMapController.getConnectorIcon();
-            List<RectRegion> regionList = getCurrRegionsMap().getRegionsInThePoint(
-                    connector.getCenterX(),
-                    connector.getCenterY());
-            editOpManager.addConnector(
-                    regionList,
-                    connector.getCenterX(),
-                    connector.getCenterY());
+            RectRegion region = editOpManager.getCurrRegMap().getRegion(id);
+            Pair<Double, Double> coords = getSideCoordinates(event.getX(), event.getY(), region);
+            boolean vert = coords.getSecond() - region.getY() < 0.001
+                || coords.getSecond() - region.getY() + region.getHeight() < 0.001;
+            Pair<RectRegion, RectRegion> regions =
+                editOpManager.getCurrRegMap()
+                    .getRegionsInThePoint(coords.getFirst(), coords.getSecond(), vert);
+            if(regions != null) {
+              editOpManager.addConnector(
+                  regions.getFirst(), regions.getSecond(),
+                  coords.getFirst(), coords.getSecond());
+            }
           }
         }
       }
     }
+  }
+
+  @Override
+  public void onRegionPressed(MouseEventWrapper event) {
+    event.consume();
+    restrictRegionSet = true;
   }
 
   @Override
@@ -148,6 +220,22 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     editOpManager.setCurrOp(SET_CONNECTOR);
     sceneElementsControl.setConnectorIconVisible(true);
   }
+
+  @Override
+  public void onClear() {
+    editOpManager.clearMap();
+  }
+
+  @Override
+  public void onPut() {
+
+  }
+
+  @Override
+  public void onGet() {
+
+  }
+
 
   private void stopOperation() {
     editOpManager.setCurrOp(GlobalMapEditOp.NONE);

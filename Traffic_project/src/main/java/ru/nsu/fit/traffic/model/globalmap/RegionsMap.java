@@ -1,29 +1,18 @@
 package ru.nsu.fit.traffic.model.globalmap;
 
-import javafx.scene.shape.Rectangle;
+import ru.nsu.fit.traffic.utils.Pair;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 public class RegionsMap {
   //private Map<String, RectRegion> regions = new HashMap<>();
-  private List<RectRegion> regions = new ArrayList<>();
+  private final List<RectRegion> regions = new ArrayList<>();
 
   public void addRegion(RectRegion region) {
     //regions.put(region.getName(), region);
     regions.add(region);
   }
-
-//  public Map<String, RectRegion> getRegions() {
-//    return regions;
-//  }
-
-//  public void setRegions(Map<String, RectRegion> regions) {
-//    this.regions = regions;
-//  }
 
   public void foreachRegion(Consumer<RectRegion> consumer) {
     regions.forEach(consumer);
@@ -37,15 +26,41 @@ public class RegionsMap {
     return regions.size();
   }
 
-  public List<RectRegion> getRegionsInThePoint(double x, double y){
-    List<RectRegion> regions = new ArrayList<>();
-    for (RectRegion region: this.regions){
-
-      Rectangle rect = new Rectangle(region.getX(), region.getY(), region.getWidth(), region.getHeight());
-      if (rect.intersects(x - 5, y-5, 10, 10)){
-        regions.add(region);
+  public Pair<RectRegion, RectRegion> getRegionsInThePoint(double x, double y, boolean vertical){
+    RectRegion region1 = null;
+    RectRegion region2 = null;
+    double x1 = x;
+    double y1 = y;
+    double x2 = x;
+    double y2 = y;
+    if (vertical) {
+      y1 -= 5;
+      y2 += 5;
+    } else {
+      x1 -= 5;
+      x2 += 5;
+    }
+    for (RectRegion region : regions) {
+      if (region != region1
+          && x1 > region.getX()
+          && x1 < region.getX() + region.getWidth()
+          && y1 > region.getY()
+          && y1 < region.getY() + region.getHeight()) {
+        region1 = region;
       }
     }
-    return regions;
+    for (RectRegion region : regions) {
+      if (region != region2
+          && x2 > region.getX()
+          && x2 < region.getX() + region.getWidth()
+          && y2 > region.getY()
+          && y2 < region.getY() + region.getHeight()) {
+        region2 = region;
+      }
+    }
+    if (region1 == null || region2 == null) {
+      return null;
+    }
+    return new Pair<>(region1, region2);
   }
 }

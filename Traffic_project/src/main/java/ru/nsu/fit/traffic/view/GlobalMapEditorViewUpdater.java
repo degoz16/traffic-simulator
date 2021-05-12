@@ -36,7 +36,8 @@ public class GlobalMapEditorViewUpdater {
       }
       map.foreachRegion(region -> {
         region.foreachConnector(roadConnector -> {
-          mainPane.getChildren().add(painter.paintConnector(roadConnector, true));
+          Shape connector = painter.paintConnector(roadConnector, true);
+          mainPane.getChildren().add(connector);
         });
       });
     });

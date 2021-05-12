@@ -1,31 +1,27 @@
 package ru.nsu.fit.traffic.model.globalmap;
 
-import ru.nsu.fit.traffic.model.map.Node;
-
-import java.util.List;
-
 public class RoadConnector {
-  private RoadConnector link = null;
-  private List<RectRegion> rectRegions;
+  private RoadConnector connectorLink = null;
+  private RectRegion region;
   private double x;
   private double y;
 
-  public RoadConnector(List<RectRegion> rectRegion, double x, double y) {
-    this.rectRegions = rectRegion;
+  public RoadConnector(double x, double y, RectRegion region) {
     this.x = x;
     this.y = y;
+    this.region = region;
   }
 
-  public RoadConnector getLink() {
-    return link;
+  public void setConnectorLink(RoadConnector roadConnector) {
+    this.connectorLink = roadConnector;
   }
 
-  public void setLink(RoadConnector link) {
-    this.link = link;
+  public RoadConnector getConnectorLink() {
+    return connectorLink;
   }
 
-  public List<RectRegion> getRectRegions() {
-    return rectRegions;
+  public RectRegion getRegion() {
+    return region;
   }
 
   public double getX() {
@@ -42,5 +38,13 @@ public class RoadConnector {
 
   public void setY(double y) {
     this.y = y;
+  }
+
+  public double getGlobalX() {
+    return x + region.getX();
+  }
+
+  public double getGlobalY() {
+    return y + region.getY();
   }
 }

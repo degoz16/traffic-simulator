@@ -7,12 +7,13 @@ import java.util.function.Consumer;
 public class RectRegion {
 
   //TODO: show notification on width/height less then min size
-  private final int MIN_REGION_SIZE = 40;
+  private static final int MIN_REGION_SIZE = 40;
   private String name;
   private double x;
   private double y;
   private double width;
   private double height;
+  private String regionMapLink = null;
   private List<RoadConnector> connectorList = new ArrayList<>();
 
   public RectRegion(String name, double x, double y, double width, double height) {

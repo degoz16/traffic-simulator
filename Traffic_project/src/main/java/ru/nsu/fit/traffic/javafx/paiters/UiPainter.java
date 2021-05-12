@@ -1,6 +1,8 @@
 package ru.nsu.fit.traffic.javafx.paiters;
 
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -94,11 +96,11 @@ public class UiPainter {
     resizeSelectRect(x, y, selectRect);
   }
 
-  public static void removeConnectorIcon(Shape icon, Pane mainPane) {
+  public static void removeConnectorIcon(Shape icon, AnchorPane mainPane) {
     mainPane.getChildren().remove(icon);
   }
 
-  public static void addConnectorIcon(double x, double y, Circle icon, Pane mainPane) {
+  public static void addConnectorIcon(double x, double y, Circle icon, AnchorPane mainPane) {
     rePosConnectorIcon(x, y, icon);
     mainPane.getChildren().add(icon);
   }

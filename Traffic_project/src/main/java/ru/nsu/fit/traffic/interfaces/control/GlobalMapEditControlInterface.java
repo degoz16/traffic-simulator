@@ -6,6 +6,12 @@ import ru.nsu.fit.traffic.utils.Pair;
 
 public interface GlobalMapEditControlInterface {
 
+  double getCurrX();
+
+  double getCurrY();
+
+  boolean testRegionsBounds(double x, double y, int id);
+
   RegionsMap getCurrRegionsMap();
 
   void onMainPaneReleased(MouseEventWrapper event);
@@ -18,11 +24,19 @@ public interface GlobalMapEditControlInterface {
 
   void onRegionClick(int id, MouseEventWrapper event);
 
+  void onRegionPressed(MouseEventWrapper event);
+
   void onRegionMouseMove(int id, MouseEventWrapper event);
 
   void onSetRegionButton();
 
   void onSetConnectorButton();
+
+  void onClear();
+
+  void onPut();
+
+  void onGet();
 
   Pair<Double, Double> getSideCoordinates(
       double x, double y, double regX, double regY, double regW, double regH);

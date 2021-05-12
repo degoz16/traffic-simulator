@@ -4,15 +4,18 @@ import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 
-import java.util.List;
-
 public class GlobalMapEditOpManager {
-  private final RegionsMap currRegMap = new RegionsMap();
+  private RegionsMap currRegMap = new RegionsMap();
   private GlobalMapEditOp currOp = GlobalMapEditOp.NONE;
   private final GlobalMapUpdateObserver updateObserver;
 
   public GlobalMapEditOpManager(GlobalMapUpdateObserver updateObserver) {
     this.updateObserver = updateObserver;
+  }
+
+  public void clearMap() {
+    currRegMap = new RegionsMap();
+    updateObserver.update(this);
   }
 
   public void setCurrOp(GlobalMapEditOp currOp) {
@@ -38,10 +41,14 @@ public class GlobalMapEditOpManager {
     updateObserver.update(this);
   }
 
-  public void addConnector(List<RectRegion> regions, double x, double y) {
-    for (RectRegion region : regions) {
-      region.addConnector(new RoadConnector(regions, x, y));
-    }
+  public void addConnector(RectRegion region1, RectRegion region2, double x, double y) {
+    RoadConnector connector1 = new RoadConnector(x - region1.getX(), y - region1.getY(), region1);
+    RoadConnector connector2 = new RoadConnector(x - region2.getX(), y - region2.getY(), region2);
+    connector1.setConnectorLink(connector2);
+    connector2.setConnectorLink(connector1);
+    region1.addConnector(connector1);
+    region2.addConnector(connector2);
+
     updateObserver.update(this);
   }
 }
