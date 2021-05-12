@@ -15,10 +15,16 @@ dependencies {
     //compile group: 'org.controlsfx', name: 'controlsfx', version: '8.0.5'
     // https://mvnrepository.com/artifact/com.jfoenix/jfoenix
     compile 'com.jfoenix:jfoenix:9.0.10'
+
+    // https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.13'
+// https://mvnrepository.com/artifact/org.apache.httpcomponents/httpmime
+    implementation group: 'org.apache.httpcomponents', name: 'httpmime', version: '4.5.13'
+
 }
 
 javafx {
-    version = "16"
+    version = "15"
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
