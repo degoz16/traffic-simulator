@@ -20,20 +20,17 @@ public class RectRegion {
     this.name = name;
     this.x = x;
     this.y = y;
-    this.height = height;
-    this.width = width;
+    this.width = Math.max(MIN_REGION_SIZE, width);
+    this.height = Math.max(MIN_REGION_SIZE, height);
   }
 
   public RectRegion(double x, double y, double width, double height) {
     this.name = "";
     this.x = x;
     this.y = y;
-    if (width > MIN_REGION_SIZE) {
-      this.width = width;
-    }
-    if (height > MIN_REGION_SIZE) {
-      this.height = height;
-    }
+    this.width = Math.max(MIN_REGION_SIZE, width);
+    this.height = Math.max(MIN_REGION_SIZE, height);
+
   }
 
   public RoadConnector getConnector(int id) {
@@ -50,6 +47,14 @@ public class RectRegion {
 
   public int getConnectorsCount() {
     return connectorList.size();
+  }
+
+  public String getRegionMapLink() {
+    return regionMapLink;
+  }
+
+  public void setRegionMapLink(String regionMapLink) {
+    this.regionMapLink = regionMapLink;
   }
 
   public String getName() {

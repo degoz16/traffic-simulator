@@ -1,8 +1,12 @@
 package ru.nsu.fit.traffic.controller.edit;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
+import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
+import ru.nsu.fit.traffic.json.parse.RegionMapJson;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOp;
@@ -10,6 +14,7 @@ import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
 import ru.nsu.fit.traffic.utils.Pair;
 
+import java.io.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -228,12 +233,28 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   @Override
   public void onPut() {
-
+    try {
+      Writer writer = new FileWriter("/save.json");
+      Gson gson = new GsonBuilder().setPrettyPrinting().create();
+      String jsonMap = gson.toJson(new RegionMapJson(editOpManager.getCurrRegMap()));
+      writer.write(jsonMap);
+      writer.close();
+    } catch (IOException e) {
+      System.err.println(e.getMessage());
+    }
   }
 
   @Override
   public void onGet() {
-
+    try {
+      Gson gson = new GsonBuilder().setPrettyPrinting().create();
+      Reader fileReader = new FileReader("/save.json");
+      RegionMapJson map = gson.fromJson(fileReader, RegionMapJson.class);
+      editOpManager.setCurrRegMap(map.getMap());
+      updateObserver.update(editOpManager);
+    } catch (FileNotFoundException e) {
+      System.err.println(e.getMessage());
+    }
   }
 
 

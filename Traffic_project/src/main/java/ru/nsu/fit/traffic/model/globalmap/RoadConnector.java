@@ -12,6 +12,11 @@ public class RoadConnector {
     this.region = region;
   }
 
+  public RoadConnector(double x, double y) {
+    this.x = x;
+    this.y = y;
+  }
+
   public void setConnectorLink(RoadConnector roadConnector) {
     this.connectorLink = roadConnector;
   }
@@ -22,6 +27,10 @@ public class RoadConnector {
 
   public RectRegion getRegion() {
     return region;
+  }
+
+  public void setRegion(RectRegion region) {
+    this.region = region;
   }
 
   public double getX() {

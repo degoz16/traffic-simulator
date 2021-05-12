@@ -18,6 +18,10 @@ public class GlobalMapEditOpManager {
     updateObserver.update(this);
   }
 
+  public void setCurrRegMap(RegionsMap currRegMap) {
+    this.currRegMap = currRegMap;
+  }
+
   public void setCurrOp(GlobalMapEditOp currOp) {
     this.currOp = currOp;
   }
