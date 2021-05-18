@@ -6,7 +6,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.createMap.CreateMapController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.createMap.CreateMapController">
    <children>
       <Text layoutX="23.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Map wigth (meters)" AnchorPane.leftAnchor="23.0" />
       <TextField layoutX="173.0" layoutY="33.0" prefHeight="31.0" prefWidth="104.0" AnchorPane.leftAnchor="173.0" />

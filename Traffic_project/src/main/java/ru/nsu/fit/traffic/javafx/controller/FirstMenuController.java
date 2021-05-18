@@ -23,8 +23,8 @@ public class FirstMenuController {
 
     @FXML
     public void create_map(){
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/CreateMap.fxml"));
-
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("../../view/CreateMap.fxml"));
+    System.out.println(getClass());
         try{
             Parent root = loader.load();
             Scene scene = new Scene(root);
