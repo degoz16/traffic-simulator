@@ -5,13 +5,12 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="220.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.createMap.CreateMapController">
    <children>
-      <Text layoutX="23.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Map wigth (meters)" AnchorPane.leftAnchor="23.0" />
-      <TextField layoutX="173.0" layoutY="33.0" prefHeight="31.0" prefWidth="104.0" AnchorPane.leftAnchor="173.0" />
-      <Text layoutX="23.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Map heigth (meters)" AnchorPane.leftAnchor="23.0" />
-      <TextField layoutX="173.0" layoutY="81.0" prefHeight="31.0" prefWidth="104.0" AnchorPane.leftAnchor="173.0" />
-      <Button layoutX="177.0" layoutY="159.0" mnemonicParsing="false" text="Create map" />
+      <Text layoutX="23.0" layoutY="54.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Map wight (meters)" AnchorPane.leftAnchor="23.0" />
+      <TextField fx:id="text_field_wight" layoutX="173.0" layoutY="33.0" prefHeight="31.0" prefWidth="104.0" promptText="1000" text="1000" AnchorPane.leftAnchor="173.0" />
+      <Text layoutX="23.0" layoutY="103.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Map height (meters)" AnchorPane.leftAnchor="23.0" />
+      <TextField fx:id="text_field_height" layoutX="173.0" layoutY="81.0" prefHeight="31.0" prefWidth="104.0" promptText="1000" text="1000" AnchorPane.leftAnchor="173.0" />
+      <Button fx:id="button_create_map" layoutX="177.0" layoutY="159.0" mnemonicParsing="false" onAction="#createMap" text="Create map" />
    </children>
 </AnchorPane>
