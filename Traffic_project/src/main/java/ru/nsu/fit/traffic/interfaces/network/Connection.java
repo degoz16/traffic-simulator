@@ -1,8 +1,12 @@
 package ru.nsu.fit.traffic.interfaces.network;
 
+import java.util.List;
+
 public interface Connection {
-  void pushMap(int num, String filepath);
-  String getMapFromServer(int num);
-  void pushGlobalMap(String filepath);
-  String getGlobalMapFromServer();
+  Integer createRoom(String filePath);
+  List<Integer> getRooms();
+
+  void pushMap(int num, String filepath, int roomId);
+  String getMapFromServer(int num, int roomId);
+  String getGlobalMapFromServer(int roomId);
 }
