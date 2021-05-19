@@ -34,6 +34,13 @@ public class GlobalMapController {
   private boolean isSelRectVisible = false;
   private boolean isConnectorIconVisible = false;
 
+  public void setMapParams(double wight, double height){
+      mainPane.setPrefWidth(wight);
+      mainPane.setMaxWidth(wight);
+      mainPane.setPrefHeight(height);
+      mainPane.setMaxHeight(height);
+  }
+
   private final GlobalMapSceneElementsControl sceneElementsControl =
       new GlobalMapSceneElementsControl() {
         @Override
