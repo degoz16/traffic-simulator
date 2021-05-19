@@ -6,6 +6,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
@@ -29,6 +30,7 @@ public class GlobalMapController {
   @FXML private Group scrollPaneContent;
   @FXML private Pane mainPane;
   @FXML private AnchorPane basePane;
+  @FXML private VBox centeredField;
   private GlobalMapEditControlInterface editControl;
   private GlobalMapObjectPainter painter;
   private boolean isSelRectVisible = false;
@@ -39,6 +41,11 @@ public class GlobalMapController {
       mainPane.setMaxWidth(wight);
       mainPane.setPrefHeight(height);
       mainPane.setMaxHeight(height);
+
+      centeredField.setPrefWidth(wight);
+      centeredField.setMaxWidth(wight);
+      centeredField.setPrefHeight(height);
+      centeredField.setMaxHeight(height);
   }
 
   private final GlobalMapSceneElementsControl sceneElementsControl =

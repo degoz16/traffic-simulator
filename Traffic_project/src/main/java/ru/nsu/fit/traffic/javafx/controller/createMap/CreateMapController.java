@@ -5,10 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
 
 import java.io.IOException;
+import java.util.function.UnaryOperator;
 
 public class CreateMapController {
 
@@ -19,6 +21,22 @@ public class CreateMapController {
 
   public void setStage(Stage stage) {
     this.stage = stage;
+  }
+
+  @FXML
+  public void initialize() {
+    UnaryOperator<TextFormatter.Change> integerFilter = change -> {
+      String input = change.getText();
+      int text_size = change.getControlNewText().length();
+
+      if (input.matches("[0-9]*") && text_size <= 4) {
+        return change;
+      }
+      return null;
+    };
+
+    text_field_wight.setTextFormatter(new TextFormatter<Object>(integerFilter));
+    text_field_height.setTextFormatter(new TextFormatter<Object>(integerFilter));
   }
 
   @FXML
@@ -33,11 +51,11 @@ public class CreateMapController {
       stage.setScene(scene);
       GlobalMapController controller = loader.getController();
       controller.setStage(stage);
-/* todo: fix
+      
       controller.setMapParams(
-          Integer.getInteger(text_field_wight.getText()) * 3.3,
-          Integer.getInteger(text_field_height.getText()) * 3.3);
-*/
+          Integer.parseInt(text_field_wight.getText()) * 3.3,
+          Integer.parseInt(text_field_height.getText()) * 3.3);
+
       stage.setWidth(850);
       stage.setHeight(540);
       stage.show();
