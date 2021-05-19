@@ -1,14 +1,12 @@
 package ru.nsu.fit.trafficProjectServer.controller;
 
-import java.io.IOException;
-import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,12 +22,13 @@ public class MapController {
   private MapService service;
 
   @GetMapping("getMap")
-  public ResponseEntity<Resource> getMap(@RequestParam(required = false) Integer id) {
-    String fileName = service.getDocumentName(id == null ? -1 : id);
+  public ResponseEntity<Resource> getMap(@RequestParam Integer id,
+                                         @RequestParam Integer roomId) {
+    String fileName = service.getDocumentName(id, roomId);
     Resource resource = null;
-    if(fileName !=null && !fileName.isEmpty()) {
+    if (fileName != null && !fileName.isEmpty()) {
       try {
-        resource = service.loadFileAsResource(fileName);
+        resource = service.loadFileAsResource(fileName, roomId);
       } catch (Exception e) {
         e.printStackTrace();
       }
@@ -39,15 +38,46 @@ public class MapController {
         .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
         .body(resource);
     } else {
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.badRequest().build();
     }
   }
 
   @PostMapping("saveMap")
   public ResponseEntity<Resource> saveMap(@RequestParam("file") MultipartFile file,
-                                             @RequestParam(required = false) Integer id) {
-    service.storeFile(file, id == null ? -1 : id);
+                                          @RequestParam Integer id,
+                                          @RequestParam Integer roomId) {
+    service.storeFile(file, id, roomId);
     return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("rooms")
+  public List<Integer> roomsNumber() {
+    return service.getRooms();
+  }
+
+  @PostMapping("createRoom")
+  public Long createRoom(@RequestParam("file") MultipartFile file) {
+    return service.createRoom(file);
+  }
+
+  @GetMapping("global")
+  public ResponseEntity<Resource> getGlobalMap(@RequestParam Integer roomId){
+    String fileName = service.getGlobalMap(roomId);
+    Resource resource = null;
+    if (fileName != null && !fileName.isEmpty()) {
+      try {
+        resource = service.loadFileAsResource(fileName, roomId);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      String contentType = "application/octet-stream";
+      return ResponseEntity.ok()
+        .contentType(MediaType.parseMediaType(contentType))
+        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+        .body(resource);
+    } else {
+      return ResponseEntity.badRequest().build();
+    }
   }
 
 }

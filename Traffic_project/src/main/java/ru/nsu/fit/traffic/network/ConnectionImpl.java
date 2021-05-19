@@ -1,75 +1,103 @@
 package ru.nsu.fit.traffic.network;
 
-import java.io.DataOutputStream;
+import com.google.gson.Gson;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClientBuilder;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
-import ru.nsu.fit.traffic.utils.ParameterStringBuilder;
 
 public class ConnectionImpl implements Connection {
 
-  private static final String URL = "http://localhost:8080/";
-  private static final String GET_URL = URL + "api/getMap";
-  private static final String SAVE_URL = URL + "api/saveMap";
+  private final String URL;
+  private final String GET_URL;
+  private final String SAVE_URL;
+  private final String ROOMS_URL;
+  private final String CREATE_ROOM;
+  private final String GLOBAL;
 
+
+  public ConnectionImpl(String url) {
+    this.URL = url;
+    GET_URL = URL + "api/getMap";
+    SAVE_URL = URL + "api/saveMap";
+    ROOMS_URL = URL + "api/rooms";
+    CREATE_ROOM = URL + "api/createRoom";
+    GLOBAL = URL + "api/global";
+  }
 
   @Override
-  public String getMapFromServer(int num) {
-    URL url = null;
-
+  public Integer createRoom(String filePath) {
+    HttpEntity entity = pushAnyMap(filePath, CREATE_ROOM);
     try {
-      url = new URL(GET_URL + "?id=" + num);
-      HttpURLConnection con = (HttpURLConnection) url.openConnection();
-      con.setRequestMethod("GET");
-
-
-      ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
-      FileOutputStream fos;
-
-      Path fullPath;
-
-      if (num != -1) {
-        fullPath = Path.of(new File("").getAbsolutePath(), "map_" + num + ".json");
-        fos = new FileOutputStream(fullPath.toString());
-      } else {
-        fullPath = Path.of(new File("").getAbsolutePath(), "map_global.json");
-        fos = new FileOutputStream(fullPath.toString());
-      }
-      fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
-      return fullPath.toString();
+      Scanner scanner = new Scanner(entity.getContent());
+      return scanner.nextInt();
     } catch (IOException e) {
-      throw new RuntimeException("Can't get map: '" + num + "' id.", e);
+      throw new RuntimeException(e);
     }
   }
 
   @Override
-  public String getGlobalMapFromServer() {
-    return getMapFromServer(-1);
+  public List<Integer> getRooms() {
+    HttpGet request = new HttpGet(ROOMS_URL);
+    HttpClient client = HttpClientBuilder.create().build();
+    List<Integer> list ;
+    try {
+      HttpResponse response = client.execute(request);
+      Gson gson = new Gson();
+      return gson.fromJson(
+        new BufferedReader(new InputStreamReader(response.getEntity().getContent())),
+        ArrayList.class
+      );
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
-  public void pushMap(int num, String filepath) {
-    String url = null;
+  public String getMapFromServer(int num, int roomId) {
     try {
-      url = SAVE_URL + "?id=" + num;
+      return getMap(num, roomId, new URL(GET_URL + "?id=" + num));
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public String getGlobalMapFromServer(int roomId) {
+    try {
+      return getMap(null, roomId, new URL(GLOBAL + "?roomId="+roomId));
+    } catch (MalformedURLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  @Override
+  public void pushMap(int num, String filepath, int roomId) {
+    pushAnyMap(filepath, SAVE_URL + "?id=" + num + "&roomId=" + roomId);
+  }
+
+  private HttpEntity pushAnyMap(String filepath, String url) {
+    try {
       HttpEntity entity = MultipartEntityBuilder.create()
         .addPart("file", new FileBody(new File(filepath)))
         .build();
@@ -79,16 +107,35 @@ public class ConnectionImpl implements Connection {
 
       HttpClient client = HttpClientBuilder.create().build();
       HttpResponse response = client.execute(request);
-      response.getEntity();
+      return response.getEntity();
     } catch (IOException e) {
-      throw new RuntimeException("Can't push map: '" + num + "' id.", e);
+      throw new RuntimeException("Can't push map: '" + url, e);
     }
   }
 
-  @Override
-  public void pushGlobalMap(String filepath) {
-    pushMap(-1, filepath);
-  }
+  private String getMap(Integer id, int roomId, URL url) {
 
+    try {
+      HttpURLConnection con = (HttpURLConnection) url.openConnection();
+      con.setRequestMethod("GET");
+
+
+      ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
+      FileOutputStream fos;
+
+      Path fullPath;
+
+      if (id != null) {
+        fullPath = Path.of(new File("").getAbsolutePath(), "map_" + id + ".json");
+      } else {
+        fullPath = Path.of(new File("").getAbsolutePath(), "map_global.json");
+      }
+      fos = new FileOutputStream(fullPath.toString());
+      fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+      return fullPath.toString();
+    } catch (IOException e) {
+      throw new RuntimeException("Can't get map: '" + id + "' id.", e);
+    }
+  }
 
 }
