@@ -17,6 +17,10 @@ public class RoadConnector {
     this.y = y;
   }
 
+  void deleteLink(){
+    getConnectorLink().getRegion().deleteConnector(getConnectorLink());
+  }
+
   public void setConnectorLink(RoadConnector roadConnector) {
     this.connectorLink = roadConnector;
   }

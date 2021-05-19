@@ -51,7 +51,7 @@ public class CreateMapController {
       stage.setScene(scene);
       GlobalMapController controller = loader.getController();
       controller.setStage(stage);
-      
+
       controller.setMapParams(
           Integer.parseInt(text_field_wight.getText()) * 3.3,
           Integer.parseInt(text_field_height.getText()) * 3.3);

@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
-import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
 import ru.nsu.fit.traffic.json.parse.RegionMapJson;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
@@ -16,11 +15,9 @@ import ru.nsu.fit.traffic.utils.Pair;
 
 import java.io.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_CONNECTOR;
-import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_REGION;
+import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.*;
 
 public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   private GlobalMapEditOpManager editOpManager = null;
@@ -196,6 +193,11 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
                   coords.getFirst(), coords.getSecond());
             }
           }
+          case DELETE_REGION -> {
+            getCurrRegionsMap().deleteRegion(id);
+            editOpManager.setCurrOp(NONE);
+            updateObserver.update(editOpManager);
+          }
         }
       }
     }
@@ -255,6 +257,11 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     } catch (FileNotFoundException e) {
       System.err.println(e.getMessage());
     }
+  }
+
+  @Override
+  public void deleteRegion() {
+    editOpManager.setCurrOp(DELETE_REGION);
   }
 
 

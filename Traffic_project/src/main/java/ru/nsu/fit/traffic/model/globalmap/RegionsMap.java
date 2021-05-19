@@ -26,6 +26,14 @@ public class RegionsMap {
     return regions.size();
   }
 
+  public void deleteRegion(int id){
+    RectRegion region = regions.get(id);
+    for (RoadConnector connector: region.getConnectorList()){
+        connector.deleteLink();
+    }
+    regions.remove(region);
+  }
+
   public Pair<RectRegion, RectRegion> getRegionsInThePoint(double x, double y, boolean vertical){
     RectRegion region1 = null;
     RectRegion region2 = null;

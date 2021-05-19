@@ -27,6 +27,7 @@ public class GlobalMapEditorViewUpdater {
    */
   public void updateMapView(GlobalMapEditOpManager editOperationsManager) {
     RegionsMap map = editOperationsManager.getCurrRegMap();
+    mainPane.getChildren().clear();
     Platform.runLater(() -> {
       for (int i = 0; i < map.getRegionCount(); i++) {
         RectRegion region = map.getRegion(i);

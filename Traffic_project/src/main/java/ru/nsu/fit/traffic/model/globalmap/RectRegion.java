@@ -33,6 +33,10 @@ public class RectRegion {
 
   }
 
+  void deleteConnector(RoadConnector connector){
+    connectorList.remove(connector);
+  }
+
   public RoadConnector getConnector(int id) {
     return connectorList.get(id);
   }

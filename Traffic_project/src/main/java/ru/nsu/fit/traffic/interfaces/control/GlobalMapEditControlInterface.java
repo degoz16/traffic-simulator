@@ -38,6 +38,8 @@ public interface GlobalMapEditControlInterface {
 
   void onGet();
 
+  void deleteRegion();
+
   Pair<Double, Double> getSideCoordinates(
       double x, double y, double regX, double regY, double regW, double regH);
 }

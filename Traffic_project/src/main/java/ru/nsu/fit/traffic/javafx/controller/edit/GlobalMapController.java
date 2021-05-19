@@ -102,6 +102,11 @@ public class GlobalMapController {
   }
 
   @FXML
+  public void deleteFragment(){
+      editControl.deleteRegion();
+  }
+
+  @FXML
   public void setFragment() {
     editControl.onSetRegionButton();
   }
