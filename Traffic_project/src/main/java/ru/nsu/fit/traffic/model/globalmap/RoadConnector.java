@@ -5,16 +5,22 @@ public class RoadConnector {
   private RectRegion region;
   private double x;
   private double y;
+  private int id;
 
-  public RoadConnector(double x, double y, RectRegion region) {
+  public RoadConnector(int id, double x, double y, RectRegion region) {
     this.x = x;
     this.y = y;
     this.region = region;
+    this.id = id;
   }
 
   public RoadConnector(double x, double y) {
     this.x = x;
     this.y = y;
+  }
+
+  public int getId() {
+    return id;
   }
 
   void deleteLink(){

@@ -8,13 +8,13 @@ import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 public class Node {
-  private final double x;
-  private final double y;
+  private double x;
+  private double y;
 
   private List<Spawner> spawners = null;
   private TrafficLight trafficLight = null;
   private PlaceOfInterest placeOfInterest = null;
-
+  private Connector connector = null;
   // На одинаковых индексах лежат противоположно направленные дороги
   private List<Road> roadsOut = new ArrayList<>();
   private List<Road> roadsIn = new ArrayList<>();
@@ -22,6 +22,18 @@ public class Node {
   public Node(double x, double y) {
     this.x = x;
     this.y = y;
+  }
+
+  public void setX(double x) {
+    this.x = x;
+  }
+
+  public void setY(double y) {
+    this.y = y;
+  }
+
+  public Connector getConnector() {
+    return connector;
   }
 
   public List<Spawner> getSpawners() {

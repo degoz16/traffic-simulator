@@ -8,6 +8,20 @@ import java.util.function.Consumer;
 public class RegionsMap {
   //private Map<String, RectRegion> regions = new HashMap<>();
   private final List<RectRegion> regions = new ArrayList<>();
+  private int currConnectorsCnt = 0;
+
+  public int getCurrConnectorsCnt() {
+    return currConnectorsCnt;
+  }
+
+  public void setCurrConnectorsCnt(int currConnectorsCnt) {
+    this.currConnectorsCnt = currConnectorsCnt;
+  }
+
+  public int getNextConnectorId() {
+    currConnectorsCnt++;
+    return currConnectorsCnt - 1;
+  }
 
   public void addRegion(RectRegion region) {
     //regions.put(region.getName(), region);

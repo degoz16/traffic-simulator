@@ -10,8 +10,10 @@ import java.util.List;
 public class RegionMapJson {
   private List<RegionJson> regions = new ArrayList<>();
   private List<ConnectorJson> connectors = new ArrayList<>();
+  private int currConnectorsCnt;
 
   public RegionMapJson(RegionsMap map) {
+    currConnectorsCnt = map.getCurrConnectorsCnt();
     List<RoadConnector> connectorList = new ArrayList<>();
     List<RectRegion> rectRegionList = new ArrayList<>();
     map.foreachRegion(region -> {
@@ -38,6 +40,7 @@ public class RegionMapJson {
 
   public RegionsMap getMap() {
     RegionsMap map = new RegionsMap();
+    map.setCurrConnectorsCnt(currConnectorsCnt);
     List<RoadConnector> connectorList = new ArrayList<>();
     List<RectRegion> rectRegionList = new ArrayList<>();
     connectors.forEach(connectorJson -> {

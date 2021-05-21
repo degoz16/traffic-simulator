@@ -14,10 +14,10 @@ import java.util.function.UnaryOperator;
 
 public class CreateMapController {
 
-  @FXML TextField text_field_wight;
-  @FXML TextField text_field_height;
+  private @FXML TextField text_field_wight;
+  private @FXML TextField text_field_height;
 
-  Stage stage;
+  private Stage stage;
 
   public void setStage(Stage stage) {
     this.stage = stage;

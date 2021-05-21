@@ -11,6 +11,15 @@ public class TrafficMap {
     private List<PlaceOfInterest> placesOfInterest;
     private String start;
     private String end;
+    private int regionId;
+
+    public int getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(int regionId) {
+        this.regionId = regionId;
+    }
 
     public String getStart() {
         return start;

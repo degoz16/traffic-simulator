@@ -4,6 +4,11 @@ public class Pair <A, B> {
   private A first;
   private B second;
 
+  public Pair() {
+    first = null;
+    second = null;
+  }
+
   public Pair(A first, B second) {
     this.first = first;
     this.second = second;
