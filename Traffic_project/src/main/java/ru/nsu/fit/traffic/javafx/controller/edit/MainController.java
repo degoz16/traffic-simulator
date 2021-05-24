@@ -436,6 +436,7 @@ public class MainController {
 
   public void setStage(Stage stage) {
     this.stage = stage;
+    menuBarController.setStage(stage);
   }
 
   /**
@@ -462,8 +463,8 @@ public class MainController {
     );
     controlsInitializer.initialize(viewUpdater::updateMapView);
     //menuBarController.setMap(currMap);
-    menuBarController.setStage(stage);
 
+    //System.out.println(stage);
     selectRect = UiPainter.getSelectRect();
     trafficLightController.setTrafficLightSettingsControl(
         controlsInitializer.getTrafficLightSettingsControl()

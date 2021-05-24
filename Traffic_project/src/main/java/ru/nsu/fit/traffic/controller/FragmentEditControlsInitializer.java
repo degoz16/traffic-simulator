@@ -2,7 +2,7 @@ package ru.nsu.fit.traffic.controller;
 
 import ru.nsu.fit.traffic.controller.edit.EditControl;
 import ru.nsu.fit.traffic.controller.engine.EngineController;
-import ru.nsu.fit.traffic.controller.saveload.SaveLoadControl;
+import ru.nsu.fit.traffic.controller.menu.MenuControl;
 import ru.nsu.fit.traffic.controller.settings.BuildingSettingsControl;
 import ru.nsu.fit.traffic.controller.settings.NodeSettingsControl;
 import ru.nsu.fit.traffic.controller.settings.RoadSettingsControl;
@@ -14,7 +14,7 @@ import ru.nsu.fit.traffic.model.logic.UpdateObserver;
 
 public class FragmentEditControlsInitializer implements ControlInitializerInterface {
     private final EditControl editControl;
-    private final SaveLoadControl saveLoadControl;
+    private final MenuControl saveLoadControl;
     private final BuildingSettingsControl buildingSettingsControl;
     private final NodeSettingsControl nodeSettingsControl;
     private final RoadSettingsControl roadSettingsControl;
@@ -25,7 +25,7 @@ public class FragmentEditControlsInitializer implements ControlInitializerInterf
         statisticControl = new StatisticControl(
                 sceneElementsControl
         );
-        saveLoadControl = new SaveLoadControl(
+        saveLoadControl = new MenuControl(
                 sceneElementsControl
         );
         EngineController engineController = new EngineController(
@@ -82,7 +82,7 @@ public class FragmentEditControlsInitializer implements ControlInitializerInterf
         return editControl;
     }
 
-    public SaveLoadControl getSaveLoadControl() {
+    public MenuControl getSaveLoadControl() {
         return saveLoadControl;
     }
 

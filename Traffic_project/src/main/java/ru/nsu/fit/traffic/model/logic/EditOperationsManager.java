@@ -1,5 +1,9 @@
 package ru.nsu.fit.traffic.model.logic;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
+import ru.nsu.fit.traffic.json.parse.RegionMapJson;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.model.map.Node;
@@ -12,6 +16,7 @@ import ru.nsu.fit.traffic.model.map.TrafficLightConfig;
 import ru.nsu.fit.traffic.model.map.MainRoadSign;
 import ru.nsu.fit.traffic.model.map.RoadSign;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -294,6 +299,32 @@ public class EditOperationsManager {
         node.foreachRoadIn(road -> {
             road.setRoadHighLight(RoadHighLight.NONE);
         });
+    }
+
+    public static void saveMap(String path, TrafficMap map) {
+        try {
+            Writer writer = new FileWriter(path);
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            String jsonMap = gson.toJson(new MapJsonStruct(map));
+            writer.write(jsonMap);
+            writer.close();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    public static TrafficMap loadMap(String path) {
+        try {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            Reader fileReader = new FileReader(path);
+            MapJsonStruct map = gson.fromJson(fileReader, MapJsonStruct.class);
+            TrafficMap map1 = new TrafficMap();
+            map.toTrafficMap(map1);
+            return map1;
+        } catch (FileNotFoundException e) {
+            System.err.println(e.getMessage());
+        }
+        return null;
     }
 
     /**

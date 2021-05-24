@@ -60,7 +60,7 @@ public class ConnectionImpl implements Connection {
   public List<Integer> getRooms() {
     HttpGet request = new HttpGet(ROOMS_URL);
     HttpClient client = HttpClientBuilder.create().build();
-    List<Integer> list ;
+    //List<Integer> list ;
     try {
       HttpResponse response = client.execute(request);
       Gson gson = new Gson();
@@ -114,11 +114,9 @@ public class ConnectionImpl implements Connection {
   }
 
   private String getMap(Integer id, int roomId, URL url) {
-
     try {
       HttpURLConnection con = (HttpURLConnection) url.openConnection();
       con.setRequestMethod("GET");
-
 
       ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
       FileOutputStream fos;
@@ -137,5 +135,4 @@ public class ConnectionImpl implements Connection {
       throw new RuntimeException("Can't get map: '" + id + "' id.", e);
     }
   }
-
 }

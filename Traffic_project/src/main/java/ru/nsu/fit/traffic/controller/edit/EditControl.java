@@ -14,7 +14,7 @@ import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.engine.EngineController;
 import ru.nsu.fit.traffic.controller.notification.NotificationType;
-import ru.nsu.fit.traffic.controller.saveload.SaveLoadControl;
+import ru.nsu.fit.traffic.controller.menu.MenuControl;
 import ru.nsu.fit.traffic.controller.statistic.StatisticControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
@@ -36,7 +36,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
   private final ReportStruct reportStruct = new ReportStruct();
   private final SignFactory signFactory = new SignFactory();
   private final StatisticControl statisticControl;
-  private final SaveLoadControl saveLoadControl;
+  private final MenuControl saveLoadControl;
   private final EngineController engineController;
   private PlaybackStruct playbackStruct;
   private double lastBaseX = 0d;
@@ -49,7 +49,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
 
   public EditControl(SceneElementsControl sceneElementsControl,
                      StatisticControl statisticControl,
-                     SaveLoadControl saveLoadControl,
+                     MenuControl saveLoadControl,
                      EngineController engineController) {
     super(sceneElementsControl);
     this.statisticControl = statisticControl;

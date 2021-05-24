@@ -1,17 +1,34 @@
 package ru.nsu.fit.traffic.model.map;
 
+import ru.nsu.fit.traffic.model.globalmap.RectRegion;
+import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class TrafficMap {
-    private List<Node> nodes;
-    private List<Road> roads;
-    private List<Street> streets;
-    private List<PlaceOfInterest> placesOfInterest;
+    private List<Node> nodes = new ArrayList<>();
+    private List<Road> roads = new ArrayList<>();
+    private List<Street> streets = new ArrayList<>();
+    private List<PlaceOfInterest> placesOfInterest = new ArrayList<>();
     private String start;
     private String end;
     private int regionId;
+
+    public TrafficMap() {
+
+    }
+
+    public TrafficMap(int regId, RectRegion region, double scale) {
+        for (int i = 0; i < region.getConnectorsCount(); i++) {
+            nodes.add(new Node(
+                region.getConnector(i).getX() * scale,
+                region.getConnector(i).getY() * scale,
+                regId,
+                i));
+        }
+    }
 
     public int getRegionId() {
         return regionId;
@@ -35,13 +52,6 @@ public class TrafficMap {
 
     public void setEnd(String end) {
         this.end = end;
-    }
-
-    public TrafficMap() {
-        roads = new ArrayList<>();
-        nodes = new ArrayList<>();
-        streets = new ArrayList<>();
-        placesOfInterest = new ArrayList<>();
     }
 
     public void clearMap() {

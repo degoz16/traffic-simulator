@@ -235,34 +235,20 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   @Override
   public void onPut() {
-    try {
-      Writer writer = new FileWriter("/save.json");
-      Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      String jsonMap = gson.toJson(new RegionMapJson(editOpManager.getCurrRegMap()));
-      writer.write(jsonMap);
-      writer.close();
-    } catch (IOException e) {
-      System.err.println(e.getMessage());
-    }
+    editOpManager.saveRegMap("/save.json");
   }
 
   @Override
   public void onGet() {
-    try {
-      Gson gson = new GsonBuilder().setPrettyPrinting().create();
-      Reader fileReader = new FileReader("/save.json");
-      RegionMapJson map = gson.fromJson(fileReader, RegionMapJson.class);
-      editOpManager.setCurrRegMap(map.getMap());
-      updateObserver.update(editOpManager);
-    } catch (FileNotFoundException e) {
-      System.err.println(e.getMessage());
-    }
+    editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap("/save.json"));
+    updateObserver.update(editOpManager);
   }
 
   @Override
   public void deleteRegion() {
     editOpManager.setCurrOp(DELETE_REGION);
   }
+
 
 
   private void stopOperation() {

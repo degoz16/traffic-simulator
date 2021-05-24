@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.controller.saveload;
+package ru.nsu.fit.traffic.controller.menu;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -12,13 +12,13 @@ import java.io.Reader;
 import java.io.Writer;
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
-import ru.nsu.fit.traffic.interfaces.control.SaveLoadControlInterface;
+import ru.nsu.fit.traffic.interfaces.control.MenuControlInterface;
 import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
 
-public class SaveLoadControl extends BaseControl implements SaveLoadControlInterface {
+public class MenuControl extends BaseControl implements MenuControlInterface {
   private String pathToProjectDir;
 
-  public SaveLoadControl(
+  public MenuControl(
     SceneElementsControl sceneElementsControl) {
     super(sceneElementsControl);
     pathToProjectDir = getDocsPath();
@@ -82,15 +82,14 @@ public class SaveLoadControl extends BaseControl implements SaveLoadControlInter
     }
   }
 
+  @Override
   public void onOpenProject(File file) {
     if (file != null) {
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
       try {
         Reader fileReader = new FileReader(file);
         MapJsonStruct mapJsonStruct = gson.fromJson(fileReader, MapJsonStruct.class);
-//                File oldFile =
-//                        new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
-//                saveCurrentProject(oldFile);
+
         mapJsonStruct.toTrafficMap(editOperationsManager.getMap());
         pathToProjectDir = file.getAbsolutePath();
       } catch (FileNotFoundException e) {
@@ -100,10 +99,9 @@ public class SaveLoadControl extends BaseControl implements SaveLoadControlInter
     update.update(editOperationsManager);
   }
 
+  @Override
   public void onNewProject() {
-//        File file =
-//                new File(pathToProjectDir); // TODO Должно быть диалоговое окно с выбором СОХРАНиТЬ/НЕТ
-//        saveCurrentProject(file);
+
     editOperationsManager.getMap().clearMap();
     pathToProjectDir = getDocsPath();
     if (pathToProjectDir == null) {
@@ -112,15 +110,22 @@ public class SaveLoadControl extends BaseControl implements SaveLoadControlInter
     update.update(editOperationsManager);
   }
 
+  @Override
   public void onSave() {
     File file = new File(pathToProjectDir);
     saveCurrentProject(file);
   }
 
+  @Override
   public void onSaveAs(File file) {
     if (file != null) {
       saveCurrentProject(file);
       pathToProjectDir = file.getAbsolutePath();
     }
+  }
+
+  @Override
+  public void onConnectToServer(String ip, String port) {
+
   }
 }

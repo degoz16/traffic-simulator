@@ -1,5 +1,7 @@
 package ru.nsu.fit.traffic.model.map;
 
+import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
+
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,12 @@ public class Node {
   public Node(double x, double y) {
     this.x = x;
     this.y = y;
+  }
+
+  public Node(double x, double y, int regId, int connectorId) {
+    this.x = x;
+    this.y = y;
+    this.connector = new Connector(regId, connectorId);
   }
 
   public void setX(double x) {
