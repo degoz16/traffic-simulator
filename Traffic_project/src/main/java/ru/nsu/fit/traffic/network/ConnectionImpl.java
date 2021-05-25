@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -37,6 +36,8 @@ public class ConnectionImpl implements Connection {
 
 
   public ConnectionImpl(String url) {
+    if (!url.endsWith("/")) url += "/";
+    if (!url.startsWith("http://")) url = "http://" + url;
     this.URL = url;
     GET_URL = URL + "api/getMap";
     SAVE_URL = URL + "api/saveMap";
@@ -57,10 +58,9 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public List<Integer> getRooms() {
+  public List<Double> getRooms() {
     HttpGet request = new HttpGet(ROOMS_URL);
     HttpClient client = HttpClientBuilder.create().build();
-    //List<Integer> list ;
     try {
       HttpResponse response = client.execute(request);
       Gson gson = new Gson();
@@ -76,7 +76,7 @@ public class ConnectionImpl implements Connection {
   @Override
   public String getMapFromServer(int num, int roomId) {
     try {
-      return getMap(num, roomId, new URL(GET_URL + "?id=" + num));
+      return getMap(num, new URL(GET_URL + "?id=" + num + "&roomId=" + roomId));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
@@ -85,7 +85,7 @@ public class ConnectionImpl implements Connection {
   @Override
   public String getGlobalMapFromServer(int roomId) {
     try {
-      return getMap(null, roomId, new URL(GLOBAL + "?roomId="+roomId));
+      return getMap(null, new URL(GLOBAL + "?roomId="+roomId));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
@@ -113,7 +113,7 @@ public class ConnectionImpl implements Connection {
     }
   }
 
-  private String getMap(Integer id, int roomId, URL url) {
+  private String getMap(Integer id, URL url) {
     try {
       HttpURLConnection con = (HttpURLConnection) url.openConnection();
       con.setRequestMethod("GET");

@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.javafx.controller.menubar;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.fxml.FXML;
@@ -12,13 +13,19 @@ import javafx.scene.control.TextInputDialog;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.App;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.interfaces.control.MenuControlInterface;
+import ru.nsu.fit.traffic.interfaces.network.Connection;
+import ru.nsu.fit.traffic.javafx.controller.rooms.RoomController;
+import ru.nsu.fit.traffic.network.ConnectionImpl;
 
 public class MenuBarController {
 
   private MenuControlInterface saveLoadControl;
 
   private Stage stage;
+
+  private ConnectionConfig connectionConfig = ConnectionConfig.getConnectionConfig();
 
   public void setStage(Stage stage) {
     this.stage = stage;
@@ -76,14 +83,16 @@ public class MenuBarController {
     Optional<String> result = dialog.showAndWait();
 
     result.ifPresent(name -> {
-      //TODO: обработка соединения
+      connectionConfig.setConnection(new ConnectionImpl(name));
     });
 
-    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapView.fxml"));
+    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/RoomButtonsView.fxml"));
     Parent root;
     try {
       root = loader.load();
       stage.getScene().setRoot(root);
+      RoomController roomController = loader.getController();
+      roomController.setStage(stage);
     } catch (IOException e) {
       e.printStackTrace();
     }

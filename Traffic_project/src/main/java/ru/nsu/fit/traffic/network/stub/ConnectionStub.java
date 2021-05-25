@@ -36,19 +36,19 @@ public class ConnectionStub implements Connection {
       throw new RuntimeException("Reg map load exception");
     }
     roomsRegCnt.add(map.getRegionCount());
-    GlobalMapEditOpManager.saveRegMap(theDir.getAbsolutePath() + "/global_map.json", map);
+    GlobalMapEditOpManager.saveRegMap(theDir.getAbsolutePath() + "/global_map.tsp", map);
     for (int i = 0; i < map.getRegionCount(); i++) {
       TrafficMap m = new TrafficMap(i, map.getRegion(i), scale);
-      EditOperationsManager.saveMap(theDir.getAbsolutePath() + "/map_" + i + ".json", m);
+      EditOperationsManager.saveMap(theDir.getAbsolutePath() + "/map_" + i + ".tsp", m);
     }
     return currRoomsCnt++;
   }
 
   @Override
-  public List<Integer> getRooms() {
-    var list = new ArrayList<Integer>();
+  public List<Double> getRooms() {
+    var list = new ArrayList<Double>();
     for (int i = 0; i < currRoomsCnt; i++) {
-      list.add(i);
+      list.add((double) i);
     }
     return list;
   }
@@ -56,16 +56,16 @@ public class ConnectionStub implements Connection {
   @Override
   public void pushMap(int num, String filepath, int roomId) {
     TrafficMap map = EditOperationsManager.loadMap(filepath);
-    EditOperationsManager.saveMap(serverFolder + "room_" + roomId + "/map_" + num + ".json", map);
+    EditOperationsManager.saveMap(serverFolder + "room_" + roomId + "/map_" + num + ".tsp", map);
   }
 
   @Override
   public String getMapFromServer(int num, int roomId) {
-    return serverFolder + "room_" + roomId + "/map_" + num + ".json";
+    return serverFolder + "room_" + roomId + "/map_" + num + ".tsp";
   }
 
   @Override
   public String getGlobalMapFromServer(int roomId) {
-    return serverFolder + "room_" + roomId + "/global_map.json";
+    return serverFolder + "room_" + roomId + "/global_map.tsp";
   }
 }

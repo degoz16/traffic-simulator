@@ -1,19 +1,21 @@
 package ru.nsu.fit.traffic.controller.edit;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import java.nio.file.Path;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
+import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.json.parse.RegionMapJson;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOp;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.utils.Pair;
 
-import java.io.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -239,17 +241,43 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   }
 
   @Override
+  public void onNewPut() {
+    //editOpManager.saveRegMap("/save.json");
+    RegionsMap map = editOpManager.getCurrRegMap();
+    Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
+    editOpManager.saveRegMap("/global_map.tsp");
+    Integer roomId = connection.createRoom("/global_map.tsp");
+    for (int i = 0; i < map.getRegionCount(); i++) {
+      TrafficMap m = new TrafficMap(i, map.getRegion(i), 1);
+      EditOperationsManager.saveMap("/map_" + i + ".tsp", m);
+      connection.pushMap(i, "/map_" + i + ".tsp", roomId);
+    }
+    System.out.println(roomId);
+  }
+
+  @Override
+  public void onNewGet() {
+    editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap("/save.json"));
+    updateObserver.update(editOpManager);
+  }
+
+  @Override
   public void onGet() {
     editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap("/save.json"));
     updateObserver.update(editOpManager);
   }
+
 
   @Override
   public void deleteRegion() {
     editOpManager.setCurrOp(DELETE_REGION);
   }
 
-
+  @Override
+  public void updateMap(String filepath) {
+    editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap(filepath));
+    updateObserver.update(editOpManager);
+  }
 
   private void stopOperation() {
     editOpManager.setCurrOp(GlobalMapEditOp.NONE);

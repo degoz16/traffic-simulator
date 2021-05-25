@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface Connection {
   Integer createRoom(String filePath);
-  List<Integer> getRooms();
+  List<Double> getRooms();
 
   void pushMap(int num, String filepath, int roomId);
   String getMapFromServer(int num, int roomId);

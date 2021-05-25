@@ -36,9 +36,15 @@ public interface GlobalMapEditControlInterface {
 
   void onPut();
 
+  void onNewPut();
+
+  void onNewGet();
+
   void onGet();
 
   void deleteRegion();
+
+  void updateMap(String filepath);
 
   Pair<Double, Double> getSideCoordinates(
       double x, double y, double regX, double regY, double regW, double regH);

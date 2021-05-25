@@ -32,7 +32,7 @@ public class GlobalMapEditOpManager {
 
   public static void saveRegMap(String path, RegionsMap regionsMap) {
     try {
-      Writer writer = new FileWriter(path);
+      Writer writer = new FileWriter(path);;
       Gson gson = new GsonBuilder().setPrettyPrinting().create();
       String jsonMap = gson.toJson(new RegionMapJson(regionsMap));
       writer.write(jsonMap);

@@ -13,6 +13,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.controller.GlobalMapEditControlInitializer;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
+import ru.nsu.fit.traffic.controller.edit.EditControl;
 import ru.nsu.fit.traffic.controller.edit.GlobalMapEditControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapControlInitializerInterface;
@@ -124,12 +125,17 @@ public class GlobalMapController {
 
   @FXML
   public void onGet() {
-    editControl.onGet();
+    editControl.onNewGet();
+    //editControl.onGet();
   }
 
   @FXML
   public void onPut() {
-    editControl.onPut();
+    editControl.onNewPut();
+  }
+
+  public GlobalMapEditControlInterface getEditControl() {
+    return editControl;
   }
 
   @FXML
