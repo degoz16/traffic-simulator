@@ -133,7 +133,18 @@ public class GlobalMapEditOpManager {
     double xMax = Math.max(x1, x2);
     double yMin = Math.min(y1, y2);
     double yMax = Math.max(y1, y2);
+    if (currRegMap.getRegions().stream().noneMatch(region -> {
+      double regXmin = region.getX();
+      double regXmax = region.getX() + region.getWidth();
+      double regYmin = region.getY();
+      double regYmax = region.getY() + region.getHeight();
+      return ((xMin - 4 > regXmin && xMin - 3 < regXmax) || (xMax + 4 > regXmin && xMax + 3 < regXmax)) &&
+          ((yMin - 4 > regYmin && yMin - 3 < regYmax) || (yMax + 4 > regYmin && yMax + 3 < regYmax));
+    }) && currRegMap.getRegionCount() > 0) {
+      return;
+    }
     RectRegion region = new RectRegion(name, xMin, yMin, xMax - xMin, yMax - yMin);
+
     currRegMap.addRegion(region);
     updateObserver.update(this);
   }

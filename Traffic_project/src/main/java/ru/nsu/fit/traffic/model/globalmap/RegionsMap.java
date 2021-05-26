@@ -10,6 +10,10 @@ public class RegionsMap {
   private final List<RectRegion> regions = new ArrayList<>();
   private int currConnectorsCnt = 0;
 
+  public List<RectRegion> getRegions() {
+    return regions;
+  }
+
   public int getCurrConnectorsCnt() {
     return currConnectorsCnt;
   }
