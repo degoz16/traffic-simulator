@@ -1,4 +1,4 @@
-package ru.nsu.fit.traffic.javafx.controller.createMap;
+package ru.nsu.fit.traffic.javafx.controller.create.map;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

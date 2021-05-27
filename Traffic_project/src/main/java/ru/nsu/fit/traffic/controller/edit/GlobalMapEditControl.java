@@ -52,34 +52,19 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   @Override
   public boolean testRegionsBounds(double x, double y, int id) {
-    Pair<Double, Double> c = getSideCoordinates(x, y, editOpManager.getCurrRegMap().getRegion(id));
+    Pair<Double, Double> c = editOpManager.getSideCoordinates(x, y, editOpManager.getCurrRegMap().getRegion(id));
     return editOpManager.getCurrRegMap()
         .getRegionsInThePoint(c.getFirst(), c.getSecond(), false) != null
         || editOpManager.getCurrRegMap()
         .getRegionsInThePoint(c.getFirst(), c.getSecond(), true) != null;
   }
 
-  private Pair<Double, Double> getSideCoordinates(double x, double y, RectRegion region) {
-    return getSideCoordinates(x, y, region.getX(), region.getY(), region.getWidth(), region.getHeight());
-  }
+
 
   @Override
   public Pair<Double, Double> getSideCoordinates(
       double x, double y, double regX, double regY, double regW, double regH) {
-    boolean d1 = y > (regH / regW) * (x - regX) + regY;
-    boolean d2 = y > -(regH / regW) * (x - regX - regW) + regY;
-    if (d1 && d2) {
-      return new Pair<>(x, regY + regH);
-    }
-    else if(d1) {
-      return new Pair<>(regX, y);
-    }
-    else if (d2) {
-      return new Pair<>(regX + regW, y);
-    }
-    else {
-      return new Pair<>(x, regY);
-    }
+    return editOpManager.getSideCoordinates(x, y, regX, regY, regW, regH);
   }
 
   public void setEditOpManager(GlobalMapEditOpManager editOpManager) {
@@ -183,17 +168,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
         switch (editOpManager.getCurrentOp()) {
           case SET_CONNECTOR -> {
             RectRegion region = editOpManager.getCurrRegMap().getRegion(id);
-            Pair<Double, Double> coords = getSideCoordinates(event.getX(), event.getY(), region);
-            boolean vert = coords.getSecond() - region.getY() < 0.001
-                || coords.getSecond() - region.getY() + region.getHeight() < 0.001;
-            Pair<RectRegion, RectRegion> regions =
-                editOpManager.getCurrRegMap()
-                    .getRegionsInThePoint(coords.getFirst(), coords.getSecond(), vert);
-            if(regions != null) {
-              editOpManager.addConnector(
-                  regions.getFirst(), regions.getSecond(),
-                  coords.getFirst(), coords.getSecond());
-            }
+            editOpManager.addConnector(region, event.getX(), event.getY());
           }
           case DELETE_REGION -> {
             getCurrRegionsMap().deleteRegion(id);

@@ -13,12 +13,10 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
-import ru.nsu.fit.traffic.controller.GlobalMapEditControlInitializer;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
-import ru.nsu.fit.traffic.interfaces.control.GlobalMapControlInitializerInterface;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
-import ru.nsu.fit.traffic.javafx.controller.createMap.CreateMapController;
+import ru.nsu.fit.traffic.javafx.controller.create.map.CreateMapController;
 import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
 
 public class RoomController {

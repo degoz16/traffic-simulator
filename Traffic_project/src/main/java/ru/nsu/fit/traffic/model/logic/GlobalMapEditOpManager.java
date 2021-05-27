@@ -25,6 +25,28 @@ public class GlobalMapEditOpManager {
     this.updateObserver = updateObserver;
   }
 
+  public Pair<Double, Double> getSideCoordinates(double x, double y, RectRegion region) {
+    return getSideCoordinates(x, y, region.getX(), region.getY(), region.getWidth(), region.getHeight());
+  }
+
+  public Pair<Double, Double> getSideCoordinates(
+      double x, double y, double regX, double regY, double regW, double regH) {
+    boolean d1 = y > (regH / regW) * (x - regX) + regY;
+    boolean d2 = y > -(regH / regW) * (x - regX - regW) + regY;
+    if (d1 && d2) {
+      return new Pair<>(x, regY + regH);
+    }
+    else if(d1) {
+      return new Pair<>(regX, y);
+    }
+    else if (d2) {
+      return new Pair<>(regX + regW, y);
+    }
+    else {
+      return new Pair<>(x, regY);
+    }
+  }
+
   public void clearMap() {
     currRegMap = new RegionsMap();
     updateObserver.update(this);
@@ -133,13 +155,23 @@ public class GlobalMapEditOpManager {
     double xMax = Math.max(x1, x2);
     double yMin = Math.min(y1, y2);
     double yMax = Math.max(y1, y2);
+
+    final double exp = 3;
+    double expXmin = xMin - exp;
+    double expXmax = xMax + exp;
+    double expYmin = yMin - exp;
+    double expYmax = yMax + exp;
+
     if (currRegMap.getRegions().stream().noneMatch(region -> {
       double regXmin = region.getX();
       double regXmax = region.getX() + region.getWidth();
       double regYmin = region.getY();
       double regYmax = region.getY() + region.getHeight();
-      return ((xMin - 4 > regXmin && xMin - 3 < regXmax) || (xMax + 4 > regXmin && xMax + 3 < regXmax)) &&
-          ((yMin - 4 > regYmin && yMin - 3 < regYmax) || (yMax + 4 > regYmin && yMax + 3 < regYmax));
+      //Guano, no mne len` raznosit` eto
+      return ((expXmin > regXmin && expXmin < regXmax) || (expXmax > regXmin && expXmax < regXmax)) &&
+          ((expYmin > regYmin && expYmin < regYmax) || (expYmax > regYmin && expYmax < regYmax)) ||
+          ((regXmin > expXmin && regXmin < expXmax) || (regXmax > expXmin && regXmax < expXmax)) &&
+              ((regYmin > expYmin && regYmin < expYmax) || (regYmax > expYmin && regYmax < expYmax));
     }) && currRegMap.getRegionCount() > 0) {
       return;
     }
@@ -149,14 +181,53 @@ public class GlobalMapEditOpManager {
     updateObserver.update(this);
   }
 
-  public void addConnector(RectRegion region1, RectRegion region2, double x, double y) {
-    int id = currRegMap.getNextConnectorId();
-    RoadConnector connector1 = new RoadConnector(id, x - region1.getX(), y - region1.getY(), region1);
-    RoadConnector connector2 = new RoadConnector(id, x - region2.getX(), y - region2.getY(), region2);
-    connector1.setConnectorLink(connector2);
-    connector2.setConnectorLink(connector1);
-    region1.addConnector(connector1);
-    region2.addConnector(connector2);
+  public void addConnector(RectRegion region, double x, double y) {
+    Pair<Double, Double> coords = getSideCoordinates(x, y, region);
+    boolean vert = Math.abs(coords.getSecond() - region.getY()) < 0.001
+        || Math.abs(coords.getSecond() - region.getY() - region.getHeight()) < 0.001;
+    Pair<RectRegion, RectRegion> regions =
+        getCurrRegMap()
+            .getRegionsInThePoint(coords.getFirst(), coords.getSecond(), vert);
+
+    if(regions != null) {
+      RectRegion region1 = regions.getFirst();
+      RectRegion region2 = regions.getSecond();
+      int id = currRegMap.getNextConnectorId();
+      double x1 = coords.getFirst();
+      double x2 = coords.getFirst();
+      double y1 = coords.getSecond();
+      double y2 = coords.getSecond();
+      if (vert) {
+        if (region1.getY() < region2.getY()) {
+          y1 -= 3;
+          y2 += 3;
+        } else {
+          y1 += 3;
+          y2 -= 3;
+        }
+      } else {
+        if (region1.getX() < region2.getX()) {
+          x1 -= 3;
+          x2 += 3;
+        } else {
+          x1 += 3;
+          x2 -= 3;
+        }
+      }
+      Pair<Double, Double> coords1 = getSideCoordinates(x1, y1, region1);
+      Pair<Double, Double> coords2 = getSideCoordinates(x2, y2, region2);
+      x1 = coords1.getFirst();
+      x2 = coords2.getFirst();
+      y1 = coords1.getSecond();
+      y2 = coords2.getSecond();
+
+      RoadConnector connector1 = new RoadConnector(id, x1 - region1.getX(), y1 - region1.getY(), region1);
+      RoadConnector connector2 = new RoadConnector(id, x2 - region2.getX(), y2 - region2.getY(), region2);
+      connector1.setConnectorLink(connector2);
+      connector2.setConnectorLink(connector1);
+      region1.addConnector(connector1);
+      region2.addConnector(connector2);
+    }
 
     updateObserver.update(this);
   }

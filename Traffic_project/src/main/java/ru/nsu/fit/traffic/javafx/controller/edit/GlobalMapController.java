@@ -166,12 +166,6 @@ public class GlobalMapController {
                       }
                     }
                   });
-              rect.setOnMouseEntered(
-                  event -> {
-                    Pair<Double, Double> coords =
-                        editControl.getSideCoordinates(
-                            event.getX(), event.getY(), rect.getX(), rect.getY(), regW, regH);
-                  });
               rect.setOnMouseClicked(event -> {
                 editControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
               });

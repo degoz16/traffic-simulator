@@ -32,8 +32,24 @@ public class GlobalMapObjectPainter {
     else{
       circle.setRadius(8);
     }
-    circle.setCenterX(connector.getGlobalX());
-    circle.setCenterY(connector.getGlobalY());
+    double x = connector.getGlobalX();
+    double y = connector.getGlobalY();
+    if (isSet) {
+      if (Math.abs(connector.getX()) < 0.001) {
+        x += 8;
+        circle.setRotate(-90);
+      } else if (Math.abs(connector.getY()) < 0.001) {
+        y += 8;
+      } else if (Math.abs(connector.getX() - connector.getRegion().getWidth()) < 0.001) {
+        x -= 8;
+        circle.setRotate(90);
+      } else if (Math.abs(connector.getY() - connector.getRegion().getHeight()) < 0.001) {
+        y -= 8;
+        circle.setRotate(180);
+      }
+    }
+    circle.setCenterX(x);
+    circle.setCenterY(y);
     Image img;
     if (isSet) {
       img = new Image("ru/nsu/fit/traffic/view/Images/connector_on_map.png");

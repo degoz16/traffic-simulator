@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import ru.nsu.fit.traffic.javafx.controller.createMap.CreateMapController;
+import ru.nsu.fit.traffic.javafx.controller.create.map.CreateMapController;
 
 import java.io.IOException;
 
