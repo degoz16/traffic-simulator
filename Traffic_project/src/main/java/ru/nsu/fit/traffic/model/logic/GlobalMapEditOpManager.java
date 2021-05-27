@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalMapEditOpManager {
+  private static final int MIN_REGION_SIZE = 40;
   private final GlobalMapUpdateObserver updateObserver;
   private RegionsMap currRegMap = new RegionsMap();
   private GlobalMapEditOp currOp = GlobalMapEditOp.NONE;
@@ -156,6 +157,10 @@ public class GlobalMapEditOpManager {
     double yMin = Math.min(y1, y2);
     double yMax = Math.max(y1, y2);
 
+    if (xMax - xMin < MIN_REGION_SIZE
+        || yMax - yMin < MIN_REGION_SIZE) {
+      return;
+    }
     final double exp = 3;
     double expXmin = xMin - exp;
     double expXmax = xMax + exp;

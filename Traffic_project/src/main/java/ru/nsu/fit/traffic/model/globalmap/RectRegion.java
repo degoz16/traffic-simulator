@@ -6,8 +6,6 @@ import java.util.function.Consumer;
 
 public class RectRegion {
 
-  //TODO: show notification on width/height less then min size
-  private static final int MIN_REGION_SIZE = 40;
   private String name;
   private double x;
   private double y;
@@ -20,16 +18,16 @@ public class RectRegion {
     this.name = name;
     this.x = x;
     this.y = y;
-    this.width = Math.max(MIN_REGION_SIZE, width);
-    this.height = Math.max(MIN_REGION_SIZE, height);
+    this.width = width;
+    this.height = height;
   }
 
   public RectRegion(double x, double y, double width, double height) {
     this.name = "";
     this.x = x;
     this.y = y;
-    this.width = Math.max(MIN_REGION_SIZE, width);
-    this.height = Math.max(MIN_REGION_SIZE, height);
+    this.width = width;
+    this.height = height;
 
   }
 
