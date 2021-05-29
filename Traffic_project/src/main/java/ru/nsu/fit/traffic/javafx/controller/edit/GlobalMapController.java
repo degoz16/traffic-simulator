@@ -33,7 +33,6 @@ public class GlobalMapController {
   @FXML private AnchorPane basePane;
   @FXML private VBox centeredField;
   private GlobalMapEditControlInterface editControl;
-  private GlobalMapObjectPainter painter;
   private boolean isSelRectVisible = false;
   private boolean isConnectorIconVisible = false;
 
@@ -140,7 +139,7 @@ public class GlobalMapController {
 
   @FXML
   public void initialize() {
-    painter = new GlobalMapObjectPainter();
+    GlobalMapObjectPainter painter = new GlobalMapObjectPainter();
     GlobalMapControlInitializerInterface initializer =
         new GlobalMapEditControlInitializer(sceneElementsControl);
     editControl = initializer.getEditControl();

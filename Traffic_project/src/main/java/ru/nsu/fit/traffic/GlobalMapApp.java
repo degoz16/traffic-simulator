@@ -11,7 +11,7 @@ public class GlobalMapApp extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/GlobalMapView.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("view/GlobalMapSelectorView.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
 
@@ -21,8 +21,8 @@ public class GlobalMapApp extends Application {
         stage.setHeight(540);
         stage.show();
 
-        GlobalMapController controller = loader.getController();
-        controller.setStage(stage);
+        //GlobalMapController controller = loader.getController();
+        //controller.setStage(stage);
 
         stage.setMinWidth(850);
         stage.setMinHeight(540);

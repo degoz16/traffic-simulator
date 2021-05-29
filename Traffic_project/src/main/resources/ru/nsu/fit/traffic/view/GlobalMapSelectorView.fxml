@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="400.0" prefWidth="640.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.edit.GlobalSelectorController">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="Quit" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <AnchorPane fx:id="basePane" maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
+            <children>
+                <ScrollPane fx:id="mainScrollPane" layoutX="10.0" layoutY="10.0" pannable="true" prefHeight="375.0" prefWidth="646.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <content>
+                        <VBox fx:id="centeredField" alignment="CENTER" prefHeight="2000.0" prefWidth="2000.0">
+                            <children>
+                                <Group fx:id="scrollPaneContent" VBox.vgrow="ALWAYS">
+                                    <children>
+                                        <Pane fx:id="mainPane" layoutX="14.0" prefHeight="2000.0" prefWidth="2000.0" style="-fx-background-color: #b1bbbb;" stylesheets="@MainViewStyleSheets/background.css" />
+                                    </children>
+                                </Group>
+                            </children>
+                        </VBox>
+                    </content>
+                </ScrollPane>
+            <VBox layoutX="566.4000244140625" layoutY="299.6000061035156" AnchorPane.bottomAnchor="50.0" AnchorPane.rightAnchor="40.0">
+               <children>
+                  <Label text="DEBUG BUTTONS" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            </children>
+        </AnchorPane>
+    </children>
+</VBox>
