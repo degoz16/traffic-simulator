@@ -15,6 +15,9 @@ import ru.nsu.fit.traffic.interfaces.control.GlobalMapControlInitializerInterfac
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterface;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorInitializerInterface;
+import ru.nsu.fit.traffic.model.globalmap.RectRegion;
+import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
 import ru.nsu.fit.traffic.utils.Pair;
@@ -28,13 +31,26 @@ public class GlobalSelectorController {
   @FXML private Pane mainPane;
   @FXML private AnchorPane basePane;
   @FXML private VBox centeredField;
+  private GlobalMapObjectPainter painter;
   private GlobalMapSelectorControllerInterface selectorControl;
   private GlobalMapEditOpManager editOpManager = null;
   private GlobalMapUpdateObserver updateObserver = null;
 
+  public void setCurrentMap(RegionsMap regionsMap){
+    for (RectRegion region: regionsMap.getRegions()){
+      mainPane.getChildren().add(painter.paintRegion(region));
+      for (RoadConnector connector: region.getConnectorList()){
+        mainPane.getChildren().add(painter.paintConnector(connector,true));
+      }
+    }
+  }
+
+  public void setStage(Stage stage){
+    this.stage = stage;
+  }
+
   @FXML
   public void initialize() {
-    GlobalMapObjectPainter painter = new GlobalMapObjectPainter();
     painter = new GlobalMapObjectPainter();
     GlobalMapSelectorInitializerInterface initializer =
         new GlobalMapSelectorInitializer();

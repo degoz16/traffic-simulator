@@ -1,0 +1,31 @@
+{
+    -fx-background-image: url("../ButtonsImages/delete_road_connector.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 27 27;
+    -fx-background-position: center center;
+}
+
+
+:hover {
+    -fx-background-image: url("../ButtonsImages/delete_road_connector.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 31 31;
+    -fx-background-position: center center;
+
+}
+
+:pressed {
+  -fx-background-image: url("../ButtonsImages/delete_road_connector.png");
+  -fx-background-repeat: stretch;
+  -fx-background-size: 29 29;
+  -fx-background-position: center center;
+
+}
+
+:focused {
+  -fx-background-image: url("../ButtonsImages/delete_road_connector.png");
+  -fx-background-repeat: stretch;
+  -fx-background-size: 29 29;
+  -fx-background-position: center center;
+
+}

@@ -1,14 +1,14 @@
 {
     -fx-background-image: url("../ButtonsImages/save.png");
     -fx-background-repeat: stretch;
-    -fx-background-size: 75 75;
+    -fx-background-size: 65 65;
     -fx-background-position: center center;
 }
 
 :pressed {
   -fx-background-image: url("../ButtonsImages/save.png");
   -fx-background-repeat: stretch;
-  -fx-background-size: 86 86;
+  -fx-background-size: 73 73;
   -fx-background-position: center center;
 
 }
@@ -16,7 +16,7 @@
 :focused {
   -fx-background-image: url("../ButtonsImages/save.png");
   -fx-background-repeat: stretch;
-  -fx-background-size: 80 80;
+  -fx-background-size: 70 70;
   -fx-background-position: center center;
 
 }

@@ -1,7 +1,10 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
@@ -23,12 +26,13 @@ import ru.nsu.fit.traffic.utils.Pair;
 import ru.nsu.fit.traffic.view.GlobalMapEditorViewUpdater;
 import ru.nsu.fit.traffic.view.GlobalMapObjectPainter;
 
+import java.io.IOException;
+
 public class GlobalMapController {
   private final Rectangle selectRect = UiPainter.getSelectRect();
   private final Circle connectorIcon = UiPainter.getConnectorIcon();
   private Stage stage;
   @FXML private ScrollPane mainScrollPane;
-  @FXML private Group scrollPaneContent;
   @FXML private Pane mainPane;
   @FXML private AnchorPane basePane;
   @FXML private VBox centeredField;
@@ -116,6 +120,7 @@ public class GlobalMapController {
     editControl.onSetConnectorButton();
   }
 
+  /*
   @FXML
   public void onClear() {
     mainPane.getChildren().clear();
@@ -127,10 +132,38 @@ public class GlobalMapController {
     editControl.onNewGet();
     //editControl.onGet();
   }
+*/
+    @FXML
+    public void deleteConnector(){
+
+    }
 
   @FXML
-  public void onPut() {
-    editControl.onNewPut();
+  public void saveMap() {
+    try{
+        editControl.onNewPut();
+    } catch (Exception e){
+    }
+
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/GlobalMapSelectorView.fxml"));
+    System.out.println(getClass().toString());
+    System.out.println(getClass());
+    try {
+      Parent root = loader.load();
+      Scene scene = new Scene(root);
+
+      stage.setTitle("Traffic simulator");
+      stage.setScene(scene);
+
+      GlobalSelectorController controller = loader.getController();
+      controller.setStage(stage);
+      controller.setCurrentMap(editControl.getCurrRegionsMap());
+
+      stage.show();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public GlobalMapEditControlInterface getEditControl() {
