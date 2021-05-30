@@ -12,7 +12,8 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
 
   @Override
   public void onRegionClick(int id, MouseEventWrapper event) {
-    //TODO: TUT PISAT
+    // TODO: TUT PISAT
+    System.out.println("click on region");
   }
 
   @Override

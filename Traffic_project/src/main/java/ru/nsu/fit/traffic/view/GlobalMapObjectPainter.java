@@ -1,6 +1,5 @@
 package ru.nsu.fit.traffic.view;
 
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;

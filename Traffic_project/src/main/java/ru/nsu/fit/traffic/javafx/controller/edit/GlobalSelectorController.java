@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.javafx.controller.edit;
 
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
@@ -37,8 +38,17 @@ public class GlobalSelectorController {
   private GlobalMapUpdateObserver updateObserver = null;
 
   public void setCurrentMap(RegionsMap regionsMap){
-    for (RectRegion region: regionsMap.getRegions()){
-      mainPane.getChildren().add(painter.paintRegion(region));
+    for (int i = 0; i < regionsMap.getRegionCount(); ++i){
+      RectRegion region = regionsMap.getRegion(i);
+      Node reg = painter.paintRegion(region);
+
+      final int id = i;
+      reg.setOnMouseClicked(event ->{
+        selectorControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
+      });
+
+      mainPane.getChildren().add(reg);
+
       for (RoadConnector connector: region.getConnectorList()){
         mainPane.getChildren().add(painter.paintConnector(connector,true));
       }
