@@ -3,6 +3,7 @@ package ru.nsu.fit.traffic.javafx.controller.edit;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
@@ -31,7 +32,7 @@ public class GlobalSelectorController {
   @FXML private Group scrollPaneContent;
   @FXML private Pane mainPane;
   @FXML private AnchorPane basePane;
-  @FXML private VBox centeredField;
+  @FXML private CheckBox checkBox;
   private GlobalMapObjectPainter painter;
   private GlobalMapSelectorControllerInterface selectorControl;
   private GlobalMapEditOpManager editOpManager = null;
@@ -57,6 +58,17 @@ public class GlobalSelectorController {
 
   public void setStage(Stage stage){
     this.stage = stage;
+  }
+
+  @FXML
+  public void checkBoxClicked(){
+    if (checkBox.isSelected()){
+      // todo: show whole map
+      System.out.println("show whole map");
+    }else{
+      // todo: hide map
+      System.out.println("hide map");
+    }
   }
 
   @FXML
