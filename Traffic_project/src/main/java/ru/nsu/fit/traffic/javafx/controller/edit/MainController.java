@@ -1,11 +1,21 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jfoenix.controls.JFXTimePicker;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
@@ -17,6 +27,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import ru.nsu.fit.traffic.App;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.FragmentEditControlsInitializer;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.notification.NotificationType;
@@ -24,6 +36,8 @@ import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
 import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
 import ru.nsu.fit.traffic.interfaces.control.EditControlInterface;
+import ru.nsu.fit.traffic.interfaces.control.MenuControlInterface;
+import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.javafx.controller.menubar.MenuBarController;
 import ru.nsu.fit.traffic.javafx.controller.notification.NotificationController;
 import ru.nsu.fit.traffic.javafx.controller.settings.BuildingController;
@@ -32,6 +46,7 @@ import ru.nsu.fit.traffic.javafx.controller.settings.RoadSettingsController;
 import ru.nsu.fit.traffic.javafx.controller.settings.TrafficLightController;
 import ru.nsu.fit.traffic.javafx.controller.statistic.StatisticsController;
 import ru.nsu.fit.traffic.javafx.paiters.UiPainter;
+import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
 import ru.nsu.fit.traffic.view.MapEditorViewUpdater;
 
 import java.time.LocalTime;
@@ -105,6 +120,7 @@ public class MainController {
   @FXML
   private HBox progressIndicator;
 
+  private MenuControlInterface saveLoadControl;
   private Stage stage;
   private EditControlInterface editControl;
   private boolean timePickerFlag = false;
@@ -439,6 +455,10 @@ public class MainController {
     menuBarController.setStage(stage);
   }
 
+  public void initMap(String mapPath) {
+    saveLoadControl.onOpenProject(new File(mapPath));
+  }
+
   /**
    * инициализация.
    */
@@ -564,7 +584,7 @@ public class MainController {
             basePane.getHeight(),
             100, 100
         ));
-
+    saveLoadControl = controlsInitializer.getSaveLoadControl();
   }
 
   @FXML
@@ -664,6 +684,29 @@ public class MainController {
   @FXML
   public void setSpeedSign() {
     editControl.setSpeedSign(speedComboBox.getValue());
+  }
+
+  @FXML
+  public void saveMap() {
+    saveLoadControl.onSave();
+    editControl.saveMap();
+    Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
+    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
+    try {
+      Parent root = loader.load();
+      Scene scene = new Scene(root);
+
+      stage.setTitle("Traffic simulator");
+      stage.setScene(scene);
+      GlobalSelectorController controller = loader.getController();
+      controller.setStage(stage);
+      controller.setMap(
+        connection.getGlobalMapFromServer(ConnectionConfig.getConnectionConfig().getRoomId())
+      );
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    stage.show();
   }
 
   @FXML

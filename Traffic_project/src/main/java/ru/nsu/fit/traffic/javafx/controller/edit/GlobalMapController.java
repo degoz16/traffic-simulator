@@ -14,6 +14,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import ru.nsu.fit.traffic.App;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.GlobalMapEditControlInitializer;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.controller.edit.EditControl;
@@ -120,7 +122,6 @@ public class GlobalMapController {
     editControl.onSetConnectorButton();
   }
 
-  /*
   @FXML
   public void onClear() {
     mainPane.getChildren().clear();
@@ -132,7 +133,7 @@ public class GlobalMapController {
     editControl.onNewGet();
     //editControl.onGet();
   }
-*/
+
     @FXML
     public void deleteConnector(){
 
@@ -140,14 +141,9 @@ public class GlobalMapController {
 
   @FXML
   public void saveMap() {
-    try{
-        editControl.onNewPut();
-    } catch (Exception e){
-    }
-
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/GlobalMapSelectorView.fxml"));
-    System.out.println(getClass().toString());
-    System.out.println(getClass());
+    Integer roomId = editControl.onNewPut();
+    ConnectionConfig.getConnectionConfig().setRoomId(roomId);
+    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
     try {
       Parent root = loader.load();
       Scene scene = new Scene(root);
@@ -157,7 +153,7 @@ public class GlobalMapController {
 
       GlobalSelectorController controller = loader.getController();
       controller.setStage(stage);
-      controller.setCurrentMap(editControl.getCurrRegionsMap());
+      controller.setMap(ConnectionConfig.getConnectionConfig().getConnection().getGlobalMapFromServer(roomId));
 
       stage.show();
 

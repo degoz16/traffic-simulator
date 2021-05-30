@@ -1,18 +1,10 @@
 package ru.nsu.fit.traffic.controller.edit;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
-import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
-import ru.nsu.fit.traffic.json.parse.RegionMapJson;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
@@ -222,8 +214,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   }
 
   @Override
-  public void onNewPut() {
-    //editOpManager.saveRegMap("/save.json");
+  public Integer onNewPut() {
     RegionsMap map = editOpManager.getCurrRegMap();
     Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
     editOpManager.saveRegMap("/global_map.tsp");
@@ -231,9 +222,9 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     for (int i = 0; i < map.getRegionCount(); i++) {
       TrafficMap m = new TrafficMap(i, map.getRegion(i), 1);
       EditOperationsManager.saveMap("/map_" + i + ".tsp", m);
-      connection.pushMap(i, "/map_" + i + ".tsp", roomId);
+      connection.pushMap(i, roomId, "/map_" + i + ".tsp");
     }
-    System.out.println(roomId);
+    return roomId;
   }
 
   @Override

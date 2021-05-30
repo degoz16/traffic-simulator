@@ -18,6 +18,7 @@ import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.javafx.controller.create.map.CreateMapController;
 import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
+import ru.nsu.fit.traffic.javafx.controller.edit.GlobalSelectorController;
 
 public class RoomController {
 
@@ -25,7 +26,6 @@ public class RoomController {
   private HBox hBox;
   private ConnectionConfig connectionConfig = ConnectionConfig.getConnectionConfig();
   private Connection connection;
-  private GlobalMapEditControlInterface editControl;
   Stage stage;
 
   public void setStage(Stage stage){
@@ -60,18 +60,17 @@ public class RoomController {
 
   private void buttonClickHandler(ActionEvent event) {
     Button button = (Button) event.getSource();
-    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapView.fxml"));
+    ConnectionConfig.getConnectionConfig().setRoomId(Integer.parseInt(button.getText()));
+    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
     try {
       Parent root = loader.load();
       Scene scene = new Scene(root);
 
       stage.setTitle("Traffic simulator");
       stage.setScene(scene);
-      GlobalMapController controller = loader.getController();
+      GlobalSelectorController controller = loader.getController();
       controller.setStage(stage);
-      controller.getEditControl().updateMap(
-        connection.getGlobalMapFromServer(Integer.parseInt(button.getText()))
-      );
+      controller.setMap(connection.getGlobalMapFromServer(connectionConfig.getRoomId()));
     } catch (IOException e) {
       e.printStackTrace();
     }

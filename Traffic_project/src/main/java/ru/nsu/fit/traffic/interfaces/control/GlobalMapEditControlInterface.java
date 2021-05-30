@@ -36,7 +36,7 @@ public interface GlobalMapEditControlInterface {
 
   void onPut();
 
-  void onNewPut();
+  Integer onNewPut();
 
   void onNewGet();
 

@@ -19,7 +19,7 @@ public class NetworkTests {
     Path path = Path.of(NetworkTests.class.getResource("/connection/map_1.tsp").toURI());
     String val = new Scanner(path.toFile()).next();
 
-    connection.pushMap(999, path.toString(), 0);
+    connection.pushMap(999, 0, path.toString());
     Assert.assertEquals(val, new Scanner(Path.of(connection.getMapFromServer(999, 0))
       .toFile())
       .next());

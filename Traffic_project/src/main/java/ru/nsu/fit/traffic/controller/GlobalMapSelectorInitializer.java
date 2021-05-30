@@ -1,10 +1,12 @@
 package ru.nsu.fit.traffic.controller;
 
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.edit.GlobalMapSelectorController;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterface;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorInitializerInterface;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
+import ru.nsu.fit.traffic.network.ConnectionImpl;
 
 public class GlobalMapSelectorInitializer implements GlobalMapSelectorInitializerInterface {
   private final GlobalMapSelectorController selectorController;
@@ -18,6 +20,7 @@ public class GlobalMapSelectorInitializer implements GlobalMapSelectorInitialize
   public void initialize(GlobalMapUpdateObserver updateObserver) {
     GlobalMapEditOpManager editOperationsManager = new GlobalMapEditOpManager(updateObserver);
 
+    selectorController.setConnection(ConnectionConfig.getConnectionConfig().getConnection());
     selectorController.setUpdateObserver(updateObserver);
     selectorController.setEditOpManager(editOperationsManager);
   }
