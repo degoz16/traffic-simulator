@@ -42,7 +42,7 @@ public class GlobalMapController {
   private boolean isSelRectVisible = false;
   private boolean isConnectorIconVisible = false;
 
-  public void setMapParams(double wight, double height){
+  public void setMapParams(double wight, double height, String name){
       mainPane.setPrefWidth(wight);
       mainPane.setMaxWidth(wight);
       mainPane.setPrefHeight(height);
@@ -52,6 +52,8 @@ public class GlobalMapController {
       centeredField.setMaxWidth(wight);
       centeredField.setPrefHeight(height);
       centeredField.setMaxHeight(height);
+
+      editControl.getCurrRegionsMap().setName(name);
   }
 
   private final GlobalMapSceneElementsControl sceneElementsControl =

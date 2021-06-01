@@ -66,4 +66,8 @@ public interface EditControlInterface {
   void onRoadClick(int id, int i, MouseEventWrapper event);
 
   void saveMap();
+
+  double getMapWidth();
+
+  double getMapHeight();
 }

@@ -17,7 +17,7 @@ public class CreateMapController {
 
   private @FXML TextField text_field_wight;
   private @FXML TextField text_field_height;
-
+  private @FXML TextField textFieldName;
   private Stage stage;
 
   public void setStage(Stage stage) {
@@ -54,7 +54,9 @@ public class CreateMapController {
 
       controller.setMapParams(
           Integer.parseInt(text_field_wight.getText()) * 3.3,
-          Integer.parseInt(text_field_height.getText()) * 3.3);
+          Integer.parseInt(text_field_height.getText()) * 3.3,
+          textFieldName.getText()
+          );
 
       stage.setWidth(850);
       stage.setHeight(540);

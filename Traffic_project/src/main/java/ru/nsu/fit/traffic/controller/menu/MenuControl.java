@@ -91,6 +91,7 @@ public class MenuControl extends BaseControl implements MenuControlInterface {
         MapJsonStruct mapJsonStruct = gson.fromJson(fileReader, MapJsonStruct.class);
 
         mapJsonStruct.toTrafficMap(editOperationsManager.getMap());
+
         pathToProjectDir = file.getAbsolutePath();
       } catch (FileNotFoundException e) {
         System.err.println(e.getMessage());

@@ -457,6 +457,16 @@ public class MainController {
 
   public void initMap(String mapPath) {
     saveLoadControl.onOpenProject(new File(mapPath));
+
+    mainPane.setPrefWidth(editControl.getMapWidth());
+    mainPane.setMaxWidth(editControl.getMapWidth());
+    mainPane.setPrefHeight(editControl.getMapHeight());
+    mainPane.setMaxHeight(editControl.getMapHeight());
+
+    centeredField.setPrefWidth(editControl.getMapWidth());
+    centeredField.setMaxWidth(editControl.getMapWidth());
+    centeredField.setPrefHeight(editControl.getMapHeight());
+    centeredField.setMaxHeight(editControl.getMapHeight());
   }
 
   /**
@@ -466,6 +476,7 @@ public class MainController {
   public void initialize() {
     ControlInitializerInterface controlsInitializer = new FragmentEditControlsInitializer(sceneElementsControl);
     editControl = controlsInitializer.getEditControl();
+
     MapEditorViewUpdater viewUpdater = new MapEditorViewUpdater(
         (shape, placeOfInterestId) ->
             shape.setOnMouseClicked(event ->

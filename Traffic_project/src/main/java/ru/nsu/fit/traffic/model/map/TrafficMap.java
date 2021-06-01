@@ -15,12 +15,16 @@ public class TrafficMap {
     private String start;
     private String end;
     private int regionId;
+    private double width = 1000;
+    private double height = 1000;
 
     public TrafficMap() {
 
     }
 
     public TrafficMap(int regId, RectRegion region, double scale) {
+        this.width = region.getWidth() * scale;
+        this.height = region.getHeight() * scale;
         for (int i = 0; i < region.getConnectorsCount(); i++) {
             nodes.add(new Node(
                 region.getConnector(i).getX() * scale,
@@ -28,6 +32,14 @@ public class TrafficMap {
                 regId,
                 i));
         }
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
     }
 
     public int getRegionId() {

@@ -519,4 +519,14 @@ public class EditControl extends BaseControl implements EditControlInterface {
     sceneElementsControl.roadSignMenuSetVisible(false);
     sceneElementsControl.setSelectRectVisible(false);
   }
+
+  @Override
+  public double getMapWidth() {
+    return editOperationsManager.getMap().getWidth();
+  }
+
+  @Override
+  public double getMapHeight() {
+    return editOperationsManager.getMap().getHeight();
+  }
 }
