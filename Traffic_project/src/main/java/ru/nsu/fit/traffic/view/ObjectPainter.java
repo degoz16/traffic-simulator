@@ -155,9 +155,13 @@ public class ObjectPainter {
         Shape shape;
         List<Shape> res = new ArrayList<>();
         if(node.getConnector() != null) {
-            shape = new Circle(8);
+            var circle = new Circle(8);
+            circle.setCenterX(node.getX());
+            circle.setCenterY(node.getY());
+            shape = circle;
             shape.setFill(Color.LIGHTBLUE);
             res.add(shape);
+
             return res;
         }
         if (node.getRoadPair().size() == 0) {

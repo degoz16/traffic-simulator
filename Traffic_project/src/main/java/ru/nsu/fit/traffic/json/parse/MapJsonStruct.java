@@ -29,7 +29,12 @@ public class MapJsonStruct {
           }
           node.foreachRoadIn(road -> roadsFrom.add(map.indexOfRoad(road)));
           node.foreachRoadOut(road -> roadsTo.add(map.indexOfRoad(road)));
-
+          RegionConnectorJson conn = null;
+          if (node.getConnector() != null) {
+            conn = new RegionConnectorJson(
+                node.getConnector().getRegionId(),
+                node.getConnector().getConnectorId());
+          }
           if (node.getTrafficLight() != null) {
             TrafficLight trafficLight = node.getTrafficLight();
             List<TrafficLightConfigJsonStruct> configToTraffic = new ArrayList<>();
@@ -46,9 +51,7 @@ public class MapJsonStruct {
                     roadsTo,
                     structs,
                     configToTraffic,
-                    new RegionConnectorJson(
-                        node.getConnector().getRegionId(),
-                        node.getConnector().getConnectorId())));
+                    conn));
 
           } else {
             nodes.add(
@@ -59,9 +62,7 @@ public class MapJsonStruct {
                     roadsTo,
                     structs,
                     null,
-                    new RegionConnectorJson(
-                        node.getConnector().getRegionId(),
-                        node.getConnector().getConnectorId())));
+                    conn));
 
           }
         });
