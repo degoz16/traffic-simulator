@@ -117,9 +117,11 @@ public class MapJsonStruct {
                 finalSpawners.add(new Spawner(period.getStart(), period.getEnd(), period.getSpawnerRate())));
           }
           mapNode.setSpawners(spawners);
-          mapNode.setConnector(new Connector(
-              node.getConnector().getRegionId(),
-              node.getConnector().getConnectorId()));
+          if (mapNode.getConnector() != null) {
+            mapNode.setConnector(new Connector(
+                node.getConnector().getRegionId(),
+                node.getConnector().getConnectorId()));
+          }
           mapNodes.add(mapNode);
         });
     roads.forEach(
