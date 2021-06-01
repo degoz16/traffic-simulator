@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -61,10 +62,19 @@ public class GlobalSelectorController {
     GlobalMapEditorViewUpdater viewUpdater = new GlobalMapEditorViewUpdater(
       ((rect, id, regW, regH) -> {
         rect.setOnMouseClicked(event -> {
-          String partFilepath = selectorControl.onRegionClick(
-            id,
-            MouseEventWrapper.getMouseEventWrapper(event)
-          );
+          String partFilepath = null;
+          try {
+            partFilepath = selectorControl.onRegionClick(
+              id,
+              MouseEventWrapper.getMouseEventWrapper(event)
+            );
+          } catch (Exception e) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setHeaderText("Connection error");
+            errorAlert.setContentText("Error while trying to get map from server");
+            errorAlert.showAndWait();
+            e.printStackTrace();
+          }
           FXMLLoader loader = new FXMLLoader(App.class.getResource("view/MainView.fxml"));
           Parent root = null;
           try {
@@ -77,8 +87,10 @@ public class GlobalSelectorController {
 
             MainController controller = loader.getController();
             controller.setStage(stage);
-            controller.initMap(partFilepath);
-            System.out.println(partFilepath);
+            if (partFilepath != null) {
+              controller.initMap(partFilepath);
+              System.out.println(partFilepath);
+            }
             ConnectionConfig.getConnectionConfig().setMapId(id);
           } catch (IOException e) {
             e.printStackTrace();

@@ -15,7 +15,7 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
 
 
   @Override
-  public String onRegionClick(int id, MouseEventWrapper event) {
+  public String onRegionClick(int id, MouseEventWrapper event) throws Exception {
     event.consume();
     return connection.getMapFromServer(id, ConnectionConfig.getConnectionConfig().getRoomId());
   }

@@ -74,7 +74,7 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public String getMapFromServer(int num, int roomId) {
+  public String getMapFromServer(int num, int roomId) throws Exception {
     try {
       return getMap(num, new URL(GET_URL + "?id=" + num + "&roomId=" + roomId));
     } catch (MalformedURLException e) {
@@ -83,7 +83,7 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public String getGlobalMapFromServer(int roomId) {
+  public String getGlobalMapFromServer(int roomId) throws Exception {
     try {
       return getMap(null, new URL(GLOBAL + "?roomId="+roomId));
     } catch (MalformedURLException e) {
@@ -113,7 +113,7 @@ public class ConnectionImpl implements Connection {
     }
   }
 
-  private String getMap(Integer id, URL url) {
+  private String getMap(Integer id, URL url) throws Exception {
     try {
       HttpURLConnection con = (HttpURLConnection) url.openConnection();
       con.setRequestMethod("GET");
@@ -132,7 +132,7 @@ public class ConnectionImpl implements Connection {
       fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
       return fullPath.toString();
     } catch (IOException e) {
-      throw new RuntimeException("Can't get map: '" + id + "' id.", e);
+      throw new Exception("Can't get map: '" + id + "' id.", e);
     }
   }
 }

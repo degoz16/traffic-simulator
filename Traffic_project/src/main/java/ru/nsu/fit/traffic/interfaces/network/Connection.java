@@ -7,6 +7,6 @@ public interface Connection {
   List<Double> getRooms();
 
   void pushMap(int num, int roomId,  String filepath);
-  String getMapFromServer(int num, int roomId);
-  String getGlobalMapFromServer(int roomId);
+  String getMapFromServer(int num, int roomId) throws Exception;
+  String getGlobalMapFromServer(int roomId) throws Exception;
 }

@@ -152,8 +152,14 @@ public class ObjectPainter {
     }
 
     public List<Shape> paintNode(Node node) {
-
         Shape shape;
+        List<Shape> res = new ArrayList<>();
+        if(node.getConnector() != null) {
+            shape = new Circle(8);
+            shape.setFill(Color.LIGHTBLUE);
+            res.add(shape);
+            return res;
+        }
         if (node.getRoadPair().size() == 0) {
             return new ArrayList<>();
         }
@@ -176,9 +182,9 @@ public class ObjectPainter {
                 Image img = new Image(getClass().getResource("../view/Images/spawner.png").toExternalForm());
                 shape.setFill(new ImagePattern(img));
             }
-            List<Shape> res = new ArrayList<>();
+            List<Shape> res1 = new ArrayList<>();
             res.add(shape);
-            return res;
+            return res1;
         }
         List<Map.Entry<Road, Road>> roadPairs = node.getRoadPair();
         double[] angles = new double[roadPairs.size()];
@@ -253,7 +259,6 @@ public class ObjectPainter {
         shape.setStroke(roadColor);
         shape.setStrokeWidth(2);
 
-        List<Shape> res = new ArrayList<>();
         res.add(shape);
 
         if (node.getTrafficLight() != null) {
