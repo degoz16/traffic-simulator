@@ -1,16 +1,10 @@
 package ru.nsu.fit.traffic.json.parse;
 
+import ru.nsu.fit.traffic.model.map.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import ru.nsu.fit.traffic.model.map.PlaceOfInterest;
-import ru.nsu.fit.traffic.model.map.TrafficMap;
-import ru.nsu.fit.traffic.model.map.Node;
-import ru.nsu.fit.traffic.model.map.Spawner;
-import ru.nsu.fit.traffic.model.map.Lane;
-import ru.nsu.fit.traffic.model.map.Road;
-import ru.nsu.fit.traffic.model.map.TrafficLight;
-import ru.nsu.fit.traffic.model.map.TrafficLightConfig;
 
 public class MapJsonStruct {
   private final List<NodeJsonStruct> nodes = new ArrayList<>();
@@ -23,77 +17,83 @@ public class MapJsonStruct {
     start = map.getStart();
     end = map.getEnd();
     map.forEachNode(
-      node -> {
-        List<Integer> roadsFrom = new ArrayList<>();
-        List<Integer> roadsTo = new ArrayList<>();
-        List<SpawnerJsonStruct> structs = null;
-        if (node.getSpawners() != null) {
-          structs = new ArrayList<>();
-          List<SpawnerJsonStruct> finalStructs = structs;
-          node.getSpawners().forEach(spawner -> finalStructs.add(new SpawnerJsonStruct(
-            spawner.getStartString(), spawner.getEndString(), spawner.getSpawnRate())));
-        }
-        node.foreachRoadIn(road -> roadsFrom.add(map.indexOfRoad(road)));
-        node.foreachRoadOut(road -> roadsTo.add(map.indexOfRoad(road)));
+        node -> {
+          List<Integer> roadsFrom = new ArrayList<>();
+          List<Integer> roadsTo = new ArrayList<>();
+          List<SpawnerJsonStruct> structs = null;
+          if (node.getSpawners() != null) {
+            structs = new ArrayList<>();
+            List<SpawnerJsonStruct> finalStructs = structs;
+            node.getSpawners().forEach(spawner -> finalStructs.add(new SpawnerJsonStruct(
+                spawner.getStartString(), spawner.getEndString(), spawner.getSpawnRate())));
+          }
+          node.foreachRoadIn(road -> roadsFrom.add(map.indexOfRoad(road)));
+          node.foreachRoadOut(road -> roadsTo.add(map.indexOfRoad(road)));
 
-        if (node.getTrafficLight() != null) {
-          TrafficLight trafficLight = node.getTrafficLight();
-          List<TrafficLightConfigJsonStruct> configToTraffic = new ArrayList<>();
-          trafficLight.getConfig().forEach(x -> {
-            List<Integer> roads = new ArrayList<>();
-            x.getRoads().forEach(road -> roads.add(map.indexOfRoad(road)));
-            configToTraffic.add(new TrafficLightConfigJsonStruct(x.getDelay(), roads));
-          });
-          nodes.add(
-            new NodeJsonStruct(
-              node.getX(),
-              node.getY(),
-              roadsFrom,
-              roadsTo,
-              structs,
-              configToTraffic));
+          if (node.getTrafficLight() != null) {
+            TrafficLight trafficLight = node.getTrafficLight();
+            List<TrafficLightConfigJsonStruct> configToTraffic = new ArrayList<>();
+            trafficLight.getConfig().forEach(x -> {
+              List<Integer> roads = new ArrayList<>();
+              x.getRoads().forEach(road -> roads.add(map.indexOfRoad(road)));
+              configToTraffic.add(new TrafficLightConfigJsonStruct(x.getDelay(), roads));
+            });
+            nodes.add(
+                new NodeJsonStruct(
+                    node.getX(),
+                    node.getY(),
+                    roadsFrom,
+                    roadsTo,
+                    structs,
+                    configToTraffic,
+                    new RegionConnectorJson(
+                        node.getConnector().getRegionId(),
+                        node.getConnector().getConnectorId())));
 
-        } else {
-          nodes.add(
-            new NodeJsonStruct(
-              node.getX(),
-              node.getY(),
-              roadsFrom,
-              roadsTo,
-              structs,
-              null));
+          } else {
+            nodes.add(
+                new NodeJsonStruct(
+                    node.getX(),
+                    node.getY(),
+                    roadsFrom,
+                    roadsTo,
+                    structs,
+                    null,
+                    new RegionConnectorJson(
+                        node.getConnector().getRegionId(),
+                        node.getConnector().getConnectorId())));
 
-        }
-      });
+          }
+        });
     map.forEachRoad(
-      road -> {
-        List<LaneJsonStruct> lanes = new ArrayList<>();
-        road.forEachLane(
-          lane -> {
-            List<Map<String, String>> signs = new ArrayList<>();
-            lane.getSigns().forEach(sign -> signs.add(sign.getSettings()));
-            LaneJsonStruct laneJsonStruct = new LaneJsonStruct(signs);
-            lanes.add(laneJsonStruct);
-          });
-        RoadJsonStruct roadJsonStruct =
-          new RoadJsonStruct(
-            map.indexOfNode(road.getFrom()), map.indexOfNode(road.getTo()), lanes);
-        roads.add(roadJsonStruct);
-      });
+        road -> {
+          List<LaneJsonStruct> lanes = new ArrayList<>();
+          road.forEachLane(
+              lane -> {
+                List<Map<String, String>> signs = new ArrayList<>();
+                lane.getSigns().forEach(sign -> signs.add(sign.getSettings()));
+                LaneJsonStruct laneJsonStruct = new LaneJsonStruct(signs);
+                lanes.add(laneJsonStruct);
+              });
+          RoadJsonStruct roadJsonStruct =
+              new RoadJsonStruct(
+                  map.indexOfNode(road.getFrom()), map.indexOfNode(road.getTo()), lanes);
+          roads.add(roadJsonStruct);
+        });
     map.forEachPlaceOfInterest(
-      poi -> {
-        List<Integer> nodes = new ArrayList<>();
-        poi.foreachNodeIn(node -> nodes.add(map.indexOfNode(node)));
-        pointsOfInterest.add(
-          new PlaceOfInterestJsonStruct(
-            poi.getX(),
-            poi.getY(),
-            poi.getWidth(),
-            poi.getHeight(),
-            poi.getNumberOfParkingPlaces(),
-            poi.getWeight(),
-            nodes));
-      });
+        poi -> {
+          List<Integer> nodes = new ArrayList<>();
+          poi.foreachNodeIn(node -> nodes.add(map.indexOfNode(node)));
+          pointsOfInterest.add(
+              new PlaceOfInterestJsonStruct(
+                  poi.getX(),
+                  poi.getY(),
+                  poi.getWidth(),
+                  poi.getHeight(),
+                  poi.getNumberOfParkingPlaces(),
+                  poi.getWeight(),
+                  nodes));
+        });
   }
 
   /**
@@ -106,42 +106,45 @@ public class MapJsonStruct {
     List<PlaceOfInterest> mapPois = new ArrayList<>();
 
     nodes.forEach(
-      node -> {
-        Node mapNode = new Node(node.getX(), node.getY());
-        List<Spawner> spawners = null;
-        if (node.getPeriodsOfSpawn() != null) {
-          spawners = new ArrayList<>();
-          List<Spawner> finalSpawners = spawners;
-          node.getPeriodsOfSpawn().forEach(period ->
-            finalSpawners.add(new Spawner(period.getStart(), period.getEnd(), period.getSpawnerRate())));
-        }
-        mapNode.setSpawners(spawners);
-        mapNodes.add(mapNode);
-      });
+        node -> {
+          Node mapNode = new Node(node.getX(), node.getY());
+          List<Spawner> spawners = null;
+          if (node.getPeriodsOfSpawn() != null) {
+            spawners = new ArrayList<>();
+            List<Spawner> finalSpawners = spawners;
+            node.getPeriodsOfSpawn().forEach(period ->
+                finalSpawners.add(new Spawner(period.getStart(), period.getEnd(), period.getSpawnerRate())));
+          }
+          mapNode.setSpawners(spawners);
+          mapNode.setConnector(new Connector(
+              node.getConnector().getRegionId(),
+              node.getConnector().getConnectorId()));
+          mapNodes.add(mapNode);
+        });
     roads.forEach(
-      roadJsonStruct -> {
-        Road mapRoad = new Road();
-        List<Lane> lanes = new ArrayList<>();
-        roadJsonStruct
-          .getLanes()
-          .forEach(
-            laneJsonStruct -> {
-              Lane lane = new Lane();
-              laneJsonStruct
-                .getSigns()
-                .forEach(
-                  map -> {
-                    lane.addSign(creator.createSign(map));
+        roadJsonStruct -> {
+          Road mapRoad = new Road();
+          List<Lane> lanes = new ArrayList<>();
+          roadJsonStruct
+              .getLanes()
+              .forEach(
+                  laneJsonStruct -> {
+                    Lane lane = new Lane();
+                    laneJsonStruct
+                        .getSigns()
+                        .forEach(
+                            map -> {
+                              lane.addSign(creator.createSign(map));
+                            });
+                    lanes.add(lane);
                   });
-              lanes.add(lane);
-            });
-        mapRoad.setLanes(lanes);
-        Node nodeFrom = mapNodes.get(roadJsonStruct.getFrom());
-        Node nodeTo = mapNodes.get(roadJsonStruct.getTo());
-        mapRoad.setTo(nodeTo);
-        mapRoad.setFrom(nodeFrom);
-        mapRoads.add(mapRoad);
-      });
+          mapRoad.setLanes(lanes);
+          Node nodeFrom = mapNodes.get(roadJsonStruct.getFrom());
+          Node nodeTo = mapNodes.get(roadJsonStruct.getTo());
+          mapRoad.setTo(nodeTo);
+          mapRoad.setFrom(nodeFrom);
+          mapRoads.add(mapRoad);
+        });
 
     int i = 0;
 
@@ -176,25 +179,25 @@ public class MapJsonStruct {
     }
 
     pointsOfInterest.forEach(
-      poiJsonStruct -> {
-        PlaceOfInterest place =
-          new PlaceOfInterest(
-            poiJsonStruct.getX(),
-            poiJsonStruct.getY(),
-            poiJsonStruct.getWidth(),
-            poiJsonStruct.getHeight(),
-            poiJsonStruct.getCapacity(),
-            poiJsonStruct.getWeight());
-        poiJsonStruct
-          .getNodes()
-          .forEach(
-            nodeNum -> {
-              Node node = mapNodes.get(nodeNum);
-              node.setPlaceOfInterest(place);
-              place.addNode(node);
-            });
-        mapPois.add(place);
-      });
+        poiJsonStruct -> {
+          PlaceOfInterest place =
+              new PlaceOfInterest(
+                  poiJsonStruct.getX(),
+                  poiJsonStruct.getY(),
+                  poiJsonStruct.getWidth(),
+                  poiJsonStruct.getHeight(),
+                  poiJsonStruct.getCapacity(),
+                  poiJsonStruct.getWeight());
+          poiJsonStruct
+              .getNodes()
+              .forEach(
+                  nodeNum -> {
+                    Node node = mapNodes.get(nodeNum);
+                    node.setPlaceOfInterest(place);
+                    place.addNode(node);
+                  });
+          mapPois.add(place);
+        });
 
     trafficMap.setEnd(end);
     trafficMap.setStart(start);

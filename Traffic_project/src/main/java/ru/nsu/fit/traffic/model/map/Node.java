@@ -44,6 +44,10 @@ public class Node {
     return connector;
   }
 
+  public void setConnector(Connector connector) {
+    this.connector = connector;
+  }
+
   public List<Spawner> getSpawners() {
     return spawners;
   }

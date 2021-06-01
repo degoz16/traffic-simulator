@@ -220,7 +220,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     editOpManager.saveRegMap("/global_map.tsp");
     Integer roomId = connection.createRoom("/global_map.tsp");
     for (int i = 0; i < map.getRegionCount(); i++) {
-      TrafficMap m = new TrafficMap(i, map.getRegion(i), 1);
+      TrafficMap m = new TrafficMap(i, map.getRegion(i), 12);
       EditOperationsManager.saveMap("/map_" + i + ".tsp", m);
       connection.pushMap(i, roomId, "/map_" + i + ".tsp");
     }

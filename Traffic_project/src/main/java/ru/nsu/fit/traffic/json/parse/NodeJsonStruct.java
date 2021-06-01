@@ -9,6 +9,7 @@ public class NodeJsonStruct {
   private List<Integer> roadsOut;
   private List<TrafficLightConfigJsonStruct> trafficLight;
   private List<SpawnerJsonStruct> periodsOfSpawn;
+  private RegionConnectorJson connector;
 
   public NodeJsonStruct(
       double x,
@@ -16,13 +17,23 @@ public class NodeJsonStruct {
       List<Integer> roadsFrom,
       List<Integer> roadsTo,
       List<SpawnerJsonStruct> periodsOfSpawn,
-      List<TrafficLightConfigJsonStruct> trafficLight) { //FIXME Поменять на TrafficJson
+      List<TrafficLightConfigJsonStruct> trafficLight,
+      RegionConnectorJson connector) {
     this.x = x;
     this.y = y;
     this.roadsIn = roadsFrom;
     this.roadsOut = roadsTo;
     this.periodsOfSpawn = periodsOfSpawn;
     this.trafficLight = trafficLight;
+    this.connector = connector;
+  }
+
+  public RegionConnectorJson getConnector() {
+    return connector;
+  }
+
+  public void setConnector(RegionConnectorJson connector) {
+    this.connector = connector;
   }
 
   public double getX() {
