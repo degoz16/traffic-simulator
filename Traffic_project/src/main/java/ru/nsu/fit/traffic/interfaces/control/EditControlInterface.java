@@ -64,4 +64,6 @@ public interface EditControlInterface {
   void onMainPaneDrag(MouseEventWrapper event);
 
   void onRoadClick(int id, int i, MouseEventWrapper event);
+
+  void saveMap();
 }

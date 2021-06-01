@@ -144,6 +144,11 @@
                   </AnchorPane>
                </children>
             </Group>
+            <VBox layoutX="566.4000244140625" layoutY="299.6000061035156" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#saveMap" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-background-radius: 100;" stylesheets="@GlobalMapStylesheets/saveButton.css" />
+               </children>
+            </VBox>
             <fx:include fx:id="roadSettings" source="RoadSettingsView.fxml" />
             <fx:include fx:id="trafficLight" source="TrafficLigthSettings.fxml" />
             <fx:include fx:id="nodeSettings" source="NodeSettingsView.fxml" />

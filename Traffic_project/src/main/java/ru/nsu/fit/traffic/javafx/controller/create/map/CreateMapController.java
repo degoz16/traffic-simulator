@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.stage.Stage;
+import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
 
 import java.io.IOException;
@@ -35,14 +36,13 @@ public class CreateMapController {
       return null;
     };
 
-    text_field_wight.setTextFormatter(new TextFormatter<Object>(integerFilter));
-    text_field_height.setTextFormatter(new TextFormatter<Object>(integerFilter));
+    text_field_wight.setTextFormatter(new TextFormatter<>(integerFilter));
+    text_field_height.setTextFormatter(new TextFormatter<>(integerFilter));
   }
 
   @FXML
   public void createMap() {
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/GlobalMapView.fxml"));
-    System.out.println(getClass());
+    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapView.fxml"));
     try {
       Parent root = loader.load();
       Scene scene = new Scene(root);

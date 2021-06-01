@@ -132,10 +132,10 @@ public class MapServiceImpl implements MapService {
   }
 
   private String saveFileMap(MultipartFile file, Integer id, Path roomPath) throws IOException {
-    String originalName = StringUtils.cleanPath(file.getOriginalFilename());
-    if (!originalName.endsWith(".tsp")) {
-      throw new RuntimeException("Sorry! File isn't tsp map " + originalName);
-    }
+//    String originalName = StringUtils.cleanPath(file.getOriginalFilename());
+//    if (!originalName.endsWith(".json")) {
+//      throw new RuntimeException("Sorry! File isn't tsp map " + originalName);
+//    }
     String fileName = toFileName(id);
     // Copy file to the target location (Replacing existing file with the same name)
     Path targetLocation = roomPath.resolve(fileName);
@@ -154,7 +154,7 @@ public class MapServiceImpl implements MapService {
   }
 
   private String toFileName(Integer id) {
-    return "map_"+(id == null ? "global" : id)+".tsp";
+    return "map_"+(id == null ? "global" : id)+".json";
   }
   
   private Path getRoomPath(int roomId) {

@@ -92,7 +92,7 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public void pushMap(int num, String filepath, int roomId) {
+  public void pushMap(int num, int roomId, String filepath) {
     pushAnyMap(filepath, SAVE_URL + "?id=" + num + "&roomId=" + roomId);
   }
 

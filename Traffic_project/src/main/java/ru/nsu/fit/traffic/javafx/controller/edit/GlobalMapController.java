@@ -1,7 +1,10 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.AnchorPane;
@@ -11,6 +14,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import ru.nsu.fit.traffic.App;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.GlobalMapEditControlInitializer;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
 import ru.nsu.fit.traffic.controller.edit.EditControl;
@@ -23,12 +28,13 @@ import ru.nsu.fit.traffic.utils.Pair;
 import ru.nsu.fit.traffic.view.GlobalMapEditorViewUpdater;
 import ru.nsu.fit.traffic.view.GlobalMapObjectPainter;
 
+import java.io.IOException;
+
 public class GlobalMapController {
   private final Rectangle selectRect = UiPainter.getSelectRect();
   private final Circle connectorIcon = UiPainter.getConnectorIcon();
   private Stage stage;
   @FXML private ScrollPane mainScrollPane;
-  @FXML private Group scrollPaneContent;
   @FXML private Pane mainPane;
   @FXML private AnchorPane basePane;
   @FXML private VBox centeredField;
@@ -128,9 +134,32 @@ public class GlobalMapController {
     //editControl.onGet();
   }
 
+    @FXML
+    public void deleteConnector(){
+
+    }
+
   @FXML
-  public void onPut() {
-    editControl.onNewPut();
+  public void saveMap() {
+    Integer roomId = editControl.onNewPut();
+    ConnectionConfig.getConnectionConfig().setRoomId(roomId);
+    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
+    try {
+      Parent root = loader.load();
+      Scene scene = new Scene(root);
+
+      stage.setTitle("Traffic simulator");
+      stage.setScene(scene);
+
+      GlobalSelectorController controller = loader.getController();
+      controller.setStage(stage);
+      controller.setMap(ConnectionConfig.getConnectionConfig().getConnection().getGlobalMapFromServer(roomId));
+
+      stage.show();
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   public GlobalMapEditControlInterface getEditControl() {

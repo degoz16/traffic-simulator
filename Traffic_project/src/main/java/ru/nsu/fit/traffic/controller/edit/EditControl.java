@@ -10,6 +10,7 @@ import java.io.Reader;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.BaseControl;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.engine.EngineController;
@@ -19,6 +20,7 @@ import ru.nsu.fit.traffic.controller.statistic.StatisticControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
 import ru.nsu.fit.traffic.interfaces.control.EditControlInterface;
+import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.model.congestion.ReportStruct;
 import ru.nsu.fit.traffic.model.congestion.ReportWindowStruct;
 import ru.nsu.fit.traffic.model.logic.EditOperation;
@@ -495,6 +497,16 @@ public class EditControl extends BaseControl implements EditControlInterface {
         }
       }
     }
+  }
+
+  @Override
+  public void saveMap() {
+    Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
+    connection.pushMap(
+      ConnectionConfig.getConnectionConfig().getMapId(),
+      ConnectionConfig.getConnectionConfig().getRoomId(),
+      saveLoadControl.getPathToProjectDir()
+    );
   }
 
   private void closeAllSettings() {
