@@ -139,7 +139,6 @@ public class GlobalMapController {
 
   @FXML
   public void initialize() {
-    GlobalMapObjectPainter painter = new GlobalMapObjectPainter();
     GlobalMapControlInitializerInterface initializer =
         new GlobalMapEditControlInitializer(sceneElementsControl);
     editControl = initializer.getEditControl();

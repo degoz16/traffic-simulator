@@ -29,8 +29,6 @@ public class GlobalSelectorController {
   @FXML private AnchorPane basePane;
   @FXML private VBox centeredField;
   private GlobalMapSelectorControllerInterface selectorControl;
-  private GlobalMapEditOpManager editOpManager = null;
-  private GlobalMapUpdateObserver updateObserver = null;
 
   @FXML
   public void initialize() {
