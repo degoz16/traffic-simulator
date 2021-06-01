@@ -462,11 +462,6 @@ public class MainController {
     mainPane.setMaxWidth(editControl.getMapWidth());
     mainPane.setPrefHeight(editControl.getMapHeight());
     mainPane.setMaxHeight(editControl.getMapHeight());
-
-    centeredField.setPrefWidth(editControl.getMapWidth());
-    centeredField.setMaxWidth(editControl.getMapWidth());
-    centeredField.setPrefHeight(editControl.getMapHeight());
-    centeredField.setMaxHeight(editControl.getMapHeight());
   }
 
   /**

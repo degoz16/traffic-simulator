@@ -10,12 +10,16 @@ public class MapJsonStruct {
   private final List<NodeJsonStruct> nodes = new ArrayList<>();
   private final List<RoadJsonStruct> roads = new ArrayList<>();
   private final List<PlaceOfInterestJsonStruct> pointsOfInterest = new ArrayList<>();
+  private double width;
+  private double height;
   private String start = "09:00";
   private String end = "19:00";
 
   public MapJsonStruct(TrafficMap map) {
     start = map.getStart();
     end = map.getEnd();
+    width = map.getWidth();
+    height = map.getHeight();
     map.forEachNode(
         node -> {
           List<Integer> roadsFrom = new ArrayList<>();
@@ -105,7 +109,8 @@ public class MapJsonStruct {
     List<Road> mapRoads = new ArrayList<>();
     List<Node> mapNodes = new ArrayList<>();
     List<PlaceOfInterest> mapPois = new ArrayList<>();
-
+    trafficMap.setWidth(width);
+    trafficMap.setHeight(height);
     nodes.forEach(
         node -> {
           Node mapNode = new Node(node.getX(), node.getY());
