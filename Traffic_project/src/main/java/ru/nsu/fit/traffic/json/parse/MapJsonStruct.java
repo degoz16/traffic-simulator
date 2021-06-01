@@ -122,7 +122,7 @@ public class MapJsonStruct {
                 finalSpawners.add(new Spawner(period.getStart(), period.getEnd(), period.getSpawnerRate())));
           }
           mapNode.setSpawners(spawners);
-          if (mapNode.getConnector() != null) {
+          if (node.getConnector() != null) {
             mapNode.setConnector(new Connector(
                 node.getConnector().getRegionId(),
                 node.getConnector().getConnectorId()));
@@ -181,8 +181,6 @@ public class MapJsonStruct {
 
         roadIn.setBackRoad(roadOut);
         roadOut.setBackRoad(roadIn);
-
-
       }
     }
 
