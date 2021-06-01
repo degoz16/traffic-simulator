@@ -9,6 +9,15 @@ public class RegionsMap {
   //private Map<String, RectRegion> regions = new HashMap<>();
   private final List<RectRegion> regions = new ArrayList<>();
   private int currConnectorsCnt = 0;
+  private String name = "map";
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
 
   public List<RectRegion> getRegions() {
     return regions;

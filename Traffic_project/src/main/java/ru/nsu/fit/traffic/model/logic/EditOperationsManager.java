@@ -208,8 +208,8 @@ public class EditOperationsManager {
         buildRoadOnEmpty(x, y);
         placeOfInterest.addNode(lastNode);
         lastNode.setPlaceOfInterest(placeOfInterest);
-        List<Node> nodeList = new ArrayList<>();
         updateView.update(this);
+        System.out.println(lastNode.getPlaceOfInterest());
     }
 
     public void addPlaceOfInterest(double x, double y, double width, double height) {

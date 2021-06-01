@@ -186,9 +186,8 @@ public class ObjectPainter {
                 Image img = new Image(getClass().getResource("../view/Images/spawner.png").toExternalForm());
                 shape.setFill(new ImagePattern(img));
             }
-            List<Shape> res1 = new ArrayList<>();
             res.add(shape);
-            return res1;
+            return res;
         }
         List<Map.Entry<Road, Road>> roadPairs = node.getRoadPair();
         double[] angles = new double[roadPairs.size()];

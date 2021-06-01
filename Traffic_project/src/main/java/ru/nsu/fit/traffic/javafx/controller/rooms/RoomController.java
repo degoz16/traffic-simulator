@@ -73,6 +73,8 @@ public class RoomController {
       controller.setMap(connection.getGlobalMapFromServer(connectionConfig.getRoomId()));
     } catch (IOException e) {
       e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     stage.show();
 

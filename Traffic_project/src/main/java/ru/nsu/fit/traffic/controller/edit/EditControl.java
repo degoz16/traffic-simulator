@@ -342,6 +342,7 @@ public class EditControl extends BaseControl implements EditControlInterface {
         switch (editOperationsManager.getCurrentOperation()) {
           case ROAD_CREATION -> {
             event.consume();
+            //System.out.println(placeOfInterest);
             editOperationsManager.buildRoadOnPlaceOfInterest(event.getX(), event.getY(), placeOfInterest);
           }
           case NONE -> {

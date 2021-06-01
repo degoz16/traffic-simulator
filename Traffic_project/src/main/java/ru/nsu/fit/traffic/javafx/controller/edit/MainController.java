@@ -705,6 +705,8 @@ public class MainController {
       );
     } catch (IOException e) {
       e.printStackTrace();
+    } catch (Exception e) {
+      e.printStackTrace();
     }
     stage.show();
   }
