@@ -5,9 +5,15 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class GlobalMapObjectPainter {
@@ -22,6 +28,34 @@ public class GlobalMapObjectPainter {
     rect.setStrokeWidth(5);
     rect.setFill(Color.valueOf("#808080"));
     return rect;
+  }
+
+  public List<Shape> paintRegionPreview(RectRegion region, TrafficMap map) {
+    List<Shape> res = new ArrayList<>();
+    double scale = region.getWidth() / map.getWidth();
+    map.forEachPlaceOfInterest(placeOfInterest -> {
+      var rect = new Rectangle(
+          scale * placeOfInterest.getX(),
+          scale * placeOfInterest.getY(),
+          scale * placeOfInterest.getWeight(),
+          scale * placeOfInterest.getHeight());
+      rect.setFill(Color.DARKGRAY);
+      rect.setStrokeWidth(0.5);
+      rect.setMouseTransparent(true);
+      res.add(rect);
+    });
+    map.forEachRoad(road -> {
+      Line line = new Line();
+      line.setStroke(Color.GRAY);
+      line.setStrokeWidth(1);
+      line.setStartX(scale * road.getFrom().getX());
+      line.setStartY(scale * road.getFrom().getY());
+      line.setEndX(scale * road.getTo().getX());
+      line.setEndY(scale * road.getTo().getY());
+      line.setMouseTransparent(true);
+      res.add(line);
+    });
+    return res;
   }
 
   public Circle paintConnector(RoadConnector connector, boolean isSet) {
