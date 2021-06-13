@@ -35,8 +35,8 @@ public class GlobalMapObjectPainter {
     double scale = region.getWidth() / map.getWidth();
     map.forEachPlaceOfInterest(placeOfInterest -> {
       var rect = new Rectangle(
-          scale * placeOfInterest.getX(),
-          scale * placeOfInterest.getY(),
+          scale * placeOfInterest.getX() + region.getX(),
+          scale * placeOfInterest.getY() + region.getY(),
           scale * placeOfInterest.getWeight(),
           scale * placeOfInterest.getHeight());
       rect.setFill(Color.DARKGRAY);
