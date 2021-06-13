@@ -44,6 +44,9 @@ public class GlobalMapEditorViewUpdater {
                     ConnectionConfig.getConnectionConfig()
                         .getConnection().getMapFromServer(
                             i, ConnectionConfig.getConnectionConfig().getRoomId()));
+            assert trafficMap != null;
+            List<Shape> shapes = painter.paintRegionPreview(region, trafficMap);
+            shapes.forEach(mainPane.getChildren()::add);
           } catch (Exception e) {
             e.printStackTrace();
           }
