@@ -20,7 +20,7 @@ import java.util.Set;
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.*;
 
 public class GlobalMapEditControl implements GlobalMapEditControlInterface {
-  private static final double MAP_SCALE = 12;
+  private static final double MAP_SCALE = 6;
   private GlobalMapEditOpManager editOpManager = null;
   private final GlobalMapSceneElementsControl sceneElementsControl;
   private GlobalMapUpdateObserver updateObserver = null;
@@ -219,7 +219,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     RegionsMap map = editOpManager.getCurrRegMap();
     Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
     editOpManager.saveRegMap("/global_map.tsp");
-    Integer roomId = connection.createRoom("/global_map.tsp");
+    Integer roomId = connection.createRoom("/global_map.tsp", map.getName());
     for (int i = 0; i < map.getRegionCount(); i++) {
       TrafficMap m = new TrafficMap(i, map.getRegion(i), MAP_SCALE);
       EditOperationsManager.saveMap("/map_" + i + ".tsp", m);

@@ -26,7 +26,7 @@ public class ConnectionStub implements Connection {
   }
 
   @Override
-  public Integer createRoom(String filePath) {
+  public Integer createRoom(String filePath, String roomName) {
     File theDir = new File(serverFolder + "room_" + currRoomsCnt);
     if (!theDir.exists()){
       theDir.mkdirs();

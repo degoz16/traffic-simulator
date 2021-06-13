@@ -6,8 +6,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -15,13 +17,19 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
 
@@ -47,8 +55,11 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public Integer createRoom(String filePath) {
-    HttpEntity entity = pushAnyMap(filePath, CREATE_ROOM);
+  public Integer createRoom(String filePath, String roomName) {
+    HttpEntity entity = pushAnyMap(
+      filePath,
+      CREATE_ROOM + "?roomName=" + roomName.replace(' ', '+')
+    );
     try {
       Scanner scanner = new Scanner(entity.getContent());
       return scanner.nextInt();
@@ -59,15 +70,21 @@ public class ConnectionImpl implements Connection {
 
   @Override
   public List<Double> getRooms() {
-    HttpGet request = new HttpGet(ROOMS_URL);
-    HttpClient client = HttpClientBuilder.create().build();
+    HttpGet request = new HttpGet(ROOMS_URL);CredentialsProvider provider = new BasicCredentialsProvider();
+    UsernamePasswordCredentials credentials
+      = new UsernamePasswordCredentials("admin", "admin");
+    provider.setCredentials(AuthScope.ANY, credentials);
+    HttpClient client = HttpClientBuilder.create()
+      .setDefaultCredentialsProvider(provider)
+      .build();
     try {
       HttpResponse response = client.execute(request);
-      Gson gson = new Gson();
-      return gson.fromJson(
-        new BufferedReader(new InputStreamReader(response.getEntity().getContent())),
-        ArrayList.class
-      );
+      return IntStream.rangeClosed(1,
+        new Scanner(
+          new InputStreamReader(response.getEntity().getContent())
+        ).nextInt()).boxed()
+        .map(x -> (double)x)
+        .collect(Collectors.toList());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -83,10 +100,10 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public String getGlobalMapFromServer(int roomId) throws Exception {
+  public String getGlobalMapFromServer(int roomId) {
     try {
       return getMap(null, new URL(GLOBAL + "?roomId="+roomId));
-    } catch (MalformedURLException e) {
+    } catch (Exception e) {
       throw new RuntimeException(e);
     }
   }
@@ -105,7 +122,13 @@ public class ConnectionImpl implements Connection {
       HttpPost request = new HttpPost(url);
       request.setEntity(entity);
 
-      HttpClient client = HttpClientBuilder.create().build();
+      CredentialsProvider provider = new BasicCredentialsProvider();
+      UsernamePasswordCredentials credentials
+        = new UsernamePasswordCredentials("admin", "admin");
+      provider.setCredentials(AuthScope.ANY, credentials);
+      HttpClient client = HttpClientBuilder.create()
+        .setDefaultCredentialsProvider(provider)
+        .build();
       HttpResponse response = client.execute(request);
       return response.getEntity();
     } catch (IOException e) {
@@ -117,6 +140,12 @@ public class ConnectionImpl implements Connection {
     try {
       HttpURLConnection con = (HttpURLConnection) url.openConnection();
       con.setRequestMethod("GET");
+      con.setAuthenticator(new Authenticator() {
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+          return new PasswordAuthentication("admin", "admin".toCharArray());
+        }
+      });
 
       ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
       FileOutputStream fos;

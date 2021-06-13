@@ -1,6 +1,7 @@
 package ru.nsu.fit.traffic.config;
 
 import ru.nsu.fit.traffic.interfaces.network.Connection;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 
 public class ConnectionConfig {
 
@@ -11,6 +12,7 @@ public class ConnectionConfig {
   private Connection connection;
   private Integer roomId;
   private Integer mapId;
+  private TrafficMap trafficMap;
 
   public Integer getRoomId() {
     return roomId;
@@ -26,6 +28,14 @@ public class ConnectionConfig {
 
   public void setMapId(Integer mapId) {
     this.mapId = mapId;
+  }
+
+  public TrafficMap getTrafficMap() {
+    return trafficMap;
+  }
+
+  public void setPartPath(TrafficMap trafficMap) {
+    this.trafficMap = trafficMap;
   }
 
   public static ConnectionConfig getConnectionConfig() {

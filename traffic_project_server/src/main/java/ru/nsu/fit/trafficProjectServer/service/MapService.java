@@ -1,14 +1,16 @@
 package ru.nsu.fit.trafficProjectServer.service;
 
-import java.util.List;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
+import ru.nsu.fit.trafficProjectServer.model.Map;
 
 public interface MapService {
-  String getDocumentName(int id, int roomId);
-  Resource loadFileAsResource(String fileName, int roomId);
-  String storeFile(MultipartFile file, int id, int roomId);
-  List<Integer> getRooms() ;
-  Long createRoom(MultipartFile file);
-  String getGlobalMap(int roomId);
+  String getDocumentName(Long id, Long roomId);
+  Resource loadFileAsResource(String fileName, Long roomId);
+  String storeFile(MultipartFile file, Long id, Long roomId);
+  Long getRooms() ;
+  Long createRoom(MultipartFile file, String name);
+  String getGlobalMap(Long roomId);
+  Map getMap(Long id, Long roomId);
+  Map getGlobalMapNew(Long roomId);
 }

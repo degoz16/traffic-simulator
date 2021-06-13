@@ -8,11 +8,13 @@ group = 'ru.nsu.fit'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
 }
+
 
 repositories {
     mavenCentral()
@@ -23,8 +25,17 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation group: 'org.springframework.data', name: 'spring-data-rest-hal-explorer', version: '3.5.1'
+    implementation group: 'com.h2database', name: 'h2', version: '1.4.200'
     annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+// https://mvnrepository.com/artifact/org.projectlombok/lombok
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-security
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.5.0'
+
 }
 
 test {

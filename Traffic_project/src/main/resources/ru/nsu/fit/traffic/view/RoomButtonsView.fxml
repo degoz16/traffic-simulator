@@ -6,7 +6,7 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.rooms.RoomController">
    <children>
-      <HBox fx:id="hBox" layoutX="39.0" layoutY="41.0" prefHeight="256.0" prefWidth="523.0" />
-      <Button fx:id="newRoom" layoutX="201.0" layoutY="320.0" mnemonicParsing="false" prefHeight="50.0" prefWidth="200.0" text="Создать новую комнату" onAction="#onCreateMapClicked"/>
+      <HBox fx:id="root" layoutX="39.0" layoutY="41.0" prefHeight="256.0" prefWidth="523.0" />
+      <Button fx:id="newRoom" contentDisplay="CENTER" layoutX="200.0" layoutY="322.0" mnemonicParsing="false" onAction="#onCreateMapClicked" prefHeight="50.0" prefWidth="200.0" text="Создать новую комнату" />
    </children>
 </AnchorPane>

@@ -2,7 +2,6 @@ package ru.nsu.fit.traffic.javafx.controller.edit;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -12,23 +11,17 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.GlobalMapEditControlInitializer;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
-import ru.nsu.fit.traffic.controller.edit.EditControl;
-import ru.nsu.fit.traffic.controller.edit.GlobalMapEditControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapControlInitializerInterface;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
 import ru.nsu.fit.traffic.javafx.paiters.UiPainter;
 import ru.nsu.fit.traffic.utils.Pair;
 import ru.nsu.fit.traffic.view.GlobalMapEditorViewUpdater;
-import ru.nsu.fit.traffic.view.GlobalMapObjectPainter;
-
-import java.io.IOException;
 
 public class GlobalMapController {
   private final Rectangle selectRect = UiPainter.getSelectRect();
@@ -159,8 +152,6 @@ public class GlobalMapController {
 
       stage.show();
 
-    } catch (IOException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     }

@@ -5,8 +5,10 @@ import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 
 public class GlobalMapSelectorController implements GlobalMapSelectorControllerInterface {
   private GlobalMapUpdateObserver updateObserver = null;
@@ -17,7 +19,11 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   @Override
   public String onRegionClick(int id, MouseEventWrapper event) throws Exception {
     event.consume();
-    return connection.getMapFromServer(id, ConnectionConfig.getConnectionConfig().getRoomId());
+    try {
+      return connection.getMapFromServer(id, ConnectionConfig.getConnectionConfig().getRoomId());
+    } catch (RuntimeException e){
+      return null;
+    }
   }
 
   @Override

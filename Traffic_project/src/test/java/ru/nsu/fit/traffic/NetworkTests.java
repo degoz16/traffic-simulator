@@ -13,7 +13,7 @@ public class NetworkTests {
   private static final String URL = "http://localhost:8080/";
 
   @Test
-  public void testPutAndGet() throws FileNotFoundException, URISyntaxException {
+  public void testPutAndGet() throws Exception {
     Connection connection = new ConnectionImpl(URL);
 
     Path path = Path.of(NetworkTests.class.getResource("/connection/map_1.tsp").toURI());
@@ -32,7 +32,7 @@ public class NetworkTests {
     Path path = Path.of(NetworkTests.class.getResource("/connection/global.tsp").toURI());
     String val = new Scanner(path.toFile()).next();
 
-    Integer roomId = connection.createRoom(path.toString());
+    Integer roomId = connection.createRoom(path.toString(), "NAME");
     Assert.assertEquals(val, new Scanner(Path.of(connection.getGlobalMapFromServer(roomId)).toFile())
       .next());
   }
@@ -48,7 +48,7 @@ public class NetworkTests {
     Connection connection = new ConnectionImpl(URL);
     try {
       Path path = Path.of(NetworkTests.class.getResource("/connection/map_1.tsp").toURI());
-      System.out.println(connection.createRoom(path.toAbsolutePath().toString()));
+      System.out.println(connection.createRoom(path.toAbsolutePath().toString(), "NAME"));
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }

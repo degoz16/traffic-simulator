@@ -75,7 +75,7 @@ public class MenuBarController {
 
   @FXML
   public void onConnectToServer() {
-    TextInputDialog dialog = new TextInputDialog("localhost");
+    TextInputDialog dialog = new TextInputDialog("localhost:8080");
     dialog.setTitle("Connection");
     dialog.setHeaderText("Enter ip address:port");
     dialog.setContentText("Address:");
@@ -84,18 +84,19 @@ public class MenuBarController {
 
     result.ifPresent(name -> {
       connectionConfig.setConnection(new ConnectionImpl(name));
+      FXMLLoader loader = new FXMLLoader(App.class.getResource("view/RoomButtonsView.fxml"));
+      Parent root;
+      try {
+        root = loader.load();
+        stage.getScene().setRoot(root);
+        RoomController roomController = loader.getController();
+        roomController.setStage(stage);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      stage.show();
     });
 
-    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/RoomButtonsView.fxml"));
-    Parent root;
-    try {
-      root = loader.load();
-      stage.getScene().setRoot(root);
-      RoomController roomController = loader.getController();
-      roomController.setStage(stage);
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    stage.show();
+
   }
 }

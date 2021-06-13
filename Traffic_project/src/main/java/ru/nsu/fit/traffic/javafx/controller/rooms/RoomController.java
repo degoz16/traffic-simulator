@@ -3,27 +3,28 @@ package ru.nsu.fit.traffic.javafx.controller.rooms;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
-import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.javafx.controller.create.map.CreateMapController;
-import ru.nsu.fit.traffic.javafx.controller.edit.GlobalMapController;
 import ru.nsu.fit.traffic.javafx.controller.edit.GlobalSelectorController;
+import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 
 public class RoomController {
 
   @FXML
-  private HBox hBox;
+  private HBox root;
   private ConnectionConfig connectionConfig = ConnectionConfig.getConnectionConfig();
   private Connection connection;
   Stage stage;
@@ -50,17 +51,26 @@ public class RoomController {
   public void initialize() {
     connection = connectionConfig.getConnection();
     List<Button> buttonList = new ArrayList<>();
-    connection.getRooms().forEach(i -> buttonList.add(new Button(String.valueOf(Math.round(i)))));
+    connection.getRooms().forEach(i -> {
+      int roomNum = (int) Math.round(i);
+      String fileName = connection.getGlobalMapFromServer(roomNum);
+      String name = Objects.requireNonNull(GlobalMapEditOpManager.loadRegMap(fileName)).getName();
+      Button button = new Button(
+        name.replace('+', ' ')
+      );
+      button.setId(String.valueOf(roomNum));
+      buttonList.add(button);
+    });
     buttonList.forEach(button -> {
       button.setOnAction(this::buttonClickHandler);
       button.setMinSize(80, 80);
     });
-    hBox.getChildren().addAll(buttonList);
+    root.getChildren().addAll(buttonList);
   }
 
   private void buttonClickHandler(ActionEvent event) {
     Button button = (Button) event.getSource();
-    ConnectionConfig.getConnectionConfig().setRoomId(Integer.parseInt(button.getText()));
+    ConnectionConfig.getConnectionConfig().setRoomId(Integer.parseInt(button.getId()));
     FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
     try {
       Parent root = loader.load();
@@ -71,8 +81,6 @@ public class RoomController {
       GlobalSelectorController controller = loader.getController();
       controller.setStage(stage);
       controller.setMap(connection.getGlobalMapFromServer(connectionConfig.getRoomId()));
-    } catch (IOException e) {
-      e.printStackTrace();
     } catch (Exception e) {
       e.printStackTrace();
     }

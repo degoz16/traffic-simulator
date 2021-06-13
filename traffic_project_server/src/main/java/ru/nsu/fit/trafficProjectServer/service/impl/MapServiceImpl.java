@@ -9,19 +9,16 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import ru.nsu.fit.trafficProjectServer.configuration.MapConfiguration;
+import ru.nsu.fit.trafficProjectServer.model.Map;
 import ru.nsu.fit.trafficProjectServer.service.MapService;
 
 @Service
@@ -62,7 +59,7 @@ public class MapServiceImpl implements MapService {
   }
 
   @Override
-  public String getDocumentName(int id, int roomId) {
+  public String getDocumentName(Long id, Long roomId) {
     String fileName = toFileName(id);
     Path filePath = getRoomPath(roomId).resolve(fileName).toAbsolutePath();
     if (blockedFiles.contains(filePath.toString())) {
@@ -72,7 +69,7 @@ public class MapServiceImpl implements MapService {
   }
 
   @Override
-  public Resource loadFileAsResource(String fileName, int roomId) {
+  public Resource loadFileAsResource(String fileName, Long roomId) {
     try {
       Path filePath = getRoomPath(roomId).resolve(fileName).normalize();
       File file = filePath.toFile();
@@ -90,7 +87,7 @@ public class MapServiceImpl implements MapService {
   }
 
   @Override
-  public String storeFile(MultipartFile file, int id, int roomId) {
+  public String storeFile(MultipartFile file, Long id, Long roomId) {
     try {
       Path filePath = getRoomPath(roomId).resolve(toFileName(id)).normalize();
       FileWriter writer = new FileWriter(blockingFile.toFile());
@@ -111,15 +108,12 @@ public class MapServiceImpl implements MapService {
   }
 
   @Override
-  public List<Integer> getRooms() {
-    return Stream
-      .iterate(0, x -> x += 1)
-      .limit(roomsCount)
-      .collect(Collectors.toList());
+  public Long getRooms() {
+    return roomsCount;
   }
 
   @Override
-  public Long createRoom(MultipartFile file) {
+  public Long createRoom(MultipartFile file, String name) {
     Path newRoom = fileStorageLocation.resolve(String.valueOf(roomsCount));
     try {
       Files.createDirectories(newRoom);
@@ -131,11 +125,7 @@ public class MapServiceImpl implements MapService {
     return roomsCount++;
   }
 
-  private String saveFileMap(MultipartFile file, Integer id, Path roomPath) throws IOException {
-//    String originalName = StringUtils.cleanPath(file.getOriginalFilename());
-//    if (!originalName.endsWith(".json")) {
-//      throw new RuntimeException("Sorry! File isn't tsp map " + originalName);
-//    }
+  private String saveFileMap(MultipartFile file, Long id, Path roomPath) throws IOException {
     String fileName = toFileName(id);
     // Copy file to the target location (Replacing existing file with the same name)
     Path targetLocation = roomPath.resolve(fileName);
@@ -144,7 +134,12 @@ public class MapServiceImpl implements MapService {
   }
 
   @Override
-  public String getGlobalMap(int roomId) {
+  public Map getGlobalMapNew(Long roomId) {
+    return null;
+  }
+
+  @Override
+  public String getGlobalMap(Long roomId) {
     String fileName = toFileName(null);
     Path filePath = getRoomPath(roomId).resolve(fileName).toAbsolutePath();
     if (!filePath.toFile().exists()) {
@@ -153,11 +148,16 @@ public class MapServiceImpl implements MapService {
     return fileName;
   }
 
-  private String toFileName(Integer id) {
+  @Override
+  public Map getMap(Long id, Long roomId) {
+    return null;
+  }
+
+  private String toFileName(Long id) {
     return "map_"+(id == null ? "global" : id)+".json";
   }
   
-  private Path getRoomPath(int roomId) {
+  private Path getRoomPath(long roomId) {
     Path path = fileStorageLocation.resolve(String.valueOf(roomId));
     if (path.toFile().exists()) {
       return path;

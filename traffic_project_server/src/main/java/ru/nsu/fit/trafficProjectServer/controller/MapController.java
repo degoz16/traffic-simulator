@@ -1,7 +1,7 @@
 package ru.nsu.fit.trafficProjectServer.controller;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -12,72 +12,66 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import ru.nsu.fit.trafficProjectServer.model.Map;
 import ru.nsu.fit.trafficProjectServer.service.MapService;
 
 @RestController
 @RequestMapping("api")
 public class MapController {
 
+  @Qualifier("mapServiceDBImpl")
   @Autowired
   private MapService service;
 
   @GetMapping("getMap")
-  public ResponseEntity<Resource> getMap(@RequestParam Integer id,
-                                         @RequestParam Integer roomId) {
-    String fileName = service.getDocumentName(id, roomId);
-    Resource resource = null;
-    if (fileName != null && !fileName.isEmpty()) {
-      try {
-        resource = service.loadFileAsResource(fileName, roomId);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-      String contentType = "application/octet-stream";
-      return ResponseEntity.ok()
-        .contentType(MediaType.parseMediaType(contentType))
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-        .body(resource);
-    } else {
-      return ResponseEntity.badRequest().build();
-    }
+  public ResponseEntity<byte[]> getMap(
+    @RequestParam Long id,
+    @RequestParam Long roomId
+  ) {
+    Map resource = service.getMap(id, roomId);
+    String contentType = "application/octet-stream";
+    return ResponseEntity.ok()
+      .contentType(MediaType.parseMediaType(contentType))
+      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+      .body(resource.getFile());
   }
 
   @PostMapping("saveMap")
-  public ResponseEntity<Resource> saveMap(@RequestParam("file") MultipartFile file,
-                                          @RequestParam Integer id,
-                                          @RequestParam Integer roomId) {
+  public ResponseEntity<Resource> saveMap(
+    @RequestParam("file") MultipartFile file,
+    @RequestParam Long id,
+    @RequestParam Long roomId
+  ) {
     service.storeFile(file, id, roomId);
     return ResponseEntity.ok().build();
   }
 
   @GetMapping("rooms")
-  public List<Integer> roomsNumber() {
+  public Long roomsNumber() {
     return service.getRooms();
   }
 
   @PostMapping("createRoom")
-  public Long createRoom(@RequestParam("file") MultipartFile file) {
-    return service.createRoom(file);
+  public Long createRoom(
+    @RequestParam("file") MultipartFile file,
+    @RequestParam String roomName
+  ) {
+    return service.createRoom(file, roomName);
   }
 
   @GetMapping("global")
-  public ResponseEntity<Resource> getGlobalMap(@RequestParam Integer roomId){
-    String fileName = service.getGlobalMap(roomId);
-    Resource resource = null;
-    if (fileName != null && !fileName.isEmpty()) {
-      try {
-        resource = service.loadFileAsResource(fileName, roomId);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+  public ResponseEntity<byte[]> getGlobalMap(@RequestParam Long roomId) {
+    try {
+      Map resource = service.getGlobalMapNew(roomId);
       String contentType = "application/octet-stream";
       return ResponseEntity.ok()
         .contentType(MediaType.parseMediaType(contentType))
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-        .body(resource);
-    } else {
-      return ResponseEntity.badRequest().build();
+        .header(
+          HttpHeaders.CONTENT_DISPOSITION,
+          "attachment; filename=\"" + resource.getFilename() + "\""
+        ).body(resource.getFile());
+    } catch (Exception e) {
+      throw new RuntimeException(e);
     }
   }
-
 }

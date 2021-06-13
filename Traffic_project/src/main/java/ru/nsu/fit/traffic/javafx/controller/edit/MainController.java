@@ -1,13 +1,8 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jfoenix.controls.JFXTimePicker;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -33,7 +28,6 @@ import ru.nsu.fit.traffic.controller.FragmentEditControlsInitializer;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
 import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
-import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapperButton;
 import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
 import ru.nsu.fit.traffic.interfaces.control.EditControlInterface;
 import ru.nsu.fit.traffic.interfaces.control.MenuControlInterface;
@@ -46,7 +40,6 @@ import ru.nsu.fit.traffic.javafx.controller.settings.RoadSettingsController;
 import ru.nsu.fit.traffic.javafx.controller.settings.TrafficLightController;
 import ru.nsu.fit.traffic.javafx.controller.statistic.StatisticsController;
 import ru.nsu.fit.traffic.javafx.paiters.UiPainter;
-import ru.nsu.fit.traffic.json.parse.MapJsonStruct;
 import ru.nsu.fit.traffic.view.MapEditorViewUpdater;
 
 import java.time.LocalTime;
