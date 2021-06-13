@@ -10,6 +10,7 @@ import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
+import ru.nsu.fit.traffic.view.elements.observers.ConnectorObserver;
 import ru.nsu.fit.traffic.view.elements.observers.RegionObserver;
 
 import java.util.List;
@@ -18,11 +19,13 @@ public class GlobalMapEditorViewUpdater {
 
   private final GlobalMapObjectPainter painter = new GlobalMapObjectPainter();
   private final RegionObserver regionObserver;
+  private final ConnectorObserver connectorObserver;
   private final Pane mainPane;
 
-  public GlobalMapEditorViewUpdater(RegionObserver regionObserver, Pane mainPane) {
+  public GlobalMapEditorViewUpdater(RegionObserver regionObserver, ConnectorObserver connectorObserver, Pane mainPane) {
     this.mainPane = mainPane;
     this.regionObserver = regionObserver;
+    this.connectorObserver = connectorObserver;
   }
 
   /**
@@ -56,6 +59,7 @@ public class GlobalMapEditorViewUpdater {
         region.foreachConnector(roadConnector -> {
           Shape connector = painter.paintConnector(roadConnector, true);
           mainPane.getChildren().add(connector);
+          connectorObserver.setConnectorObserver(roadConnector, connector);
         });
       });
     });

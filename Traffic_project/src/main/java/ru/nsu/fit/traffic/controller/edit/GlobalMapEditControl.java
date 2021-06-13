@@ -7,14 +7,17 @@ import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOp;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
+import ru.nsu.fit.traffic.model.map.Connector;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.utils.Pair;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.*;
@@ -29,7 +32,6 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   private double lastClickY = 0;
   private double currX = 0;
   private double currY = 0;
-
 
   public GlobalMapEditControl(GlobalMapSceneElementsControl sceneElementsControl) {
     this.sceneElementsControl = sceneElementsControl;
@@ -57,8 +59,6 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
         || editOpManager.getCurrRegMap()
         .getRegionsInThePoint(c.getFirst(), c.getSecond(), true) != null;
   }
-
-
 
   @Override
   public Pair<Double, Double> getSideCoordinates(
@@ -173,6 +173,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
             getCurrRegionsMap().deleteRegion(id);
             editOpManager.setCurrOp(NONE);
             updateObserver.update(editOpManager, false);
+            sceneElementsControl.setCurrentOperation("none");
           }
         }
       }
@@ -194,14 +195,21 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   public void onSetRegionButton() {
     stopOperation();
     editOpManager.setCurrOp(SET_REGION);
+    sceneElementsControl.setCurrentOperation("set region");
     sceneElementsControl.setSelectRectVisible(true);
   }
 
   @Override
   public void onSetConnectorButton() {
-    stopOperation();
-    editOpManager.setCurrOp(SET_CONNECTOR);
-    sceneElementsControl.setConnectorIconVisible(true);
+    if (editOpManager.getCurrentOp() != SET_CONNECTOR){
+      stopOperation();
+      editOpManager.setCurrOp(SET_CONNECTOR);
+      sceneElementsControl.setCurrentOperation("set connector");
+      sceneElementsControl.setConnectorIconVisible(true);
+    }
+    else{
+      stopOperation();
+    }
   }
 
   @Override
@@ -240,10 +248,25 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     updateObserver.update(editOpManager, false);
   }
 
-
   @Override
   public void deleteRegion() {
-    editOpManager.setCurrOp(DELETE_REGION);
+    if (editOpManager.getCurrentOp() != DELETE_REGION){
+      editOpManager.setCurrOp(DELETE_REGION);
+      sceneElementsControl.setCurrentOperation("delete region");
+    } else {
+      stopOperation();
+    }
+  }
+
+  @Override
+  public void deleteConnector(){
+    if (editOpManager.getCurrentOp() != DELETE_CONNECTOR){
+      stopOperation();
+      editOpManager.setCurrOp(DELETE_CONNECTOR);
+      sceneElementsControl.setCurrentOperation("delete connector");
+    } else {
+      stopOperation();
+    }
   }
 
   @Override
@@ -254,7 +277,19 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   private void stopOperation() {
     editOpManager.setCurrOp(GlobalMapEditOp.NONE);
+    sceneElementsControl.setCurrentOperation("none");
     sceneElementsControl.setConnectorIconVisible(false);
     sceneElementsControl.setSelectRectVisible(false);
+  }
+
+  @Override
+  public void onConnectorClicked(RoadConnector connector){
+    if (editOpManager.getCurrentOp() == DELETE_CONNECTOR){
+      List<RectRegion> regions = getCurrRegionsMap().getRegions();
+      RectRegion currRegion = regions.get(regions.indexOf(connector.getRegion()));
+      currRegion.deleteConnector(connector);
+      connector.deleteLink();
+      updateObserver.update(editOpManager, false);
+    }
   }
 }

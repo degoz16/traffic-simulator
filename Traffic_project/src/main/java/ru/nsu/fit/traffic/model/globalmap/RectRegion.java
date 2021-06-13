@@ -31,7 +31,7 @@ public class RectRegion {
 
   }
 
-  void deleteConnector(RoadConnector connector){
+  public void deleteConnector(RoadConnector connector){
     connectorList.remove(connector);
   }
 

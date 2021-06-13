@@ -25,8 +25,6 @@ import ru.nsu.fit.traffic.javafx.paiters.UiPainter;
 import ru.nsu.fit.traffic.utils.Pair;
 import ru.nsu.fit.traffic.view.GlobalMapEditorViewUpdater;
 
-import java.util.Map;
-
 public class GlobalMapController {
   private final Rectangle selectRect = UiPainter.getSelectRect();
   private final Circle connectorIcon = UiPainter.getConnectorIcon();
@@ -38,6 +36,7 @@ public class GlobalMapController {
   @FXML private Text fragmentHeightText;
   @FXML private Text fragmentWightText;
   @FXML private AnchorPane fragmentParamsPane;
+  @FXML private Text currentOperation;
   private GlobalMapEditControlInterface editControl;
   private boolean isSelRectVisible = false;
   private boolean isConnectorIconVisible = false;
@@ -66,6 +65,11 @@ public class GlobalMapController {
         @Override
         public void setConnectorIconVisible(boolean visible) {
           isConnectorIconVisible = visible;
+        }
+
+        @Override
+        public void setCurrentOperation(String currOperation) {
+          currentOperation.setText(currOperation);
         }
       };
 
@@ -138,7 +142,9 @@ public class GlobalMapController {
   }
 
   @FXML
-  public void deleteConnector() {}
+  public void deleteConnector() {
+    editControl.deleteConnector();
+  }
 
   @FXML
   public void saveMap() {
@@ -204,6 +210,12 @@ public class GlobalMapController {
                   event ->
                       editControl.onRegionPressed(MouseEventWrapper.getMouseEventWrapper(event)));
             }),
+            (connector, connectorShape) -> {
+              connectorShape.setOnMouseClicked(
+                  event -> {
+                    editControl.onConnectorClicked(connector);
+                  });
+            },
             mainPane);
     initializer.initialize(viewUpdater::updateMapView);
 
@@ -236,8 +248,10 @@ public class GlobalMapController {
           if (isSelRectVisible && event.getButton() == MouseButton.PRIMARY) {
             Rectangle rect = resizeSelectRect(editControl.getCurrX(), editControl.getCurrY());
             fragmentParamsPane.setVisible(true);
-            fragmentHeightText.setText(String.valueOf((int)(rect.getHeight()/3.3 * GlobalMapEditControl.MAP_SCALE)));
-            fragmentWightText.setText(String.valueOf((int)(rect.getWidth()/3.3 * GlobalMapEditControl.MAP_SCALE)));
+            fragmentHeightText.setText(
+                String.valueOf((int) (rect.getHeight() / 3.3 * GlobalMapEditControl.MAP_SCALE)));
+            fragmentWightText.setText(
+                String.valueOf((int) (rect.getWidth() / 3.3 * GlobalMapEditControl.MAP_SCALE)));
           }
         });
 

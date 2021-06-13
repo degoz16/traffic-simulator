@@ -23,7 +23,7 @@ public class RoadConnector {
     return id;
   }
 
-  void deleteLink(){
+  public void deleteLink(){
     getConnectorLink().getRegion().deleteConnector(getConnectorLink());
   }
 

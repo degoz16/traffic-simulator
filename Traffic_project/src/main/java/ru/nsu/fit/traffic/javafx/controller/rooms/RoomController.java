@@ -44,6 +44,11 @@ public class RoomController {
       @Override
       public void setConnectorIconVisible(boolean visible) {
       }
+
+      @Override
+      public void setCurrentOperation(String operation){
+
+      }
     };
 
 

@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.model.logic;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import javafx.scene.text.Text;
 import ru.nsu.fit.traffic.json.parse.RegionMapJson;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
@@ -137,6 +138,7 @@ public class GlobalMapEditOpManager {
 
   public void setCurrOp(GlobalMapEditOp currOp) {
     this.currOp = currOp;
+    System.out.println(currOp);
   }
 
   public RegionsMap getCurrRegMap() {

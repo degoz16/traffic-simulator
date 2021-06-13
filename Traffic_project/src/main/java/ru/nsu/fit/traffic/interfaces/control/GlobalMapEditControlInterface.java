@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.interfaces.control;
 
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 import ru.nsu.fit.traffic.utils.Pair;
 
 public interface GlobalMapEditControlInterface {
@@ -32,6 +33,8 @@ public interface GlobalMapEditControlInterface {
 
   void onSetConnectorButton();
 
+  void onConnectorClicked(RoadConnector connector);
+
   void onClear();
 
   void onPut();
@@ -43,6 +46,8 @@ public interface GlobalMapEditControlInterface {
   void onGet();
 
   void deleteRegion();
+
+  void deleteConnector();
 
   void updateMap(String filepath);
 

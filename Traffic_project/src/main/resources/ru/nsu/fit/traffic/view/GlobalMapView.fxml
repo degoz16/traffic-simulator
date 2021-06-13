@@ -50,7 +50,7 @@
                 <Group AnchorPane.bottomAnchor="13.0" AnchorPane.leftAnchor="0.0">
                     <children>
 
-                        <Polygon fill="DODGERBLUE" layoutX="-9.0" points="-34.00011444091797, 41.20000076293945, 133.79989624023438, 41.200016021728516, 94.59989166259766, -30.000171661376953, -34.0, -30.0" strokeType="INSIDE" strokeWidth="50.0">
+                        <Polygon fill="DODGERBLUE" layoutX="-9.0" points="-34.00011444091797, 41.20000076293945, 229.9998779296875, 41.20001220703125, 185.9998779296875, -29.99945068359375, -34.0, -30.0" strokeType="INSIDE" strokeWidth="50.0">
                             <stroke>
                                 <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0" startX="1.0">
                                     <stops>
@@ -61,7 +61,7 @@
                                 </LinearGradient>
                             </stroke>
                         </Polygon>
-                        <Polygon fill="WHITE" layoutX="14.0" layoutY="2.0" points="-57.00011444091797, 39.20000457763672, 110.7999038696289, 39.20000457763672, 89.99988555908203, 3.600048065185547, -57.00011444091797, 3.6000304222106934" strokeType="INSIDE" strokeWidth="50.0">
+                        <Polygon fill="WHITE" layoutX="14.0" layoutY="2.0" points="-57.00011444091797, 39.20000457763672, 206.9998779296875, 39.20001220703125, 182.9998779296875, 3.60003662109375, -57.00011444091797, 3.6000304222106934" strokeType="INSIDE" strokeWidth="50.0">
                             <stroke>
                                 <LinearGradient endX="0.7904761904761904" endY="0.3047619047619048" startY="1.0">
                                     <stops>
@@ -73,9 +73,19 @@
                             </stroke>
                         </Polygon>
                         <Button fx:id="mapButton" layoutX="-24.0" layoutY="-28.0" mnemonicParsing="false" onAction="#setFragment" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/fragmentButton.css" AnchorPane.bottomAnchor="72.20018768310547" AnchorPane.leftAnchor="-24.0" />
-                        <Button fx:id="connectorButton" layoutX="26.0" layoutY="-28.0" mnemonicParsing="false" onAction="#setConnector" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/ConnectorButton.css" AnchorPane.bottomAnchor="72.20018768310547" AnchorPane.rightAnchor="111.80001831054688" />
-                  <Button fx:id="delete_button" layoutX="-24.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteFragment" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/deleteMapButton.css" />
-                  <Button layoutX="26.0" layoutY="10.0" mnemonicParsing="false" onAction="#deleteConnector" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/deleteConnectorButton.css" />
+                        <Button fx:id="connectorButton" layoutX="82.0" layoutY="-27.0" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#setConnector" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/ConnectorButton.css" AnchorPane.bottomAnchor="68.2005615234375" AnchorPane.rightAnchor="186.0" />
+                  <Button fx:id="delete_button" layoutX="26.0" layoutY="-27.0" mnemonicParsing="false" onAction="#deleteFragment" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/deleteMapButton.css" />
+                  <Button layoutX="132.0" layoutY="-26.0" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#deleteConnector" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/deleteConnectorButton.css" />
+                  <Text fx:id="currentOperation" fill="WHITE" layoutX="76.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="111.00000381469727">
+                     <font>
+                        <Font name="Arial Bold" size="11.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="currentOperation1" fill="WHITE" layoutX="-24.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current operation:" wrappingWidth="101.0000114440918">
+                     <font>
+                        <Font name="Arial Bold" size="11.0" />
+                     </font>
+                  </Text>
                     </children>
                 </Group>
             <VBox layoutX="566.4000244140625" layoutY="299.6000061035156" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">

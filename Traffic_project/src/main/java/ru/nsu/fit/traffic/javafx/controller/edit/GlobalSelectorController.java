@@ -29,16 +29,11 @@ import ru.nsu.fit.traffic.view.GlobalMapObjectPainter;
 
 public class GlobalSelectorController {
   private Stage stage;
-  @FXML
-  private ScrollPane mainScrollPane;
-  @FXML
-  private Group scrollPaneContent;
-  @FXML
-  private Pane mainPane;
-  @FXML
-  private AnchorPane basePane;
-  @FXML
-  private VBox centeredField;
+  @FXML private ScrollPane mainScrollPane;
+  @FXML private Group scrollPaneContent;
+  @FXML private Pane mainPane;
+  @FXML private AnchorPane basePane;
+  @FXML private VBox centeredField;
   @FXML private CheckBox checkBox;
   private GlobalMapObjectPainter painter;
   private GlobalMapSelectorControllerInterface selectorControl;
@@ -47,11 +42,11 @@ public class GlobalSelectorController {
     this.stage = stage;
   }
 
-  public void setCurrentMap(RegionsMap regionsMap){
-    for (RectRegion region: regionsMap.getRegions()){
+  public void setCurrentMap(RegionsMap regionsMap) {
+    for (RectRegion region : regionsMap.getRegions()) {
       mainPane.getChildren().add(painter.paintRegion(region));
-      for (RoadConnector connector: region.getConnectorList()){
-        mainPane.getChildren().add(painter.paintConnector(connector,true));
+      for (RoadConnector connector : region.getConnectorList()) {
+        mainPane.getChildren().add(painter.paintConnector(connector, true));
       }
     }
   }
@@ -77,53 +72,56 @@ public class GlobalSelectorController {
     GlobalMapSelectorInitializerInterface initializer = new GlobalMapSelectorInitializer();
     selectorControl = initializer.getSelectorControl();
 
-    GlobalMapEditorViewUpdater viewUpdater = new GlobalMapEditorViewUpdater(
-      ((rect, id, regW, regH) -> {
-        rect.setOnMouseClicked(event -> {
-          String partFilepath = null;
-          try {
-            partFilepath = selectorControl.onRegionClick(
-              id,
-              MouseEventWrapper.getMouseEventWrapper(event)
-            );
-            FXMLLoader loader = new FXMLLoader(App.class.getResource("view/MainView.fxml"));
-            Parent root = null;
-            try {
-              root = loader.load();
-              Scene scene = new Scene(root);
+    GlobalMapEditorViewUpdater viewUpdater =
+        new GlobalMapEditorViewUpdater(
+            ((rect, id, regW, regH) -> {
+              rect.setOnMouseClicked(
+                  event -> {
+                    String partFilepath = null;
+                    try {
+                      partFilepath =
+                          selectorControl.onRegionClick(
+                              id, MouseEventWrapper.getMouseEventWrapper(event));
+                      FXMLLoader loader =
+                          new FXMLLoader(App.class.getResource("view/MainView.fxml"));
+                      Parent root = null;
+                      try {
+                        root = loader.load();
+                        Scene scene = new Scene(root);
 
-              stage.setTitle("Traffic simulator");
-              stage.setScene(scene);
-              stage.show();
+                        stage.setTitle("Traffic simulator");
+                        stage.setScene(scene);
+                        stage.show();
 
-              MainController controller = loader.getController();
-              controller.setStage(stage);
-              if (partFilepath != null) {
-                controller.initMap(partFilepath);
-                System.out.println(partFilepath);
-              }
-              ConnectionConfig.getConnectionConfig().setMapId(id);
-            } catch (IOException e) {
-              e.printStackTrace();
-            }
-          } catch (Exception e) {
-            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-            errorAlert.setHeaderText("Connection error");
-            errorAlert.setContentText("Error while trying to get map from server");
-            errorAlert.showAndWait();
-          }
-        });
-      }),
-      mainPane
-    );
+                        MainController controller = loader.getController();
+                        controller.setStage(stage);
+                        if (partFilepath != null) {
+                          controller.initMap(partFilepath);
+                          System.out.println(partFilepath);
+                        }
+                        ConnectionConfig.getConnectionConfig().setMapId(id);
+                      } catch (IOException e) {
+                        e.printStackTrace();
+                      }
+                    } catch (Exception e) {
+                      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                      errorAlert.setHeaderText("Connection error");
+                      errorAlert.setContentText("Error while trying to get map from server");
+                      errorAlert.showAndWait();
+                    }
+                  });
+            }),
+            (connector, shape) -> {},
+            mainPane);
     initializer.initialize(viewUpdater::updateMapView);
   }
+
   @FXML
-  public void checkBoxClicked(){
-    if (checkBox.isSelected()){
+  public void checkBoxClicked() {
+    if (checkBox.isSelected()) {
       // todo: show whole map
       System.out.println("show whole map");
-    }else{
+    } else {
       // todo: hide map
       System.out.println("hide map");
     }
@@ -136,5 +134,4 @@ public class GlobalSelectorController {
   public void setMap(String map) {
     selectorControl.setRegionMap(map);
   }
-
 }
