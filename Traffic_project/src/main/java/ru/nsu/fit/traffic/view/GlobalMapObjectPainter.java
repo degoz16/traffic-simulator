@@ -20,13 +20,13 @@ public class GlobalMapObjectPainter {
 
   public Rectangle paintRegion(RectRegion region) {
     Rectangle rect = new Rectangle();
-    rect.setStroke(Color.valueOf("#707070"));
+    rect.setStroke(Color.DIMGRAY);
     rect.setHeight(region.getHeight());
     rect.setWidth(region.getWidth());
     rect.setX(region.getX());
     rect.setY(region.getY());
     rect.setStrokeWidth(5);
-    rect.setFill(Color.valueOf("#808080"));
+    rect.setFill(Color.GRAY);
     return rect;
   }
 
@@ -40,18 +40,19 @@ public class GlobalMapObjectPainter {
           scale * placeOfInterest.getWeight(),
           scale * placeOfInterest.getHeight());
       rect.setFill(Color.DARKGRAY);
-      rect.setStrokeWidth(0.5);
+      rect.setStrokeWidth(1f);
+      rect.setStroke(Color.BLACK);
       rect.setMouseTransparent(true);
       res.add(rect);
     });
     map.forEachRoad(road -> {
       Line line = new Line();
-      line.setStroke(Color.GRAY);
-      line.setStrokeWidth(1);
-      line.setStartX(scale * road.getFrom().getX());
-      line.setStartY(scale * road.getFrom().getY());
-      line.setEndX(scale * road.getTo().getX());
-      line.setEndY(scale * road.getTo().getY());
+      line.setStroke(Color.DARKGRAY);
+      line.setStrokeWidth(2);
+      line.setStartX(scale * road.getFrom().getX() + region.getX());
+      line.setStartY(scale * road.getFrom().getY() + region.getY());
+      line.setEndX(scale * road.getTo().getX() + region.getX());
+      line.setEndY(scale * road.getTo().getY() + region.getY());
       line.setMouseTransparent(true);
       res.add(line);
     });
