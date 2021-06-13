@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import ru.nsu.fit.traffic.MainMenu;
 
 import java.io.IOException;
 
@@ -30,6 +29,19 @@ public class LoginController {
   @FXML
   private void signUp() {
     System.out.println("sign up");
-    MainMenu.setSignUp(stage);
+    try {
+      System.out.println(getClass());
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/Signup.fxml"));
+      Parent root = loader.load();
+      Scene scene = new Scene(root);
+
+      stage.setScene(scene);
+      stage.show();
+
+      SignUpController controller = loader.getController();
+      controller.setStage(stage);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }
