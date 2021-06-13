@@ -37,7 +37,7 @@ public class GlobalMapObjectPainter {
       var rect = new Rectangle(
           scale * placeOfInterest.getX() + region.getX(),
           scale * placeOfInterest.getY() + region.getY(),
-          scale * placeOfInterest.getWeight(),
+          scale * placeOfInterest.getWidth(),
           scale * placeOfInterest.getHeight());
       rect.setFill(Color.DARKGRAY);
       rect.setStrokeWidth(1f);
