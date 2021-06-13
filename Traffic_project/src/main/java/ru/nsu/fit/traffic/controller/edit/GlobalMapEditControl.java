@@ -20,7 +20,7 @@ import java.util.Set;
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.*;
 
 public class GlobalMapEditControl implements GlobalMapEditControlInterface {
-  private static final double MAP_SCALE = 6;
+  public static final double MAP_SCALE = 6;
   private GlobalMapEditOpManager editOpManager = null;
   private final GlobalMapSceneElementsControl sceneElementsControl;
   private GlobalMapUpdateObserver updateObserver = null;

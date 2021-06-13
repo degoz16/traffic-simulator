@@ -11,17 +11,21 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.GlobalMapEditControlInitializer;
 import ru.nsu.fit.traffic.controller.GlobalMapSceneElementsControl;
+import ru.nsu.fit.traffic.controller.edit.GlobalMapEditControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapControlInitializerInterface;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapEditControlInterface;
 import ru.nsu.fit.traffic.javafx.paiters.UiPainter;
 import ru.nsu.fit.traffic.utils.Pair;
 import ru.nsu.fit.traffic.view.GlobalMapEditorViewUpdater;
+
+import java.util.Map;
 
 public class GlobalMapController {
   private final Rectangle selectRect = UiPainter.getSelectRect();
@@ -31,22 +35,25 @@ public class GlobalMapController {
   @FXML private Pane mainPane;
   @FXML private AnchorPane basePane;
   @FXML private VBox centeredField;
+  @FXML private Text fragmentHeightText;
+  @FXML private Text fragmentWightText;
+  @FXML private AnchorPane fragmentParamsPane;
   private GlobalMapEditControlInterface editControl;
   private boolean isSelRectVisible = false;
   private boolean isConnectorIconVisible = false;
 
-  public void setMapParams(double wight, double height, String name){
-      mainPane.setPrefWidth(wight);
-      mainPane.setMaxWidth(wight);
-      mainPane.setPrefHeight(height);
-      mainPane.setMaxHeight(height);
+  public void setMapParams(double wight, double height, String name) {
+    mainPane.setPrefWidth(wight);
+    mainPane.setMaxWidth(wight);
+    mainPane.setPrefHeight(height);
+    mainPane.setMaxHeight(height);
 
-      centeredField.setPrefWidth(wight);
-      centeredField.setMaxWidth(wight);
-      centeredField.setPrefHeight(height);
-      centeredField.setMaxHeight(height);
+    centeredField.setPrefWidth(wight);
+    centeredField.setMaxWidth(wight);
+    centeredField.setPrefHeight(height);
+    centeredField.setMaxHeight(height);
 
-      editControl.getCurrRegionsMap().setName(name);
+    editControl.getCurrRegionsMap().setName(name);
   }
 
   private final GlobalMapSceneElementsControl sceneElementsControl =
@@ -78,8 +85,9 @@ public class GlobalMapController {
     UiPainter.addSelectRect(x, y, selectRect, mainPane);
   }
 
-  private void resizeSelectRect(double x, double y) {
+  private Rectangle resizeSelectRect(double x, double y) {
     UiPainter.resizeSelectRect(x, y, selectRect);
+    return selectRect;
   }
 
   private void removeConnectorIcon() {
@@ -103,8 +111,8 @@ public class GlobalMapController {
   }
 
   @FXML
-  public void deleteFragment(){
-      editControl.deleteRegion();
+  public void deleteFragment() {
+    editControl.deleteRegion();
   }
 
   @FXML
@@ -126,13 +134,11 @@ public class GlobalMapController {
   @FXML
   public void onGet() {
     editControl.onNewGet();
-    //editControl.onGet();
+    // editControl.onGet();
   }
 
-    @FXML
-    public void deleteConnector(){
-
-    }
+  @FXML
+  public void deleteConnector() {}
 
   @FXML
   public void saveMap() {
@@ -148,7 +154,8 @@ public class GlobalMapController {
 
       GlobalSelectorController controller = loader.getController();
       controller.setStage(stage);
-      controller.setMap(ConnectionConfig.getConnectionConfig().getConnection().getGlobalMapFromServer(roomId));
+      controller.setMap(
+          ConnectionConfig.getConnectionConfig().getConnection().getGlobalMapFromServer(roomId));
 
       stage.show();
 
@@ -169,6 +176,7 @@ public class GlobalMapController {
     addConnectorIcon(0, 0);
     connectorIcon.setVisible(false);
     connectorIcon.setMouseTransparent(true);
+    fragmentParamsPane.setVisible(false);
     GlobalMapEditorViewUpdater viewUpdater =
         new GlobalMapEditorViewUpdater(
             ((rect, id, regW, regH) -> {
@@ -188,11 +196,13 @@ public class GlobalMapController {
                       }
                     }
                   });
-              rect.setOnMouseClicked(event -> {
-                editControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
-              });
-              rect.setOnMousePressed(event ->
-                  editControl.onRegionPressed(MouseEventWrapper.getMouseEventWrapper(event)));
+              rect.setOnMouseClicked(
+                  event -> {
+                    editControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
+                  });
+              rect.setOnMousePressed(
+                  event ->
+                      editControl.onRegionPressed(MouseEventWrapper.getMouseEventWrapper(event)));
             }),
             mainPane);
     initializer.initialize(viewUpdater::updateMapView);
@@ -201,6 +211,9 @@ public class GlobalMapController {
         event -> {
           editControl.onMainPanePressed(MouseEventWrapper.getMouseEventWrapper(event));
           if (isSelRectVisible && event.getButton() == MouseButton.PRIMARY) {
+            fragmentParamsPane.setVisible(true);
+            fragmentHeightText.setText(String.valueOf(0));
+            fragmentWightText.setText(String.valueOf(0));
             addSelectRect(event.getX(), event.getY());
           }
         });
@@ -209,6 +222,7 @@ public class GlobalMapController {
         event -> {
           editControl.onMainPaneReleased(MouseEventWrapper.getMouseEventWrapper(event));
           removeSelectRect();
+          fragmentParamsPane.setVisible(false);
           selectRect.setHeight(0);
           selectRect.setWidth(0);
           removeConnectorIcon();
@@ -220,7 +234,10 @@ public class GlobalMapController {
         event -> {
           editControl.onMainPaneDrag(MouseEventWrapper.getMouseEventWrapper(event));
           if (isSelRectVisible && event.getButton() == MouseButton.PRIMARY) {
-            resizeSelectRect(editControl.getCurrX(), editControl.getCurrY());
+            Rectangle rect = resizeSelectRect(editControl.getCurrX(), editControl.getCurrY());
+            fragmentParamsPane.setVisible(true);
+            fragmentHeightText.setText(String.valueOf((int)(rect.getHeight()/3.3 * GlobalMapEditControl.MAP_SCALE)));
+            fragmentWightText.setText(String.valueOf((int)(rect.getWidth()/3.3 * GlobalMapEditControl.MAP_SCALE)));
           }
         });
 

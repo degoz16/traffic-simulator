@@ -1,6 +1,5 @@
 package ru.nsu.fit.traffic.javafx.paiters;
 
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -15,7 +14,6 @@ import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 
 public class UiPainter {
   private static final Color correctFragment = Color.valueOf("#656565");
-  // public static final Color incorrectFragment = Color.valueOf("#FF5555");
 
   public static Rectangle getSelectRect() {
     Rectangle selectRect = new Rectangle(0, 0, 0, 0);
@@ -36,7 +34,6 @@ public class UiPainter {
 
     circle.setRadius(8);
 
-    // Image img = new Image(getResource("Images/pre_road_connector.png").toExternalForm());
     Image img = new Image("ru/nsu/fit/traffic/view/Images/pre_road_connector.png");
     if (img != null) {
       circle.setFill(new ImagePattern(img));
