@@ -50,7 +50,7 @@ public class GlobalMapEditOpManager {
 
   public void clearMap() {
     currRegMap = new RegionsMap();
-    updateObserver.update(this);
+    updateObserver.update(this, false);
   }
 
   public static void saveRegMap(String path, RegionsMap regionsMap) {
@@ -183,7 +183,7 @@ public class GlobalMapEditOpManager {
     RectRegion region = new RectRegion(name, xMin, yMin, xMax - xMin, yMax - yMin);
 
     currRegMap.addRegion(region);
-    updateObserver.update(this);
+    updateObserver.update(this, false);
   }
 
   public void addConnector(RectRegion region, double x, double y) {
@@ -234,6 +234,6 @@ public class GlobalMapEditOpManager {
       region2.addConnector(connector2);
     }
 
-    updateObserver.update(this);
+    updateObserver.update(this, false);
   }
 }

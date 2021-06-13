@@ -172,7 +172,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
           case DELETE_REGION -> {
             getCurrRegionsMap().deleteRegion(id);
             editOpManager.setCurrOp(NONE);
-            updateObserver.update(editOpManager);
+            updateObserver.update(editOpManager, false);
           }
         }
       }
@@ -231,13 +231,13 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   @Override
   public void onNewGet() {
     editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap("/save.json"));
-    updateObserver.update(editOpManager);
+    updateObserver.update(editOpManager, false);
   }
 
   @Override
   public void onGet() {
     editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap("/save.json"));
-    updateObserver.update(editOpManager);
+    updateObserver.update(editOpManager, false);
   }
 
 
@@ -249,7 +249,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   @Override
   public void updateMap(String filepath) {
     editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap(filepath));
-    updateObserver.update(editOpManager);
+    updateObserver.update(editOpManager, false);
   }
 
   private void stopOperation() {

@@ -4,9 +4,12 @@ import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
+import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.view.elements.observers.RegionObserver;
 
 import java.util.List;
@@ -25,7 +28,7 @@ public class GlobalMapEditorViewUpdater {
   /**
    * Метод отрисовки текущего состояния карты
    */
-  public void updateMapView(GlobalMapEditOpManager editOperationsManager) {
+  public void updateMapView(GlobalMapEditOpManager editOperationsManager, boolean preview) {
     RegionsMap map = editOperationsManager.getCurrRegMap();
     mainPane.getChildren().clear();
     Platform.runLater(() -> {
@@ -34,6 +37,17 @@ public class GlobalMapEditorViewUpdater {
         Rectangle regionShape = painter.paintRegion(region);
         regionObserver.setRegionMouseHandlers(regionShape, i, region.getWidth(), region.getHeight());
         mainPane.getChildren().add(regionShape);
+        if (preview) {
+          try {
+            TrafficMap trafficMap =
+                EditOperationsManager.loadMap(
+                    ConnectionConfig.getConnectionConfig()
+                        .getConnection().getMapFromServer(
+                            i, ConnectionConfig.getConnectionConfig().getRoomId()));
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        }
       }
       map.foreachRegion(region -> {
         region.foreachConnector(roadConnector -> {
