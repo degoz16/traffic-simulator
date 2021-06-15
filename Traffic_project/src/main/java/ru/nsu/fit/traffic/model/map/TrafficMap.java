@@ -26,6 +26,9 @@ public class TrafficMap {
         this.width = region.getWidth() * scale;
         this.height = region.getHeight() * scale;
         for (int i = 0; i < region.getConnectorsCount(); i++) {
+            if (region.getConnector(i) == null) {
+                continue;
+            }
             nodes.add(new Node(
                 region.getConnector(i).getX() * scale,
                 region.getConnector(i).getY() * scale,

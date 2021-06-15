@@ -2,10 +2,11 @@ package ru.nsu.fit.traffic.model.globalmap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class RectRegion {
-
+  private boolean dirty = true;
   private String name;
   private double x;
   private double y;
@@ -28,11 +29,11 @@ public class RectRegion {
     this.y = y;
     this.width = width;
     this.height = height;
-
   }
 
-  public void deleteConnector(RoadConnector connector){
-    connectorList.remove(connector);
+  public void deleteConnector(RoadConnector connector) {
+    connectorList.set(connectorList.indexOf(connector), null);
+    dirty = true;
   }
 
   public RoadConnector getConnector(int id) {
@@ -40,6 +41,15 @@ public class RectRegion {
   }
 
   public void addConnector(RoadConnector connector) {
+    if (dirty) {
+      for (int i = 0; i < getConnectorsCount(); i++) {
+        if (connectorList.get(i) == null) {
+          connectorList.set(i, connector);
+          dirty = connectorList.stream().anyMatch(Objects::isNull);
+          return;
+        }
+      }
+    }
     connectorList.add(connector);
   }
 
