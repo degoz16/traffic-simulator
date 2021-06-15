@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Formula;
+import ru.nsu.fit.trafficProjectServer.security.model.User;
 
 @Getter
 @Setter
@@ -22,12 +23,17 @@ import org.hibernate.annotations.Formula;
 @RequiredArgsConstructor
 @SequenceGenerator(
   name = "map_seq",
-  sequenceName = "MAP_SEQ"
+  sequenceName = "MAP_SEQ",
+  allocationSize = 1
 )
 public class Map {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "map_seq")
   private Long id;
+
+  @ManyToOne
+  @JoinColumn(name = "USER_ID")
+  private User grabbedByUser;
 
   @ManyToOne
   @JoinColumn(name = "ROOM_ID")

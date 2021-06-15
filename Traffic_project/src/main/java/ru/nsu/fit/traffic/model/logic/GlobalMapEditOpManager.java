@@ -84,7 +84,10 @@ public class GlobalMapEditOpManager {
   }
 
   public Pair<TrafficMap, RectRegion> loadRegion(int id) throws Exception {
-    TrafficMap map = EditOperationsManager.loadMap(ConnectionConfig.getConnectionConfig().getConnection().getMapFromServer(id, ConnectionConfig.getConnectionConfig().getRoomId()));
+    TrafficMap map = EditOperationsManager.loadMap(
+      ConnectionConfig.getConnectionConfig().getConnection()
+        .getMapFromServer(id, ConnectionConfig.getConnectionConfig().getRoomId(), false)
+    );
     return new Pair<>(map, currRegMap.getRegion(id));
   }
 

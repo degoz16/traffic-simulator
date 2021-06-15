@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,6 +39,31 @@ public class UserService implements UserDetailsService {
     }
 
     return user;
+  }
+
+  public User getCurrentUser() {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    String username;
+    if (principal instanceof UserDetails) {
+      username = ((UserDetails)principal).getUsername();
+    } else {
+      username = principal.toString();
+    }
+    return userRepository.findByUsername(username);
+  }
+
+  public void makeCurrentUserAdmin() {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    String username;
+    if (principal instanceof UserDetails) {
+      username = ((UserDetails)principal).getUsername();
+    } else {
+      username = principal.toString();
+    }
+    User user = userRepository.findByUsername(username);
+    Role role = new Role(2L, "ADMIN");
+    roleRepository.save(role);
+    user.addRole(role);
   }
 
   public User findUserById(Long userId) {

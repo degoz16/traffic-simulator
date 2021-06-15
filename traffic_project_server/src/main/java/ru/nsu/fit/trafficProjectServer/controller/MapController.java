@@ -26,9 +26,11 @@ public class MapController {
   @GetMapping("getMap")
   public ResponseEntity<byte[]> getMap(
     @RequestParam Long id,
-    @RequestParam Long roomId
+    @RequestParam Long roomId,
+    @RequestParam Boolean block
   ) {
-    Map resource = service.getMap(id, roomId);
+    Map resource = service.getMap(id, roomId, block);
+    if (resource == null) return ResponseEntity.badRequest().build();
     String contentType = "application/octet-stream";
     return ResponseEntity.ok()
       .contentType(MediaType.parseMediaType(contentType))

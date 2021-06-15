@@ -1,5 +1,6 @@
 package ru.nsu.fit.traffic.view;
 
+import java.util.List;
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -12,8 +13,6 @@ import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.view.elements.observers.ConnectorObserver;
 import ru.nsu.fit.traffic.view.elements.observers.RegionObserver;
-
-import java.util.List;
 
 public class GlobalMapEditorViewUpdater {
 
@@ -42,11 +41,14 @@ public class GlobalMapEditorViewUpdater {
         mainPane.getChildren().add(regionShape);
         if (preview) {
           try {
-            TrafficMap trafficMap =
-                EditOperationsManager.loadMap(
-                    ConnectionConfig.getConnectionConfig()
-                        .getConnection().getMapFromServer(
-                        i, ConnectionConfig.getConnectionConfig().getRoomId()));
+            String mapPath = ConnectionConfig.getConnectionConfig()
+              .getConnection()
+              .getMapFromServer(
+                i,
+                ConnectionConfig.getConnectionConfig().getRoomId(),
+                false
+              );
+            TrafficMap trafficMap = EditOperationsManager.loadMap(mapPath);
             assert trafficMap != null;
             List<Shape> shapes = painter.paintRegionPreview(region, trafficMap);
             shapes.forEach(mainPane.getChildren()::add);
@@ -57,11 +59,9 @@ public class GlobalMapEditorViewUpdater {
       }
       map.foreachRegion(region -> {
         region.foreachConnector(roadConnector -> {
-          if (roadConnector != null) {
-            Shape connector = painter.paintConnector(roadConnector, true);
-            mainPane.getChildren().add(connector);
-            connectorObserver.setConnectorObserver(roadConnector, connector);
-          }
+          Shape connector = painter.paintConnector(roadConnector, true);
+          mainPane.getChildren().add(connector);
+          connectorObserver.setConnectorObserver(roadConnector, connector);
         });
       });
     });

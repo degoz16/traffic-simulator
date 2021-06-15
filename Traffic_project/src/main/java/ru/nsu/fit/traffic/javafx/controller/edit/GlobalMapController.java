@@ -161,7 +161,8 @@ public class GlobalMapController {
       GlobalSelectorController controller = loader.getController();
       controller.setStage(stage);
       controller.setMap(
-          ConnectionConfig.getConnectionConfig().getConnection().getGlobalMapFromServer(roomId));
+          ConnectionConfig.getConnectionConfig().getConnection().getGlobalMapFromServer(roomId)
+      );
 
       stage.show();
 

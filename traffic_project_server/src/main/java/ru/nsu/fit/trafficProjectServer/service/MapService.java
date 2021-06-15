@@ -11,6 +11,6 @@ public interface MapService {
   Long getRooms() ;
   Long createRoom(MultipartFile file, String name);
   String getGlobalMap(Long roomId);
-  Map getMap(Long id, Long roomId);
+  Map getMap(Long id, Long roomId, Boolean block);
   Map getGlobalMapNew(Long roomId);
 }

@@ -1,6 +1,7 @@
 package ru.nsu.fit.trafficProjectServer.security.model;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,16 +9,21 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import ru.nsu.fit.trafficProjectServer.model.Map;
+import ru.nsu.fit.trafficProjectServer.model.Room;
 
 @Entity
 @Getter
 @Setter
-@Table(name="traffic_users")
+@Table(name="traffic_users", uniqueConstraints = @UniqueConstraint(columnNames = {"username"}))
 public class User implements UserDetails {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -30,7 +36,23 @@ public class User implements UserDetails {
   @ManyToMany(fetch = FetchType.EAGER)
   private Set<Role> roles;
 
-  private Long grabbedMapId;
+  @OneToMany
+  private Set<Map> grabbedMaps = new HashSet<>();
+
+  @OneToMany
+  private Set<Room> createdRooms  = new HashSet<>();
+
+  public void addMap(Map map) {
+    grabbedMaps.add(map);
+  }
+
+  public void addRoom(Room room) {
+    createdRooms.add(room);
+  }
+
+  public void addRole(Role role) {
+    roles.add(role);
+  }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {

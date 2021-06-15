@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.OrderColumn;
@@ -17,6 +18,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.core.annotation.Order;
+import ru.nsu.fit.trafficProjectServer.security.model.User;
 
 @Getter
 @Setter
@@ -24,7 +26,8 @@ import org.springframework.core.annotation.Order;
 @Table(name = "traffic_rooms")
 @SequenceGenerator(
   name = "room_seq",
-  sequenceName = "ROOM_SEQ"
+  sequenceName = "ROOM_SEQ",
+  allocationSize = 1
 )
 public class Room {
   @Id
@@ -35,6 +38,9 @@ public class Room {
 
   @OneToOne
   private Map globalMap;
+
+  @ManyToOne
+  private User adminUser;
 
   @OneToMany(cascade = CascadeType.ALL, mappedBy = "room")
   @OrderColumn(name = "FOLLOWUP_NUMBER")

@@ -12,6 +12,8 @@ import ru.nsu.fit.trafficProjectServer.model.Map;
 import ru.nsu.fit.trafficProjectServer.model.Room;
 import ru.nsu.fit.trafficProjectServer.repository.MapRepository;
 import ru.nsu.fit.trafficProjectServer.repository.RoomRepository;
+import ru.nsu.fit.trafficProjectServer.security.model.User;
+import ru.nsu.fit.trafficProjectServer.security.service.UserService;
 import ru.nsu.fit.trafficProjectServer.service.MapService;
 
 @Service
@@ -25,6 +27,9 @@ public class MapServiceDBImpl implements MapService {
 
   @Autowired
   private RoomRepository roomRepository;
+
+  @Autowired
+  private UserService userService;
 
   @Override
   @Deprecated
@@ -40,9 +45,12 @@ public class MapServiceDBImpl implements MapService {
   @Override
   public String storeFile(MultipartFile file, Long id, Long roomId) {
     Room room = roomRepository.getOne(roomId);
-    Map map = mapRepository.findByRoomIdAndFollowUpNumber(roomId, id)
-      .orElse(new Map());
+    Map map = mapRepository.findByRoomIdAndFollowUpNumber(roomId, id);
+    if (map == null) {
+      map = new Map();
+    }
     enrichMap(map, file, room);
+    map.setGrabbedByUser(null);
     mapRepository.save(map);
     if (map.getFollowUpNumber() == null) {
       room.addMap(map);
@@ -68,8 +76,12 @@ public class MapServiceDBImpl implements MapService {
 
   @Override
   public Long createRoom(MultipartFile file, String name) {
+    User user = userService.getCurrentUser();
     Room room = new Room();
     room.setName(name);
+    room.setAdminUser(user);
+    user.addRoom(room);
+    userService.saveUser(user);
     roomRepository.save(room);
     String fileName = StringUtils.cleanPath(Objects.requireNonNull(file.getOriginalFilename()));
     Map map = new Map();
@@ -95,8 +107,19 @@ public class MapServiceDBImpl implements MapService {
   }
 
   @Override
-  public Map getMap(Long id, Long roomId) {
-    return mapRepository.findByRoomIdAndFollowUpNumber(roomId, id).orElse(null);
+  public Map getMap(Long id, Long roomId, Boolean block) {
+    Map map = mapRepository.findByRoomIdAndFollowUpNumber(roomId, id);
+    if (block) {
+      if (map.getGrabbedByUser() != null) {
+        return null;
+      }
+      User user = userService.getCurrentUser();
+      map.setGrabbedByUser(user);
+      user.addMap(map);
+      userService.saveUser(user);
+      mapRepository.save(map);
+    }
+    return map;
   }
 
   @Override

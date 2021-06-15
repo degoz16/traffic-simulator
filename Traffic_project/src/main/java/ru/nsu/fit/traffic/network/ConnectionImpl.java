@@ -1,7 +1,5 @@
 package ru.nsu.fit.traffic.network;
 
-import com.google.gson.Gson;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,7 +12,6 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -91,9 +88,9 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public String getMapFromServer(int num, int roomId) throws Exception {
+  public String getMapFromServer(int num, int roomId, boolean block) throws Exception {
     try {
-      return getMap(num, new URL(GET_URL + "?id=" + num + "&roomId=" + roomId));
+      return getMap(num, new URL(GET_URL + "?id=" + num + "&roomId=" + roomId + "&block=" + block));
     } catch (MalformedURLException e) {
       throw new RuntimeException(e);
     }
@@ -153,9 +150,9 @@ public class ConnectionImpl implements Connection {
       Path fullPath;
 
       if (id != null) {
-        fullPath = Path.of(new File("").getAbsolutePath(), "map_" + id + ".json");
+        fullPath = Path.of(new File("").getAbsolutePath(), "map_" + id + ".tsp");
       } else {
-        fullPath = Path.of(new File("").getAbsolutePath(), "map_global.json");
+        fullPath = Path.of(new File("").getAbsolutePath(), "map_global.tsp");
       }
       fos = new FileOutputStream(fullPath.toString());
       fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);

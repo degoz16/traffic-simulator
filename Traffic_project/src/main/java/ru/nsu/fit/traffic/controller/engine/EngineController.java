@@ -76,7 +76,8 @@ public class EngineController extends BaseControl {
             + "\" \""
             + heatMapPath
             + "\" \""
-            + carStatePath + "\"");
+            + carStatePath + "\""
+        );
         System.out.println("START");
         System.out.println(enginePath);
         System.out.println(mapPath);
@@ -113,28 +114,21 @@ public class EngineController extends BaseControl {
   }
 
   private void getCommands() {
-    rThread = new Thread(new Runnable() {
-      @Override
-      public void run() {
+    rThread = new Thread(() -> {
 
-        BufferedReader r = new BufferedReader(new InputStreamReader(engineProcess.getInputStream()));
-        BufferedReader err = new BufferedReader(new InputStreamReader(engineProcess.getErrorStream()));
+      BufferedReader r = new BufferedReader(new InputStreamReader(engineProcess.getInputStream()));
+      BufferedReader err = new BufferedReader(new InputStreamReader(engineProcess.getErrorStream()));
 
-        try {
-          while (!Thread.interrupted()) {
-            String string = r.readLine();
-            if (string != null) {
-              System.out.println(r.readLine());
-            }
-//            string = err.readLine();
-//            if (string != null) {
-//              System.err.println(err.readLine());
-//            }
+      try {
+        while (!Thread.interrupted()) {
+          String string = r.readLine();
+          if (string != null) {
+            System.out.println(r.readLine());
           }
-        } catch (IOException e) {
-          e.printStackTrace();
-
         }
+      } catch (IOException e) {
+        e.printStackTrace();
+
       }
     });
     rThread.start();
