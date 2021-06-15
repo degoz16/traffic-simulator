@@ -52,6 +52,11 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   }
 
   @Override
+  public void setGlobalMapSize(double width, double height) {
+
+  }
+
+  @Override
   public boolean testRegionsBounds(double x, double y, int id) {
     Pair<Double, Double> c = editOpManager.getSideCoordinates(x, y, editOpManager.getCurrRegMap().getRegion(id));
     return editOpManager.getCurrRegMap()

@@ -6,7 +6,6 @@ import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterfac
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorInitializerInterface;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
-import ru.nsu.fit.traffic.network.ConnectionImpl;
 
 public class GlobalMapSelectorInitializer implements GlobalMapSelectorInitializerInterface {
   private final GlobalMapSelectorController selectorController;

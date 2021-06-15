@@ -34,9 +34,20 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
     updateObserver.update(editOpManager, true);
   }
 
+  @Override
   public void setRegionMap(String map) {
     editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap(map));
     updateObserver.update(editOpManager, true);
+  }
+
+  @Override
+  public double getMapWidth() {
+    return editOpManager.getCurrRegMap().getWidth();
+  }
+
+  @Override
+  public double getMapHeight() {
+    return editOpManager.getCurrRegMap().getHeight();
   }
 
   @Override

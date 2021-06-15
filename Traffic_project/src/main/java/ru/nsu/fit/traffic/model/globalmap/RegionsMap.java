@@ -9,7 +9,33 @@ public class RegionsMap {
   //private Map<String, RectRegion> regions = new HashMap<>();
   private final List<RectRegion> regions = new ArrayList<>();
   private int currConnectorsCnt = 0;
+  private double width = 1000;
+  private double height = 1000;
   private String name = "map";
+
+  public RegionsMap() {
+  }
+
+  public RegionsMap(double width, double height) {
+    this.width = width;
+    this.height = height;
+  }
+
+  public void setWidth(double width) {
+    this.width = width;
+  }
+
+  public void setHeight(double height) {
+    this.height = height;
+  }
+
+  public double getWidth() {
+    return width;
+  }
+
+  public double getHeight() {
+    return height;
+  }
 
   public String getName() {
     return name;
