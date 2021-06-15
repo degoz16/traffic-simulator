@@ -5,10 +5,8 @@ import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
-import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
-import ru.nsu.fit.traffic.model.map.TrafficMap;
 
 public class GlobalMapSelectorController implements GlobalMapSelectorControllerInterface {
   private GlobalMapUpdateObserver updateObserver = null;
@@ -20,8 +18,12 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   public String onRegionClick(int id, MouseEventWrapper event) throws Exception {
     event.consume();
     try {
-      return connection.getMapFromServer(id, ConnectionConfig.getConnectionConfig().getRoomId());
-    } catch (RuntimeException e){
+      return connection.getMapFromServer(
+        id,
+        ConnectionConfig.getConnectionConfig().getRoomId(),
+        true
+      );
+    } catch (RuntimeException e) {
       return null;
     }
   }
@@ -33,8 +35,8 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   }
 
   public void setRegionMap(String map) {
-      editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap(map));
-      updateObserver.update(editOpManager, true);
+    editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap(map));
+    updateObserver.update(editOpManager, true);
   }
 
   @Override
@@ -54,6 +56,7 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   public void setUpdateObserver(GlobalMapUpdateObserver updateObserver) {
     this.updateObserver = updateObserver;
   }
+
   public void setConnection(Connection connection) {
     this.connection = connection;
   }

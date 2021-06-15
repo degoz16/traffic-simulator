@@ -20,7 +20,7 @@ public class NetworkTests {
     String val = new Scanner(path.toFile()).next();
 
     connection.pushMap(999, 0, path.toString());
-    Assert.assertEquals(val, new Scanner(Path.of(connection.getMapFromServer(999, 0))
+    Assert.assertEquals(val, new Scanner(Path.of(connection.getMapFromServer(999, 0, true))
       .toFile())
       .next());
   }

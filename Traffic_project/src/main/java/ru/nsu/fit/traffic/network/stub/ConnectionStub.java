@@ -60,7 +60,7 @@ public class ConnectionStub implements Connection {
   }
 
   @Override
-  public String getMapFromServer(int num, int roomId) {
+  public String getMapFromServer(int num, int roomId, boolean block) {
     return serverFolder + "room_" + roomId + "/map_" + num + ".tsp";
   }
 

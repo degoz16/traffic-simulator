@@ -149,7 +149,7 @@ public class MapServiceImpl implements MapService {
   }
 
   @Override
-  public Map getMap(Long id, Long roomId) {
+  public Map getMap(Long id, Long roomId, Boolean block) {
     return null;
   }
 

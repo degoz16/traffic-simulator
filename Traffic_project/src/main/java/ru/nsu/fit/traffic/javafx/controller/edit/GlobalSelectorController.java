@@ -142,6 +142,7 @@ public class GlobalSelectorController {
         e.printStackTrace();
       }
     } catch (Exception e) {
+      e.printStackTrace();
       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
       errorAlert.setHeaderText("Connection error");
       errorAlert.setContentText("Error while trying to get map from server");
