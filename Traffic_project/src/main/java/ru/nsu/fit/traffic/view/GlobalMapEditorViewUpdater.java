@@ -46,7 +46,7 @@ public class GlobalMapEditorViewUpdater {
                 EditOperationsManager.loadMap(
                     ConnectionConfig.getConnectionConfig()
                         .getConnection().getMapFromServer(
-                            i, ConnectionConfig.getConnectionConfig().getRoomId()));
+                        i, ConnectionConfig.getConnectionConfig().getRoomId()));
             assert trafficMap != null;
             List<Shape> shapes = painter.paintRegionPreview(region, trafficMap);
             shapes.forEach(mainPane.getChildren()::add);
@@ -57,9 +57,11 @@ public class GlobalMapEditorViewUpdater {
       }
       map.foreachRegion(region -> {
         region.foreachConnector(roadConnector -> {
-          Shape connector = painter.paintConnector(roadConnector, true);
-          mainPane.getChildren().add(connector);
-          connectorObserver.setConnectorObserver(roadConnector, connector);
+          if (roadConnector != null) {
+            Shape connector = painter.paintConnector(roadConnector, true);
+            mainPane.getChildren().add(connector);
+            connectorObserver.setConnectorObserver(roadConnector, connector);
+          }
         });
       });
     });
