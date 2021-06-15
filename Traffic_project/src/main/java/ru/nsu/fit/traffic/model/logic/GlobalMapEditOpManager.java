@@ -3,6 +3,7 @@ package ru.nsu.fit.traffic.model.logic;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import javafx.scene.text.Text;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.json.parse.RegionMapJson;
 import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
@@ -82,15 +83,24 @@ public class GlobalMapEditOpManager {
     return null;
   }
 
-  public Pair<TrafficMap, Pair<Double, Double>> loadRegion(RectRegion region) {
-    //TODO: загрузка карт + позиция региона
-    return null;
+  public Pair<TrafficMap, RectRegion> loadRegion(int id) throws Exception {
+    TrafficMap map = EditOperationsManager.loadMap(ConnectionConfig.getConnectionConfig().getConnection().getMapFromServer(id, ConnectionConfig.getConnectionConfig().getRoomId()));
+    return new Pair<>(map, currRegMap.getRegion(id));
   }
 
-  //TODO: Test this shit!
-  public TrafficMap mergeGlobalMap(double scale) {
-    List<Pair<TrafficMap, Pair<Double, Double>>> maps = new ArrayList<>();
-    currRegMap.foreachRegion(region -> maps.add(loadRegion(region)));
+  public TrafficMap mergeGlobalMap() {
+    if (currRegMap.getRegionCount() == 0) {
+      return new TrafficMap();
+    }
+    List<Pair<TrafficMap, RectRegion>> maps = new ArrayList<>();
+    for (int i = 0; i < currRegMap.getRegionCount(); i++) {
+      try {
+        maps.add(loadRegion(i));
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    double scale = maps.get(0).getFirst().getHeight() / maps.get(0).getSecond().getHeight();
     List<Pair<Node, Node>> connectorPairs = new ArrayList<>();
     List<Node> nodes = new ArrayList<>();
     List<Road> roads = new ArrayList<>();
@@ -101,8 +111,8 @@ public class GlobalMapEditOpManager {
     maps.forEach(map -> {
       map.getFirst().forEachNode(node -> {
         nodes.add(node);
-        node.setX(scale * map.getSecond().getFirst() + node.getX());
-        node.setY(scale * map.getSecond().getSecond() + node.getY());
+        node.setX(scale * map.getSecond().getX() + node.getX());
+        node.setY(scale * map.getSecond().getY() + node.getY());
         if (node.getConnector() != null) {
           int connectorId =
               currRegMap.getRegion(
