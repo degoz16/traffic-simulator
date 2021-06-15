@@ -42,6 +42,11 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
 
   }
 
+  @Override
+  public String onMergeMap() {
+    return editOpManager.mergeGlobalMap();
+  }
+
   public void setEditOpManager(GlobalMapEditOpManager editOpManager) {
     this.editOpManager = editOpManager;
   }

@@ -88,9 +88,10 @@ public class GlobalMapEditOpManager {
     return new Pair<>(map, currRegMap.getRegion(id));
   }
 
-  public TrafficMap mergeGlobalMap() {
+  public String mergeGlobalMap() {
     if (currRegMap.getRegionCount() == 0) {
-      return new TrafficMap();
+      EditOperationsManager.saveMap("mergedMap.tsp", new TrafficMap());
+      return "mergedMap.tsp";
     }
     List<Pair<TrafficMap, RectRegion>> maps = new ArrayList<>();
     for (int i = 0; i < currRegMap.getRegionCount(); i++) {
@@ -140,10 +141,15 @@ public class GlobalMapEditOpManager {
     });
 
     TrafficMap map = new TrafficMap();
+    //TODO: поменять на реальные размеры
+    map.setWidth(1000);
+    map.setHeight(1000);
+
     map.setNodes(nodes);
     map.setRoads(roads);
     map.setPlacesOfInterest(pois);
-    return map;
+    EditOperationsManager.saveMap("mergedMap.tsp", map);
+    return "mergedMap.tsp";
   }
 
   public void setCurrOp(GlobalMapEditOp currOp) {
