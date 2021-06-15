@@ -115,14 +115,10 @@ public class GlobalMapEditOpManager {
         node.setX(scale * map.getSecond().getX() + node.getX());
         node.setY(scale * map.getSecond().getY() + node.getY());
         if (node.getConnector() != null) {
-          int connectorId =
-              currRegMap.getRegion(
-                  node.getConnector().getRegionId())
-                  .getConnector(node.getConnector().getConnectorId()).getId();
-          if (connectorPairs.get(connectorId).getFirst() == null) {
-            connectorPairs.get(connectorId).setFirst(node);
+          if (connectorPairs.get(node.getConnector().getConnectorId()).getFirst() == null) {
+            connectorPairs.get(node.getConnector().getConnectorId()).setFirst(node);
           } else {
-            connectorPairs.get(connectorId).setSecond(node);
+            connectorPairs.get(node.getConnector().getConnectorId()).setSecond(node);
           }
         }
       });
