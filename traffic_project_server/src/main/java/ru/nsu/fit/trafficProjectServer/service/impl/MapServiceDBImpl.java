@@ -1,9 +1,12 @@
 package ru.nsu.fit.trafficProjectServer.service.impl;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -127,6 +130,31 @@ public class MapServiceDBImpl implements MapService {
     return roomRepository.findById(roomId)
       .map(Room::getGlobalMap)
       .orElse(null);
+  }
+
+  @Override
+  public void dropBlock(Long roomId, Long mapId) {
+    if (isCurrentUserAdminOfRoom(roomId)) {
+      Map map = mapRepository.findByRoomIdAndFollowUpNumber(roomId, mapId);
+      map.setGrabbedByUser(null);
+      mapRepository.save(map);
+    }
+  }
+
+  @Override
+  @Nullable
+  public List<Long> getBlocks(Long roomId) {
+    if (isCurrentUserAdminOfRoom(roomId)) {
+      return mapRepository.findAlLByRoomId(roomId).stream()
+        .filter(map -> map.getGrabbedByUser() != null)
+        .map(Map::getFollowUpNumber)
+        .collect(Collectors.toList());
+    }
+    return null;
+  }
+
+  private boolean isCurrentUserAdminOfRoom(Long roomId) {
+    return roomRepository.getOne(roomId).getAdminUser().equals(userService.getCurrentUser());
   }
 }
 

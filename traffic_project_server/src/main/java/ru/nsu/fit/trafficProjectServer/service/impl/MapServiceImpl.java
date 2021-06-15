@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
 import javax.annotation.PostConstruct;
@@ -135,6 +136,16 @@ public class MapServiceImpl implements MapService {
 
   @Override
   public Map getGlobalMapNew(Long roomId) {
+    return null;
+  }
+
+  @Override
+  public void dropBlock(Long roomId, Long mapId) {
+
+  }
+
+  @Override
+  public List<Long> getBlocks(Long roomId) {
     return null;
   }
 

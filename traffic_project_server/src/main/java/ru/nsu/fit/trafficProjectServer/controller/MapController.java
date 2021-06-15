@@ -1,5 +1,7 @@
 package ru.nsu.fit.trafficProjectServer.controller;
 
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -76,4 +78,16 @@ public class MapController {
       throw new RuntimeException(e);
     }
   }
+
+  @PostMapping("dropBlock")
+  public ResponseEntity<String> dropBlock(@RequestParam Long roomId, @RequestParam Long mapId) {
+    service.dropBlock(roomId, mapId);
+    return ResponseEntity.ok().build();
+  }
+
+  @GetMapping("blocks")
+  public List<Long> blockedMaps(@RequestParam Long roomId) {
+    return service.getBlocks(roomId);
+  }
+
 }

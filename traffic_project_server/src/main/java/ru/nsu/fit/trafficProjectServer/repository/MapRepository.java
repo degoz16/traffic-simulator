@@ -7,4 +7,5 @@ import ru.nsu.fit.trafficProjectServer.model.Map;
 
 public interface MapRepository extends JpaRepository<Map, Long> {
   Map findByRoomIdAndFollowUpNumber(Long room_id, Long followUpNumber);
+  List<Map> findAlLByRoomId(Long roomId);
 }
