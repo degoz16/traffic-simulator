@@ -146,9 +146,8 @@ public class GlobalMapEditOpManager {
 
     TrafficMap map = new TrafficMap();
 
-    //TODO: поменять на реальные размеры
-    map.setWidth(1000);
-    map.setHeight(1000);
+    map.setWidth(currRegMap.getWidth());
+    map.setHeight(currRegMap.getHeight());
 
     map.setNodes(nodes);
     map.setRoads(roads);

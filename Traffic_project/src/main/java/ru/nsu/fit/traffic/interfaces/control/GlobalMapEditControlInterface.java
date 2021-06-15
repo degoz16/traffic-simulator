@@ -11,6 +11,8 @@ public interface GlobalMapEditControlInterface {
 
   double getCurrY();
 
+  void setGlobalMapSize(double width, double height);
+
   boolean testRegionsBounds(double x, double y, int id);
 
   RegionsMap getCurrRegionsMap();

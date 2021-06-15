@@ -7,7 +7,6 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -20,10 +19,6 @@ import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterface;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorInitializerInterface;
 import ru.nsu.fit.traffic.javafx.controller.rooms.RoomController;
-import ru.nsu.fit.traffic.model.globalmap.RectRegion;
-import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
-import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
-import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.view.GlobalMapEditorViewUpdater;
 import ru.nsu.fit.traffic.view.GlobalMapObjectPainter;
 
@@ -39,15 +34,6 @@ public class GlobalSelectorController {
 
   public void setStage(Stage stage) {
     this.stage = stage;
-  }
-
-  public void setCurrentMap(RegionsMap regionsMap) {
-    for (RectRegion region : regionsMap.getRegions()) {
-      mainPane.getChildren().add(painter.paintRegion(region));
-      for (RoadConnector connector : region.getConnectorList()) {
-        mainPane.getChildren().add(painter.paintConnector(connector, true));
-      }
-    }
   }
 
   @FXML
@@ -150,11 +136,11 @@ public class GlobalSelectorController {
     }
   }
 
-  public void setMap(RegionsMap map) {
-    selectorControl.setRegionMap(map);
-  }
-
   public void setMap(String map) {
     selectorControl.setRegionMap(map);
+    mainPane.setPrefWidth(selectorControl.getMapWidth());
+    mainPane.setMaxWidth(selectorControl.getMapWidth());
+    mainPane.setPrefHeight(selectorControl.getMapHeight());
+    mainPane.setMaxHeight(selectorControl.getMapHeight());
   }
 }

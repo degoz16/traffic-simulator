@@ -13,4 +13,8 @@ public interface GlobalMapSelectorControllerInterface {
   void setRegionMap(RegionsMap map);
 
   void setRegionMap(String map);
+
+  double getMapWidth();
+
+  double getMapHeight();
 }
