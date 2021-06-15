@@ -8,8 +8,8 @@ public class PlaceOfInterest {
   private final List<Node> nodes = new ArrayList<>();
   private final double width;
   private final double height;
-  private final double x;
-  private final double y;
+  private double x;
+  private double y;
   private int numberOfParkingPlaces;
   private double weight = 1;
 
@@ -28,6 +28,14 @@ public class PlaceOfInterest {
     this.x = x;
     this.y = y;
     this.weight = weight;
+  }
+
+  public void setX(double x) {
+    this.x = x;
+  }
+
+  public void setY(double y) {
+    this.y = y;
   }
 
   public double getWidth() {

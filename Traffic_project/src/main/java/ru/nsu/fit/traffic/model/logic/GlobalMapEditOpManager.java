@@ -124,9 +124,14 @@ public class GlobalMapEditOpManager {
             connectorPairs.get(node.getConnector().getConnectorId()).setSecond(node);
           }
         }
+        node.setConnector(null);
       });
       map.getFirst().forEachRoad(roads::add);
-      map.getFirst().forEachPlaceOfInterest(pois::add);
+      map.getFirst().forEachPlaceOfInterest(placeOfInterest -> {
+        placeOfInterest.setX(scale * map.getSecond().getX() + placeOfInterest.getX());
+        placeOfInterest.setY(scale * map.getSecond().getY() + placeOfInterest.getY());
+        pois.add(placeOfInterest);
+      });
     });
     connectorPairs.forEach(pair -> {
       pair.getSecond().getRoadsOut().forEach(road -> {
@@ -140,6 +145,7 @@ public class GlobalMapEditOpManager {
     });
 
     TrafficMap map = new TrafficMap();
+
     //TODO: поменять на реальные размеры
     map.setWidth(1000);
     map.setHeight(1000);
