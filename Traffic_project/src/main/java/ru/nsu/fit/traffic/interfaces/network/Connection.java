@@ -8,4 +8,6 @@ public interface Connection {
   void pushMap(int num, int roomId,  String filepath);
   String getMapFromServer(int num, int roomId, boolean block) throws Exception;
   String getGlobalMapFromServer(int roomId);
+  boolean dropBlock(int roomId, int mapId);
+  List<Long> blockedMaps(int roomid);
 }

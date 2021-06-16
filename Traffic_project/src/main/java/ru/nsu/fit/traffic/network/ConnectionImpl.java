@@ -1,5 +1,8 @@
 package ru.nsu.fit.traffic.network;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -28,6 +32,7 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
 
 public class ConnectionImpl implements Connection {
@@ -38,7 +43,9 @@ public class ConnectionImpl implements Connection {
   private final String ROOMS_URL;
   private final String CREATE_ROOM;
   private final String GLOBAL;
-
+  private final String DROP_BLOCK;
+  private final String BLOCKS;
+  private final ConnectionConfig connectionConfig;
 
   public ConnectionImpl(String url) {
     if (!url.endsWith("/")) url += "/";
@@ -49,6 +56,9 @@ public class ConnectionImpl implements Connection {
     ROOMS_URL = URL + "api/rooms";
     CREATE_ROOM = URL + "api/createRoom";
     GLOBAL = URL + "api/global";
+    DROP_BLOCK = URL + "api/dropBlock";
+    BLOCKS = URL + "api/blocks";
+    connectionConfig = ConnectionConfig.getConnectionConfig();
   }
 
   @Override
@@ -67,9 +77,12 @@ public class ConnectionImpl implements Connection {
 
   @Override
   public List<Double> getRooms() {
-    HttpGet request = new HttpGet(ROOMS_URL);CredentialsProvider provider = new BasicCredentialsProvider();
-    UsernamePasswordCredentials credentials
-      = new UsernamePasswordCredentials("admin", "admin");
+    HttpGet request = new HttpGet(ROOMS_URL);
+    CredentialsProvider provider = new BasicCredentialsProvider();
+    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+      connectionConfig.getUsername(),
+      connectionConfig.getPassword()
+    );
     provider.setCredentials(AuthScope.ANY, credentials);
     HttpClient client = HttpClientBuilder.create()
       .setDefaultCredentialsProvider(provider)
@@ -110,6 +123,56 @@ public class ConnectionImpl implements Connection {
     pushAnyMap(filepath, SAVE_URL + "?id=" + num + "&roomId=" + roomId);
   }
 
+  @Override
+  public boolean dropBlock(int roomId, int mapId) {
+    HttpPost request = new HttpPost(DROP_BLOCK + "?roomId="+roomId+"&mapId="+mapId);
+    CredentialsProvider provider = new BasicCredentialsProvider();
+    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+      connectionConfig.getUsername(),
+      connectionConfig.getPassword()
+    );
+
+    provider.setCredentials(AuthScope.ANY, credentials);
+    HttpClient client = HttpClientBuilder.create()
+      .setDefaultCredentialsProvider(provider)
+      .build();
+
+    try {
+      HttpResponse response = client.execute(request);
+      if (response.getStatusLine().getStatusCode() == 200) {
+        return true;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  @Override
+  public List<Long> blockedMaps(int roomId) {
+    HttpGet request = new HttpGet(BLOCKS+"?roomId="+roomId);
+    CredentialsProvider provider = new BasicCredentialsProvider();
+    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+      connectionConfig.getUsername(),
+      connectionConfig.getPassword()
+    );
+    provider.setCredentials(AuthScope.ANY, credentials);
+    HttpClient client = HttpClientBuilder.create()
+      .setDefaultCredentialsProvider(provider)
+      .build();
+    try {
+      HttpResponse response = client.execute(request);
+      Gson gson = new Gson();
+      return gson.fromJson(
+        new BufferedReader(new InputStreamReader(response.getEntity().getContent())),
+        new TypeToken<List<Long>>(){}.getType()
+      );
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
   private HttpEntity pushAnyMap(String filepath, String url) {
     try {
       HttpEntity entity = MultipartEntityBuilder.create()
@@ -120,8 +183,10 @@ public class ConnectionImpl implements Connection {
       request.setEntity(entity);
 
       CredentialsProvider provider = new BasicCredentialsProvider();
-      UsernamePasswordCredentials credentials
-        = new UsernamePasswordCredentials("admin", "admin");
+      UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+        connectionConfig.getUsername(),
+        connectionConfig.getPassword()
+      );
       provider.setCredentials(AuthScope.ANY, credentials);
       HttpClient client = HttpClientBuilder.create()
         .setDefaultCredentialsProvider(provider)
@@ -140,7 +205,10 @@ public class ConnectionImpl implements Connection {
       con.setAuthenticator(new Authenticator() {
         @Override
         protected PasswordAuthentication getPasswordAuthentication() {
-          return new PasswordAuthentication("admin", "admin".toCharArray());
+          return new PasswordAuthentication(
+            connectionConfig.getUsername(),
+            connectionConfig.getPassword().toCharArray()
+          );
         }
       });
 

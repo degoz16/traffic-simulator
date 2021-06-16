@@ -3,9 +3,11 @@ package ru.nsu.fit.traffic;
 import java.io.FileNotFoundException;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Scanner;
 import org.junit.Assert;
 import org.junit.Test;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
 import ru.nsu.fit.traffic.network.ConnectionImpl;
 
@@ -52,7 +54,19 @@ public class NetworkTests {
     } catch (URISyntaxException e) {
       e.printStackTrace();
     }
+  }
 
+  @Test
+  public void getBlocks() {
+    Connection connection = new ConnectionImpl(URL);
+    List<Long> longList = connection.blockedMaps(2);
+    connection.blockedMaps(2).forEach(System.out::println);
+  }
+
+  @Test
+  public void dropBlock() {
+    Connection connection = new ConnectionImpl(URL);
+    Assert.assertTrue(connection.dropBlock(2,0));
   }
 
 

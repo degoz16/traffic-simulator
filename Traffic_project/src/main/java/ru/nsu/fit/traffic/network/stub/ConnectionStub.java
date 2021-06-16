@@ -68,4 +68,14 @@ public class ConnectionStub implements Connection {
   public String getGlobalMapFromServer(int roomId) {
     return serverFolder + "room_" + roomId + "/global_map.tsp";
   }
+
+  @Override
+  public boolean dropBlock(int roomId, int mapId) {
+    return false;
+  }
+
+  @Override
+  public List<Long> blockedMaps(int roomid) {
+    return null;
+  }
 }
