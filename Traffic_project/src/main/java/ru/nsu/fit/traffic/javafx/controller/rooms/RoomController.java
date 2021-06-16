@@ -68,7 +68,7 @@ public class RoomController {
     });
     buttonList.forEach(button -> {
       button.setOnAction(this::buttonClickHandler);
-      button.setMinSize(80, 80);
+      button.setMinSize(80, 50);
     });
     root.getChildren().addAll(buttonList);
   }
