@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="256.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ru.nsu.fit.traffic.javafx.controller.rooms.SignUpController">
+   <children>
+      <Text fill="#3c3131" layoutX="25.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sign up" wrappingWidth="116.6708984375">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Text>
+      <TextField fx:id="usernameText" layoutX="25.0" layoutY="63.0" maxWidth="250.0" prefHeight="31.0" prefWidth="250.0" promptText="Username" />
+      <TextField fx:id="passwordText" layoutX="25.0" layoutY="108.0" maxWidth="250.0" prefHeight="31.0" prefWidth="250.0" promptText="Password" />
+      <Button fx:id="signUp" layoutX="115.0" layoutY="203.0" mnemonicParsing="false" text="Sign up" />
+      <TextField fx:id="passwordText2" layoutX="25.0" layoutY="154.0" maxWidth="250.0" prefHeight="31.0" prefWidth="250.0" promptText="Password" />
+   </children>
+</Pane>
