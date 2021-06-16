@@ -1,12 +1,19 @@
 package ru.nsu.fit.traffic.controller.edit;
 
+import javafx.fxml.FXML;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
+import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
+
+import java.util.List;
+
+import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.DELETE_CONNECTOR;
 
 public class GlobalMapSelectorController implements GlobalMapSelectorControllerInterface {
   private GlobalMapUpdateObserver updateObserver = null;
@@ -53,6 +60,17 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   @Override
   public void onRegionPressed(MouseEventWrapper event) {
 
+  }
+
+  @Override
+  public void onConnectorClicked(RoadConnector connector){
+    if (editOpManager.getCurrentOp() == DELETE_CONNECTOR){
+      List<RectRegion> regions = editOpManager.getCurrRegMap().getRegions();
+      RectRegion currRegion = regions.get(regions.indexOf(connector.getRegion()));
+      currRegion.deleteConnector(connector);
+      connector.deleteLink();
+      updateObserver.update(editOpManager, false);
+    }
   }
 
   @Override

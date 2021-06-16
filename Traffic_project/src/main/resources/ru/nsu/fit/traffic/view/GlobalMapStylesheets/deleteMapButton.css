@@ -23,7 +23,7 @@
 }
 
 :focused {
-  -fx-background-image: url("../ButtonsImages/garbage.png");
+  -fx-background-image: url("../ButtonsImages/delete_map.png");
   -fx-background-repeat: stretch;
   -fx-background-size: 29 29;
   -fx-background-position: center center;

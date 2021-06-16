@@ -2,6 +2,7 @@ package ru.nsu.fit.traffic.interfaces.control;
 
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 
 public interface GlobalMapSelectorControllerInterface {
   String onRegionClick(int id, MouseEventWrapper event) throws Exception;
@@ -17,4 +18,6 @@ public interface GlobalMapSelectorControllerInterface {
   double getMapWidth();
 
   double getMapHeight();
+
+  void onConnectorClicked(RoadConnector connector);
 }

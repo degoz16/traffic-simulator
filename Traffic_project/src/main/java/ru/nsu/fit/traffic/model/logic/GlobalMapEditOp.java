@@ -5,5 +5,6 @@ public enum GlobalMapEditOp {
   SET_REGION,
   DELETE_REGION,
   DELETE_CONNECTOR,
+  KICK_USER,
   NONE
 }
