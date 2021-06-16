@@ -13,7 +13,7 @@ import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
 
 import java.util.List;
 
-import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.DELETE_CONNECTOR;
+import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.*;
 
 public class GlobalMapSelectorController implements GlobalMapSelectorControllerInterface {
   private GlobalMapUpdateObserver updateObserver = null;
@@ -23,15 +23,16 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
 
   @Override
   public String onRegionClick(int id, MouseEventWrapper event) throws Exception {
-    event.consume();
-    try {
-      return connection.getMapFromServer(
-        id,
-        ConnectionConfig.getConnectionConfig().getRoomId(),
-        true
-      );
-    } catch (RuntimeException e) {
-      return null;
+    if (editOpManager.getCurrentOp() == NONE) {
+      event.consume();
+      try {
+        return connection.getMapFromServer(
+            id, ConnectionConfig.getConnectionConfig().getRoomId(), true);
+      } catch (RuntimeException e) {
+        return null;
+      }
+    } else if (editOpManager.getCurrentOp() == SET_CONNECTOR){
+      editOpManager.addConnector(editOpManager.getCurrRegMap().getRegion(id), event.getX(), event.getY());
     }
   }
 
