@@ -11,8 +11,8 @@ public class GlobalMapSelectorInitializer implements GlobalMapSelectorInitialize
   private final GlobalMapSelectorController selectorController;
   private GlobalMapEditOpManager editOpManager = null;
 
-  public GlobalMapSelectorInitializer() {
-    selectorController = new GlobalMapSelectorController();
+  public GlobalMapSelectorInitializer(SelectorSceneElementsControl sceneElementsControl) {
+    selectorController = new GlobalMapSelectorController(sceneElementsControl);
   }
 
   @Override

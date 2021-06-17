@@ -192,11 +192,6 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   }
 
   @Override
-  public void onRegionMouseMove(int id, MouseEventWrapper event) {
-
-  }
-
-  @Override
   public void onSetRegionButton() {
     stopOperation();
     editOpManager.setCurrOp(SET_REGION);

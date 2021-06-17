@@ -186,8 +186,6 @@ public class GlobalMapController {
             ((rect, id, regW, regH) -> {
               rect.setOnMouseMoved(
                   event -> {
-                    editControl.onRegionMouseMove(
-                        id, MouseEventWrapper.getMouseEventWrapper(event));
                     Pair<Double, Double> coords =
                         editControl.getSideCoordinates(
                             event.getX(), event.getY(), rect.getX(), rect.getY(), regW, regH);

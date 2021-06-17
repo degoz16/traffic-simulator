@@ -29,8 +29,6 @@ public interface GlobalMapEditControlInterface {
 
   void onRegionPressed(MouseEventWrapper event);
 
-  void onRegionMouseMove(int id, MouseEventWrapper event);
-
   void onSetRegionButton();
 
   void onSetConnectorButton();
