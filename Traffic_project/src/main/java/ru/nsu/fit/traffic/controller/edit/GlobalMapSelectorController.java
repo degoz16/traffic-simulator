@@ -67,7 +67,7 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
       RoadConnector con2 = con1.getConnectorLink();
       con1.getRegion().deleteConnector(con1);
       con2.getRegion().deleteConnector(con2);
-      int reg2Id = editOpManager.getCurrRegMap().getRegions().indexOf(con2.getRegion());
+      int regId2 = editOpManager.getCurrRegMap().getRegions().indexOf(con2.getRegion());
       TrafficMap map1 = EditOperationsManager.loadMap(
           ConnectionConfig.getConnectionConfig()
               .getConnection().getMapFromServer(
@@ -75,7 +75,7 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
       TrafficMap map2 = EditOperationsManager.loadMap(
           ConnectionConfig.getConnectionConfig()
               .getConnection().getMapFromServer(
-              reg2Id, ConnectionConfig.getConnectionConfig().getRoomId(), true));
+              regId2, ConnectionConfig.getConnectionConfig().getRoomId(), true));
       assert map1 != null;
       for (Node node : map1.getNodes()) {
         if (node.getConnector() != null) {
@@ -99,7 +99,7 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
           .getConnection().pushMap(regId, ConnectionConfig.getConnectionConfig().getRoomId(), "tmpMap.tsp");
       EditOperationsManager.saveMap("tmpMap.tsp", map2);
       ConnectionConfig.getConnectionConfig()
-          .getConnection().pushMap(regId, ConnectionConfig.getConnectionConfig().getRoomId(), "tmpMap.tsp");
+          .getConnection().pushMap(regId2, ConnectionConfig.getConnectionConfig().getRoomId(), "tmpMap.tsp");
       updateObserver.update(editOpManager, true);
     }
   }

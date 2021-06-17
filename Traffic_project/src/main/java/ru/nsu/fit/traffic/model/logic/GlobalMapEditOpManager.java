@@ -282,6 +282,13 @@ public class GlobalMapEditOpManager {
         map1.addNode(node1);
         assert map2 != null;
         map2.addNode(node2);
+
+        EditOperationsManager.saveMap("tmpMap.tsp", map1);
+        ConnectionConfig.getConnectionConfig()
+            .getConnection().pushMap(regId1, ConnectionConfig.getConnectionConfig().getRoomId(), "tmpMap.tsp");
+        EditOperationsManager.saveMap("tmpMap.tsp", map2);
+        ConnectionConfig.getConnectionConfig()
+            .getConnection().pushMap(regId2, ConnectionConfig.getConnectionConfig().getRoomId(), "tmpMap.tsp");
       }
     }
 
