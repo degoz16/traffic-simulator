@@ -1,7 +1,6 @@
 package ru.nsu.fit.trafficProjectServer.controller;
 
 import java.util.List;
-import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
@@ -36,7 +35,10 @@ public class MapController {
     String contentType = "application/octet-stream";
     return ResponseEntity.ok()
       .contentType(MediaType.parseMediaType(contentType))
-      .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+      .header(
+        HttpHeaders.CONTENT_DISPOSITION,
+        "attachment; filename=\"" + resource.getFilename() + "\""
+      )
       .body(resource.getFile());
   }
 

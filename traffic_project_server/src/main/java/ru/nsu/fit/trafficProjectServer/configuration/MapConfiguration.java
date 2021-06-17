@@ -14,11 +14,18 @@ public class MapConfiguration {
   @Value("${file.block-file}")
   String blockPath;
 
+  @Value("${spring.datasource.url}")
+  String path;;
+
   public String getFilePath() {
     return filePath;
   }
 
   public String getBlockPath() {
     return blockPath;
+  }
+
+  public String getPath() {
+    return path;
   }
 }

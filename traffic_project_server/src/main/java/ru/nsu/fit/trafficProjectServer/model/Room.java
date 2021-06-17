@@ -36,6 +36,46 @@ public class Room {
 
   private String name;
 
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public Map getGlobalMap() {
+    return globalMap;
+  }
+
+  public void setGlobalMap(Map globalMap) {
+    this.globalMap = globalMap;
+  }
+
+  public User getAdminUser() {
+    return adminUser;
+  }
+
+  public void setAdminUser(User adminUser) {
+    this.adminUser = adminUser;
+  }
+
+  public List<Map> getMaps() {
+    return maps;
+  }
+
+  public void setMaps(List<Map> maps) {
+    this.maps = maps;
+  }
+
   @OneToOne
   private Map globalMap;
 
