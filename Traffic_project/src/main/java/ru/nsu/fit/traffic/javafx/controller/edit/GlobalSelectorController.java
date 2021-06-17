@@ -132,11 +132,16 @@ public class GlobalSelectorController {
                     }
                   });
             }),
-            (connector, shape) -> {
+            (regId, conId, shape) -> {
               shape.setOnMouseClicked(
-                      event -> {
-                        selectorControl.onConnectorClicked(connector);
-                      });
+                  event -> {
+                    //TODO: И ТУТ ОБРАБОТКААААААААААА
+                    try {
+                      selectorControl.onConnectorClicked(regId, conId);
+                    } catch (Exception e) {
+                      e.printStackTrace();
+                    }
+                  });
             },
             mainPane);
     initializer.initialize(viewUpdater::updateMapView);

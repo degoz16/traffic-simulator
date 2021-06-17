@@ -118,10 +118,16 @@ public class GlobalMapEditOpManager {
         node.setX(scale * map.getSecond().getX() + node.getX());
         node.setY(scale * map.getSecond().getY() + node.getY());
         if (node.getConnector() != null) {
-          if (connectorPairs.get(node.getConnector().getConnectorId()).getFirst() == null) {
-            connectorPairs.get(node.getConnector().getConnectorId()).setFirst(node);
+          if (connectorPairs.get(
+              currRegMap.getRegion(node.getConnector().getRegionId())
+                  .getConnector(node.getConnector().getConnectorId()).getId()).getFirst() == null) {
+            connectorPairs.get(
+                currRegMap.getRegion(node.getConnector().getRegionId())
+                    .getConnector(node.getConnector().getConnectorId()).getId()).setFirst(node);
           } else {
-            connectorPairs.get(node.getConnector().getConnectorId()).setSecond(node);
+            connectorPairs.get(
+                currRegMap.getRegion(node.getConnector().getRegionId())
+                    .getConnector(node.getConnector().getConnectorId()).getId()).setSecond(node);
           }
         }
         node.setConnector(null);
@@ -208,7 +214,7 @@ public class GlobalMapEditOpManager {
     updateObserver.update(this, false);
   }
 
-  public void addConnector(RectRegion region, double x, double y) {
+  public void addConnector(RectRegion region, double x, double y, boolean refreshFragments) throws Exception {
     Pair<Double, Double> coords = getSideCoordinates(x, y, region);
     boolean vert = Math.abs(coords.getSecond() - region.getY()) < 0.001
         || Math.abs(coords.getSecond() - region.getY() - region.getHeight()) < 0.001;
@@ -254,6 +260,29 @@ public class GlobalMapEditOpManager {
       connector2.setConnectorLink(connector1);
       region1.addConnector(connector1);
       region2.addConnector(connector2);
+      if (refreshFragments) {
+        int regId1 = currRegMap.getRegions().indexOf(regions.getFirst());
+        int regId2 = currRegMap.getRegions().indexOf(regions.getSecond());
+        TrafficMap map1 = EditOperationsManager.loadMap(ConnectionConfig.getConnectionConfig().getConnection().getMapFromServer(
+            regId1, ConnectionConfig.getConnectionConfig().getRoomId(), true));
+        TrafficMap map2 = EditOperationsManager.loadMap(ConnectionConfig.getConnectionConfig().getConnection().getMapFromServer(
+            regId2, ConnectionConfig.getConnectionConfig().getRoomId(), true));
+        int conId1 = region1.getConnectorList().indexOf(connector1);
+        int conId2 = region2.getConnectorList().indexOf(connector2);
+        assert map1 != null;
+        double scale = map1.getWidth() / regions.getFirst().getWidth();
+        Node node1 = new Node(connector1.getX() * scale,
+            connector1.getY() * scale,
+            regId1,
+            conId1);
+        Node node2 = new Node(connector2.getX() * scale,
+            connector2.getY() * scale,
+            regId2,
+            conId2);
+        map1.addNode(node1);
+        assert map2 != null;
+        map2.addNode(node2);
+      }
     }
 
     updateObserver.update(this, false);

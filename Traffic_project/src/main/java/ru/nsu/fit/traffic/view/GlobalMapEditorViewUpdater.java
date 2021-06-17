@@ -58,11 +58,14 @@ public class GlobalMapEditorViewUpdater {
         }
       }
       map.foreachRegion(region -> {
-        region.foreachConnector(roadConnector -> {
-          Shape connector = painter.paintConnector(roadConnector, true);
+        for (int i = 0; i < region.getConnectorsCount(); i++) {
+          if (region.getConnector(i) == null) {
+            continue;
+          }
+          Shape connector = painter.paintConnector(region.getConnector(i), true);
           mainPane.getChildren().add(connector);
-          connectorObserver.setConnectorObserver(roadConnector, connector);
-        });
+          connectorObserver.setConnectorObserver(map.getRegions().indexOf(region), i, connector);
+        }
       });
     });
   }

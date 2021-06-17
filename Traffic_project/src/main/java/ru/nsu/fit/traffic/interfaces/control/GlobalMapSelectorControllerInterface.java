@@ -20,7 +20,7 @@ public interface GlobalMapSelectorControllerInterface {
 
   Pair<Double, Double> getSideCoordinates(double x, double y, double regX, double regY, double regW, double regH);
 
-  void onConnectorClicked(RoadConnector connector);
+  void onConnectorClicked(int regId, int conId) throws Exception;
 
   void onSetConnector();
 

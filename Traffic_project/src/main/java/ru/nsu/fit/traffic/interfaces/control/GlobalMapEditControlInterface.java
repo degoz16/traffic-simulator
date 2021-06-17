@@ -25,7 +25,7 @@ public interface GlobalMapEditControlInterface {
 
   void onMainPaneDrag(MouseEventWrapper event);
 
-  void onRegionClick(int id, MouseEventWrapper event);
+  void onRegionClick(int id, MouseEventWrapper event) throws Exception;
 
   void onRegionPressed(MouseEventWrapper event);
 
@@ -33,23 +33,16 @@ public interface GlobalMapEditControlInterface {
 
   void onSetConnectorButton();
 
-  void onConnectorClicked(RoadConnector connector);
+  void onConnectorClicked(int regId, int conId);
 
   void onClear();
-
-  void onPut();
-
   Integer onNewPut();
 
   void onNewGet();
 
-  void onGet();
-
   void deleteRegion();
 
   void deleteConnector();
-
-  void updateMap(String filepath);
 
   Pair<Double, Double> getSideCoordinates(
       double x, double y, double regX, double regY, double regW, double regH);

@@ -165,14 +165,14 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   }
 
   @Override
-  public void onRegionClick(int id, MouseEventWrapper event) {
+  public void onRegionClick(int id, MouseEventWrapper event) throws Exception {
     switch (event.getButton()) {
       case PRIMARY -> {
         event.consume();
         switch (editOpManager.getCurrentOp()) {
           case SET_CONNECTOR -> {
             RectRegion region = editOpManager.getCurrRegMap().getRegion(id);
-            editOpManager.addConnector(region, event.getX(), event.getY());
+            editOpManager.addConnector(region, event.getX(), event.getY(), false);
           }
           case DELETE_REGION -> {
             getCurrRegionsMap().deleteRegion(id);
@@ -218,11 +218,6 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   }
 
   @Override
-  public void onPut() {
-    editOpManager.saveRegMap("/save.json");
-  }
-
-  @Override
   public Integer onNewPut() {
     RegionsMap map = editOpManager.getCurrRegMap();
     Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
@@ -238,12 +233,6 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   @Override
   public void onNewGet() {
-    editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap("/save.json"));
-    updateObserver.update(editOpManager, false);
-  }
-
-  @Override
-  public void onGet() {
     editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap("/save.json"));
     updateObserver.update(editOpManager, false);
   }
@@ -269,12 +258,6 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     }
   }
 
-  @Override
-  public void updateMap(String filepath) {
-    editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap(filepath));
-    updateObserver.update(editOpManager, false);
-  }
-
   private void stopOperation() {
     editOpManager.setCurrOp(GlobalMapEditOp.NONE);
     sceneElementsControl.setCurrentOperation("none");
@@ -283,12 +266,12 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   }
 
   @Override
-  public void onConnectorClicked(RoadConnector connector){
+  public void onConnectorClicked(int regId, int conId){
     if (editOpManager.getCurrentOp() == DELETE_CONNECTOR){
-      List<RectRegion> regions = getCurrRegionsMap().getRegions();
-      RectRegion currRegion = regions.get(regions.indexOf(connector.getRegion()));
-      currRegion.deleteConnector(connector);
-      connector.deleteLink();
+      RoadConnector con1 = editOpManager.getCurrRegMap().getRegion(regId).getConnector(conId);
+      RoadConnector con2 = con1.getConnectorLink();
+      con1.getRegion().deleteConnector(con1);
+      con2.getRegion().deleteConnector(con2);
       updateObserver.update(editOpManager, false);
     }
   }
