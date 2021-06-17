@@ -90,6 +90,12 @@
                         <Button fx:id="editButton" layoutX="200.0" layoutY="27.0" mnemonicParsing="false" onAction="#editButtonClicked" prefHeight="36.0" prefWidth="36.0" style="-fx-pref-width: 36; -fx-pref-height: 36; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/edit.css" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="260.0" />
                         <Slider fx:id="timeLineReportSlider" majorTickUnit="2.0" max="10.0" minWidth="300.0" minorTickCount="1" prefWidth="300.0" showTickLabels="true" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" />
                         <Slider fx:id="timeLinePlaybackSlider" layoutX="10.0" layoutY="48.0" majorTickUnit="1800.0" max="10.0" minWidth="300.0" minorTickCount="600" prefWidth="300.0" showTickLabels="true" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" />
+                        <Text fx:id="currentOperation1" fill="WHITE" layoutX="16.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Optimize map" wrappingWidth="82.0000114440918">
+                           <font>
+                              <Font name="Arial Bold" size="11.0" />
+                           </font>
+                        </Text>
+                        <Button layoutX="96.0" layoutY="38.0" mnemonicParsing="false" onAction="#startOptimization" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@MainViewStyleSheets/optimize.css" />
                      </children>
                   </AnchorPane>
                   <AnchorPane fx:id="editButtonsPane" layoutX="351.0" layoutY="329.79998779296875" prefHeight="63.0" prefWidth="264.0">
@@ -146,7 +152,8 @@
             </Group>
             <VBox layoutX="566.4000244140625" layoutY="299.6000061035156" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">
                <children>
-                  <Button mnemonicParsing="false" onAction="#saveMap" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-background-radius: 100;" stylesheets="@GlobalMapStylesheets/saveButton.css" />
+                  <Button fx:id="saveButton" mnemonicParsing="false" onAction="#saveMap" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-background-radius: 100;" stylesheets="@GlobalMapStylesheets/saveButton.css" />
+                  <Button fx:id="goBackButton" mnemonicParsing="false" onAction="#goBack" prefHeight="80.0" prefWidth="80.0" style="-fx-background-color: transparent; -fx-background-radius: 100;" stylesheets="@GlobalMapStylesheets/GoBack.css" />
                </children>
             </VBox>
             <fx:include fx:id="roadSettings" source="RoadSettingsView.fxml" />
