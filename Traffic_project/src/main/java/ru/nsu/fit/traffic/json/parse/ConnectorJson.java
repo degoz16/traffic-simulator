@@ -2,13 +2,19 @@ package ru.nsu.fit.traffic.json.parse;
 
 public class ConnectorJson {
   private int connectorLink = -1;
+  private int id;
   private int region;
   private double x;
   private double y;
 
-  public ConnectorJson(double x, double y) {
+  public ConnectorJson(int id, double x, double y) {
     this.x = x;
     this.y = y;
+    this.id = id;
+  }
+
+  public int getId() {
+    return id;
   }
 
   public int getConnectorLink() {

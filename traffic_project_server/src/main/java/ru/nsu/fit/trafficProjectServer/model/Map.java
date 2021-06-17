@@ -46,4 +46,52 @@ public class Map {
   private byte[] file;
 
   private String filename;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public User getGrabbedByUser() {
+    return grabbedByUser;
+  }
+
+  public void setGrabbedByUser(User grabbedByUser) {
+    this.grabbedByUser = grabbedByUser;
+  }
+
+  public Room getRoom() {
+    return room;
+  }
+
+  public void setRoom(Room room) {
+    this.room = room;
+  }
+
+  public Long getFollowUpNumber() {
+    return followUpNumber;
+  }
+
+  public void setFollowUpNumber(Long followUpNumber) {
+    this.followUpNumber = followUpNumber;
+  }
+
+  public byte[] getFile() {
+    return file;
+  }
+
+  public void setFile(byte[] file) {
+    this.file = file;
+  }
+
+  public String getFilename() {
+    return filename;
+  }
+
+  public void setFilename(String filename) {
+    this.filename = filename;
+  }
 }

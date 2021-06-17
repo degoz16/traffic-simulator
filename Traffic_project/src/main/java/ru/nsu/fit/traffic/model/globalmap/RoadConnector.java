@@ -19,6 +19,10 @@ public class RoadConnector {
     this.y = y;
   }
 
+  public void setId(int id) {
+    this.id = id;
+  }
+
   public int getId() {
     return id;
   }

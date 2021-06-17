@@ -108,7 +108,7 @@ public class GlobalSelectorController {
     GlobalMapSelectorInitializerInterface initializer = new GlobalMapSelectorInitializer(sceneElementsControl);
     selectorControl = initializer.getSelectorControl();
     //todo: showAdminPane() if user is admin
-
+    showAdminPane();
     GlobalMapEditorViewUpdater viewUpdater =
         new GlobalMapEditorViewUpdater(
             ((rect, id, regW, regH) -> {

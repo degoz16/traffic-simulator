@@ -71,12 +71,12 @@
                      </stroke>
                   </Polygon>
                   <Button fx:id="mergeButton" layoutX="55.0" layoutY="-24.0" mnemonicParsing="false" onAction="#mergeMapClicked" prefWidth="32.0" style="-fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/mergeButton.css" />
-                  <Text fx:id="adminPane" fill="WHITE" layoutX="-23.0" layoutY="-7.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Merge map">
+                  <Text fx:id="adminPaneText" fill="WHITE" layoutX="-23.0" layoutY="-7.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Merge map">
                      <font>
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Text>
-                  <AnchorPane fx:id="adminPane" layoutX="-39.0" layoutY="6.0" prefHeight="33.0" prefWidth="160.0" style="visibility: false;">
+                  <AnchorPane fx:id="adminPane" layoutX="-39.0" layoutY="6.0" prefHeight="33.0" prefWidth="160.0">
                      <children>
                         <Button fx:id="kick" layoutX="14.0" layoutY="3.0" mnemonicParsing="false" onAction="#mergeMapClicked" prefWidth="33.0" style="-fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/kickButton.css" />
                         <Button fx:id="connectorButton" layoutX="60.0" layoutY="2.0" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#setConnector" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/ConnectorButton.css" />

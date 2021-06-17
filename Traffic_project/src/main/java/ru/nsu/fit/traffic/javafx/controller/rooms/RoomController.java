@@ -55,22 +55,24 @@ public class RoomController {
   @FXML
   public void initialize() {
     connection = connectionConfig.getConnection();
-    List<Button> buttonList = new ArrayList<>();
-    connection.getRooms().forEach(i -> {
-      int roomNum = Math.round(i);
-      String fileName = connection.getGlobalMapFromServer(roomNum);
-      String name = Objects.requireNonNull(GlobalMapEditOpManager.loadRegMap(fileName)).getName();
-      Button button = new Button(
-        name.replace('+', ' ')
-      );
-      button.setId(String.valueOf(roomNum));
-      buttonList.add(button);
-    });
-    buttonList.forEach(button -> {
-      button.setOnAction(this::buttonClickHandler);
-      button.setMinSize(80, 50);
-    });
-    root.getChildren().addAll(buttonList);
+    if (connection.getRooms() != null) {
+      List<Button> buttonList = new ArrayList<>();
+      connection.getRooms().forEach(i -> {
+        int roomNum = Math.round(i);
+        String fileName = connection.getGlobalMapFromServer(roomNum);
+        String name = Objects.requireNonNull(GlobalMapEditOpManager.loadRegMap(fileName)).getName();
+        Button button = new Button(
+            name.replace('+', ' ')
+        );
+        button.setId(String.valueOf(roomNum));
+        buttonList.add(button);
+      });
+      buttonList.forEach(button -> {
+        button.setOnAction(this::buttonClickHandler);
+        button.setMinSize(80, 50);
+      });
+      root.getChildren().addAll(buttonList);
+    }
   }
 
   private void buttonClickHandler(ActionEvent event) {
