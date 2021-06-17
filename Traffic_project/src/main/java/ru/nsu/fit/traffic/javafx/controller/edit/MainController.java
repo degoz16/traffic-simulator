@@ -26,7 +26,6 @@ import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.FragmentEditControlsInitializer;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
-import ru.nsu.fit.traffic.controller.edit.GlobalMapSelectorController;
 import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
@@ -770,13 +769,12 @@ public class MainController {
     controller.setMap(connection.getGlobalMapFromServer(connectionConfig.getRoomId()));
   }
 
-  // todo: call this func
-  private void showGoBack() {
+  public void showGoBack() {
     goBackButton.setVisible(true);
     saveButton.setVisible(false);
   }
 
-  private void showSaveMap() {
+  public void showSaveMap() {
     goBackButton.setVisible(false);
     saveButton.setVisible(true);
   }

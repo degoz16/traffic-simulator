@@ -54,6 +54,7 @@ public class GlobalSelectorController {
           stage.show();
 
           MainController controller = loader.getController();
+          controller.showSaveMap();
           controller.setStage(stage);
           if (path != null) {
             controller.initMap(path);
@@ -179,6 +180,7 @@ public class GlobalSelectorController {
         stage.show();
 
         MainController controller = loader.getController();
+        controller.showGoBack();
         controller.setStage(stage);
         if (partFilepath != null) {
           controller.initMap(partFilepath);
