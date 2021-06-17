@@ -200,16 +200,21 @@ public class GlobalMapController {
                   });
               rect.setOnMouseClicked(
                   event -> {
-                    editControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
+                    try {
+                      editControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
+                    } catch (Exception e) {
+                      //TODO: AAAAAAAAAAAA ОБРАБОТКААА
+                      e.printStackTrace();
+                    }
                   });
               rect.setOnMousePressed(
                   event ->
                       editControl.onRegionPressed(MouseEventWrapper.getMouseEventWrapper(event)));
             }),
-            (connector, connectorShape) -> {
-              connectorShape.setOnMouseClicked(
+            (regId, conId, shape) -> {
+              shape.setOnMouseClicked(
                   event -> {
-                    editControl.onConnectorClicked(connector);
+                    editControl.onConnectorClicked(regId, conId);
                   });
             },
             mainPane);

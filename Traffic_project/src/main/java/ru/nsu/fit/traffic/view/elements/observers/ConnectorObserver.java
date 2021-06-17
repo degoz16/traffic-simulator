@@ -4,5 +4,5 @@ import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 
 public interface ConnectorObserver {
-    void setConnectorObserver(RoadConnector connector, Shape connectorShape);
+    void setConnectorObserver(int regId, int conId, Shape connectorShape);
 }
