@@ -1,0 +1,34 @@
+{
+    -fx-background-image: url("../ButtonsImages/optimize.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 24 24;
+    -fx-background-position: center center;
+    -fx-background-color: transparent;
+}
+
+:hover {
+    -fx-background-image: url("../ButtonsImages/optimize.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 22 22;
+    -fx-background-position: center center;
+    -fx-background-color: transparent;
+
+}
+
+:pressed {
+    -fx-background-image: url("../ButtonsImages/optimize.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-position: center center;
+    -fx-background-color: transparent;
+
+}
+
+:focused {
+    -fx-background-image: url("../ButtonsImages/optimize.png");
+    -fx-background-repeat: stretch;
+    -fx-background-size: 20 20;
+    -fx-background-position: center center;
+    -fx-background-color: transparent;
+
+}

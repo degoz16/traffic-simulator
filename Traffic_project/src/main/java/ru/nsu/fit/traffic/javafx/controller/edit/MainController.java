@@ -112,6 +112,10 @@ public class MainController {
   private AnchorPane editButtonsPane;
   @FXML
   private HBox progressIndicator;
+  @FXML
+  private Button goBackButton;
+  @FXML
+  private Button saveButton;
 
   private MenuControlInterface saveLoadControl;
   private Stage stage;
@@ -742,5 +746,36 @@ public class MainController {
     mainScrollPane.setVvalue((valY + adjustment.getY()) / (updatedInnerBounds.getHeight() - viewportBounds.getHeight()));
   }
 
+  @FXML
+  public void startOptimization(){
+    //todo send
+  }
 
+  @FXML
+  public void goBack(){
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/GlobalMapView.fxml"));
+    try {
+      Parent root = loader.load();
+      Scene scene = new Scene(root);
+        stage.setScene(scene);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    stage.show();
+
+    GlobalMapController controller = loader.getController();
+    //todo: get map and set to this controller
+    controller.setStage(stage);
+  }
+
+  // todo: call this func
+  private void showGoBack() {
+    goBackButton.setVisible(true);
+    saveButton.setVisible(false);
+  }
+
+  private void showSaveMap() {
+    goBackButton.setVisible(false);
+    saveButton.setVisible(true);
+  }
 }
