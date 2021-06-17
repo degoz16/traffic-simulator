@@ -3,15 +3,12 @@ package ru.nsu.fit.traffic.interfaces.control;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
+import ru.nsu.fit.traffic.utils.Pair;
 
 public interface GlobalMapSelectorControllerInterface {
-  String onRegionClick(int id, MouseEventWrapper event) throws Exception;
-
-  void onRegionPressed(MouseEventWrapper event);
+  void onRegionClick(int id, MouseEventWrapper event) throws Exception;
 
   String onMergeMap();
-
-  void setRegionMap(RegionsMap map);
 
   void setRegionMap(String map);
 
@@ -19,5 +16,15 @@ public interface GlobalMapSelectorControllerInterface {
 
   double getMapHeight();
 
+  boolean testRegionsBounds(double x, double y, int id);
+
+  Pair<Double, Double> getSideCoordinates(double x, double y, double regX, double regY, double regW, double regH);
+
   void onConnectorClicked(RoadConnector connector);
+
+  void onSetConnector();
+
+  void onDeleteConnector();
+
+  void onKick();
 }
