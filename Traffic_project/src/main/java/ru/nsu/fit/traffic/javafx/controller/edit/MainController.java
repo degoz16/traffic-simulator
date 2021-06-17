@@ -26,6 +26,7 @@ import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.FragmentEditControlsInitializer;
 import ru.nsu.fit.traffic.controller.SceneElementsControl;
+import ru.nsu.fit.traffic.controller.edit.GlobalMapSelectorController;
 import ru.nsu.fit.traffic.controller.notification.NotificationType;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.ControlInitializerInterface;
@@ -753,7 +754,7 @@ public class MainController {
 
   @FXML
   public void goBack(){
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/GlobalMapView.fxml"));
+    FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/GlobalMapSelectorView.fxml"));
     try {
       Parent root = loader.load();
       Scene scene = new Scene(root);
@@ -763,9 +764,10 @@ public class MainController {
     }
     stage.show();
 
-    GlobalMapController controller = loader.getController();
-    //todo: get map and set to this controller
-    controller.setStage(stage);
+    GlobalSelectorController controller = loader.getController();
+    ConnectionConfig connectionConfig = ConnectionConfig.getConnectionConfig();
+    Connection connection = connectionConfig.getConnection();
+    controller.setMap(connection.getGlobalMapFromServer(connectionConfig.getRoomId()));
   }
 
   // todo: call this func
