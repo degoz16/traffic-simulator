@@ -135,7 +135,7 @@ public class GlobalSelectorController {
             (regId, conId, shape) -> {
               shape.setOnMouseClicked(
                   event -> {
-                    //TODO: И ТУТ ОБРАБОТКААААААААААА
+                    //TODO: и ТУТ ОБРАБОТКААААААААААА
                     try {
                       selectorControl.onConnectorClicked(regId, conId);
                     } catch (Exception e) {
