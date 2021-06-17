@@ -8,6 +8,8 @@ import ru.nsu.fit.traffic.model.map.Road;
 public interface EditControlInterface {
   void startSimulation();
 
+  void startOptimization();
+
   void stopSimulation();
 
   void rewindForward();

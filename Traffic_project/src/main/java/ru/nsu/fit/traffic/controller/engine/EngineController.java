@@ -14,6 +14,7 @@ public class EngineController extends BaseControl {
   private String carStatePath;
   private String enginePath;
   private String mapPath;
+  private String optimizedMapPath;
   private Process engineProcess;
   private Thread thread;
   private Thread rThread;
@@ -29,6 +30,14 @@ public class EngineController extends BaseControl {
 
   public void setMapPath(String mapPath) {
     this.mapPath = mapPath;
+  }
+
+  public String getOptimizedMapPath() {
+    return optimizedMapPath;
+  }
+
+  public void setOptimizedMapPath(String optimizedMapPath) {
+    this.optimizedMapPath = optimizedMapPath;
   }
 
   public String getHeatMapPath() {
@@ -93,6 +102,36 @@ public class EngineController extends BaseControl {
         rThread.join();
         System.out.println("END");
         sceneElementsControl.simulationEndModeEnable();
+      } catch (InterruptedException | IOException e) {
+        System.err.println(e.getMessage());
+        assert false;
+      }
+    });
+    thread.start();
+  }
+
+  public void startOptimizing() {
+    thread = new Thread(() -> {
+      try {
+        engineProcess = Runtime.getRuntime().exec(
+          "java -jar \""
+            + enginePath
+            + "\" \""
+            + mapPath
+            + "\" \""
+            + optimizedMapPath + "\""
+        );
+        System.out.println("START OPTIMIZATION");
+        getCommands();
+        engineProcess.waitFor();
+        //DEBUG
+        //Thread.sleep(5000);
+        //DEBUG
+        System.out.println(engineProcess.exitValue());
+        rThread.interrupt();
+        rThread.join();
+        System.out.println("END");
+        //sceneElementsControl.simulationEndModeEnable();
       } catch (InterruptedException | IOException e) {
         System.err.println(e.getMessage());
         assert false;

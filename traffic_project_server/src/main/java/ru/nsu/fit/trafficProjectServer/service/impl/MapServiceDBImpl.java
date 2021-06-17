@@ -73,8 +73,10 @@ public class MapServiceDBImpl implements MapService {
   }
 
   @Override
-  public Long getRooms() {
-    return roomRepository.count();
+  public List<Long> getRooms() {
+    return roomRepository.findAll().stream()
+      .map(Room::getId)
+      .collect(Collectors.toList());
   }
 
   @Override

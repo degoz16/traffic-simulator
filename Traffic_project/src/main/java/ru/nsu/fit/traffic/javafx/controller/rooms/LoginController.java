@@ -9,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import ru.nsu.fit.traffic.App;
+import ru.nsu.fit.traffic.controller.network.LoginControl;
 
 public class LoginController {
   @FXML TextField usernameText;
@@ -16,6 +18,7 @@ public class LoginController {
   @FXML Button logIn;
   @FXML Button signUp;
   private Stage stage;
+  private LoginControl loginControl;
 
   public void setStage(Stage stage) {
     this.stage = stage;
@@ -23,7 +26,9 @@ public class LoginController {
 
   @FXML
   private void logIn() {
-    // todo: привет, артур
+    loginControl = new LoginControl();
+    loginControl.login(usernameText.getText(), passwordText.getText());
+    //TODO
   }
 
   @FXML
@@ -31,7 +36,7 @@ public class LoginController {
     System.out.println("sign up");
     try {
       System.out.println(getClass());
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/Signup.fxml"));
+      FXMLLoader loader = new FXMLLoader(App.class.getResource("view/Signup.fxml"));
       Parent root = loader.load();
       Scene scene = new Scene(root);
 

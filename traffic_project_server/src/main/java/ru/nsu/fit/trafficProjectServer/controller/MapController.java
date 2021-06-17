@@ -51,7 +51,7 @@ public class MapController {
   }
 
   @GetMapping("rooms")
-  public Long roomsNumber() {
+  public List<Long> roomsNumber() {
     return service.getRooms();
   }
 

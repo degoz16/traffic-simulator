@@ -57,7 +57,7 @@ public class RoomController {
     connection = connectionConfig.getConnection();
     List<Button> buttonList = new ArrayList<>();
     connection.getRooms().forEach(i -> {
-      int roomNum = (int) Math.round(i);
+      int roomNum = Math.round(i);
       String fileName = connection.getGlobalMapFromServer(roomNum);
       String name = Objects.requireNonNull(GlobalMapEditOpManager.loadRegMap(fileName)).getName();
       Button button = new Button(

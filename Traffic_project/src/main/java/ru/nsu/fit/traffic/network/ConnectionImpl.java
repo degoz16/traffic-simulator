@@ -15,11 +15,8 @@ import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.auth.AuthScope;
@@ -46,6 +43,8 @@ public class ConnectionImpl implements Connection {
   private final String DROP_BLOCK;
   private final String BLOCKS;
   private final ConnectionConfig connectionConfig;
+  private final String LOGIN;
+  private final String SIGN_UP;
 
   public ConnectionImpl(String url) {
     if (!url.endsWith("/")) url += "/";
@@ -58,6 +57,8 @@ public class ConnectionImpl implements Connection {
     GLOBAL = URL + "api/global";
     DROP_BLOCK = URL + "api/dropBlock";
     BLOCKS = URL + "api/blocks";
+    LOGIN = URL + "login";
+    SIGN_UP = URL + "registration";
     connectionConfig = ConnectionConfig.getConnectionConfig();
   }
 
@@ -76,7 +77,7 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public List<Double> getRooms() {
+  public List<Long> getRooms() {
     HttpGet request = new HttpGet(ROOMS_URL);
     CredentialsProvider provider = new BasicCredentialsProvider();
     UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
@@ -89,12 +90,11 @@ public class ConnectionImpl implements Connection {
       .build();
     try {
       HttpResponse response = client.execute(request);
-      return IntStream.rangeClosed(1,
-        new Scanner(
-          new InputStreamReader(response.getEntity().getContent())
-        ).nextInt()).boxed()
-        .map(x -> (double)x)
-        .collect(Collectors.toList());
+      Gson gson = new Gson();
+      return gson.fromJson(
+        new BufferedReader(new InputStreamReader(response.getEntity().getContent())),
+        new TypeToken<List<Long>>(){}.getType()
+      );
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
@@ -139,9 +139,7 @@ public class ConnectionImpl implements Connection {
 
     try {
       HttpResponse response = client.execute(request);
-      if (response.getStatusLine().getStatusCode() == 200) {
-        return true;
-      }
+      return response.getStatusLine().getStatusCode() == 200;
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -171,6 +169,52 @@ public class ConnectionImpl implements Connection {
       e.printStackTrace();
     }
     return null;
+  }
+
+  @Override
+  public boolean login() {
+    HttpGet request = new HttpGet(LOGIN);
+    CredentialsProvider provider = new BasicCredentialsProvider();
+    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+      connectionConfig.getUsername(),
+      connectionConfig.getPassword()
+    );
+    provider.setCredentials(AuthScope.ANY, credentials);
+    HttpClient client = HttpClientBuilder.create()
+      .setDefaultCredentialsProvider(provider)
+      .build();
+    try {
+      HttpResponse response = client.execute(request);
+      return response.getStatusLine().getStatusCode() == 200;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  @Override
+  public boolean registration(String username, String password, String passConfirm) {
+    HttpPost request = new HttpPost(
+      SIGN_UP+"?username="+username+"&password="+password+"&passConfirm="+passConfirm
+    );
+    CredentialsProvider provider = new BasicCredentialsProvider();
+    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+      connectionConfig.getUsername(),
+      connectionConfig.getPassword()
+    );
+
+    provider.setCredentials(AuthScope.ANY, credentials);
+    HttpClient client = HttpClientBuilder.create()
+      .setDefaultCredentialsProvider(provider)
+      .build();
+
+    try {
+      HttpResponse response = client.execute(request);
+      return response.getStatusLine().getStatusCode() == 200;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
   }
 
   private HttpEntity pushAnyMap(String filepath, String url) {

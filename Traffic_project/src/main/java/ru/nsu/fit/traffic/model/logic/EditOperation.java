@@ -9,5 +9,6 @@ public enum EditOperation {
     REPORT_SHOWING,
     PLAYBACK_SHOWING,
     SIMULATION,
-    TIME_PICKING
+    TIME_PICKING,
+    OPTIMIZATION
 }

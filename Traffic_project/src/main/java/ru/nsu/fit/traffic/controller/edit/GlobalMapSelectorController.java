@@ -1,6 +1,10 @@
 package ru.nsu.fit.traffic.controller.edit;
 
-import javafx.fxml.FXML;
+import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.DELETE_CONNECTOR;
+import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.NONE;
+import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.SET_CONNECTOR;
+
+import java.util.List;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterface;
@@ -10,10 +14,6 @@ import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOpManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
-
-import java.util.List;
-
-import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.*;
 
 public class GlobalMapSelectorController implements GlobalMapSelectorControllerInterface {
   private GlobalMapUpdateObserver updateObserver = null;
@@ -27,13 +27,17 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
       event.consume();
       try {
         return connection.getMapFromServer(
-            id, ConnectionConfig.getConnectionConfig().getRoomId(), true);
+          id,
+          ConnectionConfig.getConnectionConfig().getRoomId(),
+          true
+        );
       } catch (RuntimeException e) {
         return null;
       }
     } else if (editOpManager.getCurrentOp() == SET_CONNECTOR){
       editOpManager.addConnector(editOpManager.getCurrRegMap().getRegion(id), event.getX(), event.getY());
     }
+    return null;
   }
 
   @Override

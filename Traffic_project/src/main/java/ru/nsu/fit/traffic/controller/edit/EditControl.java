@@ -92,7 +92,6 @@ public class EditControl extends BaseControl implements EditControlInterface {
     String dirPath = saveLoadControl.getPathToProjectDir();
     saveLoadControl.onSave();
     engineController.setMapPath(dirPath);
-    engineController.setMapPath(dirPath);
     String delimiter = dirPath.contains("/") ? "/" : "\\";
     int lastIndexOfDel = dirPath.lastIndexOf(delimiter);
     engineController.setCarStatePath(dirPath.substring(0, lastIndexOfDel) + delimiter + "carStateOut.json");
@@ -101,6 +100,21 @@ public class EditControl extends BaseControl implements EditControlInterface {
     sceneElementsControl.simulationProcessModeEnable();
     editOperationsManager.setCurrentOperation(EditOperation.SIMULATION);
     sceneElementsControl.setSelectRectVisible(false);
+  }
+
+  @Override
+  public void startOptimization() {
+    String dirPath = saveLoadControl.getPathToProjectDir();
+    saveLoadControl.onSave();
+    engineController.setMapPath(dirPath);
+    engineController.setOptimizedMapPath(
+      dirPath.substring(0,dirPath.lastIndexOf(".")) + "optimized.tsp"
+    );
+    engineController.startEngine();
+    sceneElementsControl.simulationProcessModeEnable();
+    editOperationsManager.setCurrentOperation(EditOperation.OPTIMIZATION);
+    sceneElementsControl.setSelectRectVisible(false);
+
   }
 
   public void stopSimulation() {

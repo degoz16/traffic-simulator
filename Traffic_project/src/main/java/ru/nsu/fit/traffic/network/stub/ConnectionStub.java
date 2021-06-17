@@ -45,12 +45,22 @@ public class ConnectionStub implements Connection {
   }
 
   @Override
-  public List<Double> getRooms() {
-    var list = new ArrayList<Double>();
+  public List<Long> getRooms() {
+    var list = new ArrayList<Long>();
     for (int i = 0; i < currRoomsCnt; i++) {
-      list.add((double) i);
+      list.add((long) i);
     }
     return list;
+  }
+
+  @Override
+  public boolean login() {
+    return false;
+  }
+
+  @Override
+  public boolean registration(String username, String password, String passConfirm) {
+    return false;
   }
 
   @Override
