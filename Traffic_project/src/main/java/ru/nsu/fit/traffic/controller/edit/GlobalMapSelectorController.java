@@ -5,7 +5,6 @@ import ru.nsu.fit.traffic.controller.SelectorSceneElementsControl;
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
 import ru.nsu.fit.traffic.interfaces.control.GlobalMapSelectorControllerInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
-import ru.nsu.fit.traffic.model.globalmap.RectRegion;
 import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 import ru.nsu.fit.traffic.model.logic.EditOperationsManager;
 import ru.nsu.fit.traffic.model.logic.GlobalMapEditOp;
@@ -14,8 +13,6 @@ import ru.nsu.fit.traffic.model.logic.GlobalMapUpdateObserver;
 import ru.nsu.fit.traffic.model.map.Node;
 import ru.nsu.fit.traffic.model.map.TrafficMap;
 import ru.nsu.fit.traffic.utils.Pair;
-
-import java.util.List;
 
 import static ru.nsu.fit.traffic.model.logic.GlobalMapEditOp.*;
 

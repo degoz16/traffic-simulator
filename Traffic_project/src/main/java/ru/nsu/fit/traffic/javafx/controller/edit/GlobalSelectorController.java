@@ -33,6 +33,7 @@ public class GlobalSelectorController {
   @FXML private Pane mainPane;
   @FXML private AnchorPane basePane;
   @FXML private VBox centeredField;
+  @FXML private AnchorPane adminPane;
   private final Circle connectorIcon = UiPainter.getConnectorIcon();
   private boolean isConnectorIconVisible = false;
   private GlobalMapObjectPainter painter;
@@ -106,6 +107,7 @@ public class GlobalSelectorController {
     painter = new GlobalMapObjectPainter();
     GlobalMapSelectorInitializerInterface initializer = new GlobalMapSelectorInitializer(sceneElementsControl);
     selectorControl = initializer.getSelectorControl();
+    //todo: showAdminPane() if user is admin
 
     GlobalMapEditorViewUpdater viewUpdater =
         new GlobalMapEditorViewUpdater(
@@ -197,6 +199,10 @@ public class GlobalSelectorController {
       errorAlert.setContentText("Error while trying to get map from server");
       errorAlert.showAndWait();
     }
+  }
+
+  private void showAdminPane(){
+    adminPane.setVisible(true);
   }
 
   public void setMap(String map) {
