@@ -118,16 +118,12 @@ public class GlobalMapEditOpManager {
         node.setX(scale * map.getSecond().getX() + node.getX());
         node.setY(scale * map.getSecond().getY() + node.getY());
         if (node.getConnector() != null) {
-          if (connectorPairs.get(
-              currRegMap.getRegion(node.getConnector().getRegionId())
-                  .getConnector(node.getConnector().getConnectorId()).getId()).getFirst() == null) {
-            connectorPairs.get(
-                currRegMap.getRegion(node.getConnector().getRegionId())
-                    .getConnector(node.getConnector().getConnectorId()).getId()).setFirst(node);
+          int id = currRegMap.getRegion(node.getConnector().getRegionId())
+              .getConnector(node.getConnector().getConnectorId()).getId();
+          if (connectorPairs.get(id).getFirst() == null) {
+            connectorPairs.get(id).setFirst(node);
           } else {
-            connectorPairs.get(
-                currRegMap.getRegion(node.getConnector().getRegionId())
-                    .getConnector(node.getConnector().getConnectorId()).getId()).setSecond(node);
+            connectorPairs.get(id).setSecond(node);
           }
         }
         node.setConnector(null);
