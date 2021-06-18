@@ -66,6 +66,8 @@ public interface SceneElementsControl {
 
   void editModeEnable();
 
+  void optimizingModeEnabled(String path);
+
   void reportModeEnable();
 
   void playBackModeEnable();

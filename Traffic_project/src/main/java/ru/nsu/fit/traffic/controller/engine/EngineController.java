@@ -134,7 +134,7 @@ public class EngineController extends BaseControl {
         rThread.join();
         System.out.println("END");
         //sceneElementsControl.simulationEndModeEnable();
-        sceneElementsControl.editModeEnable();
+        sceneElementsControl.optimizingModeEnabled(optimizedMapPath);
       } catch (InterruptedException | IOException e) {
         System.err.println(e.getMessage());
         assert false;

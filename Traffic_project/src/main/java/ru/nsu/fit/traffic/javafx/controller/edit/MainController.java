@@ -3,6 +3,11 @@ package ru.nsu.fit.traffic.javafx.controller.edit;
 import com.jfoenix.controls.JFXTimePicker;
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -11,8 +16,18 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
-import javafx.scene.input.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -41,12 +56,6 @@ import ru.nsu.fit.traffic.javafx.controller.settings.TrafficLightController;
 import ru.nsu.fit.traffic.javafx.controller.statistic.StatisticsController;
 import ru.nsu.fit.traffic.javafx.paiters.UiPainter;
 import ru.nsu.fit.traffic.view.MapEditorViewUpdater;
-
-import java.time.LocalTime;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 
 /**
  * Контроллер основной сцены, на которой располагаются все остальные.
@@ -410,7 +419,13 @@ public class MainController {
       progressIndicator.setVisible(false);
     }
 
-    @Override
+        @Override
+        public void optimizingModeEnabled(String path) {
+          saveLoadControl.onOpenProject(new File(path));
+          editModeEnable();
+        }
+
+        @Override
     public void reportModeEnable() {
       simulationStopButton.setDisable(true);
       simulationStartButton.setDisable(false);

@@ -516,13 +516,11 @@ public class EditControl extends BaseControl implements EditControlInterface {
   @Override
   public boolean saveMap() {
     Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
-    connection.pushMap(
+    return connection.pushMap(
       ConnectionConfig.getConnectionConfig().getMapId(),
       ConnectionConfig.getConnectionConfig().getRoomId(),
       saveLoadControl.getPathToProjectDir()
     );
-    //todo: Hi, Artur!
-    return false;
   }
 
   private void closeAllSettings() {
