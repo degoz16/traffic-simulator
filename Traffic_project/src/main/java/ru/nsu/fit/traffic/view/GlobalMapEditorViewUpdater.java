@@ -1,8 +1,11 @@
 package ru.nsu.fit.traffic.view;
 
+import java.util.ArrayList;
 import java.util.List;
+
 import javafx.application.Platform;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
@@ -34,6 +37,7 @@ public class GlobalMapEditorViewUpdater {
     RegionsMap map = editOperationsManager.getCurrRegMap();
     mainPane.getChildren().clear();
     Platform.runLater(() -> {
+      TrafficMap trafficMap = null;
       for (int i = 0; i < map.getRegionCount(); i++) {
         RectRegion region = map.getRegion(i);
         Rectangle regionShape = painter.paintRegion(region);
@@ -48,7 +52,7 @@ public class GlobalMapEditorViewUpdater {
                 ConnectionConfig.getConnectionConfig().getRoomId(),
                 false
               );
-            TrafficMap trafficMap = EditOperationsManager.loadMap(mapPath);
+            trafficMap = EditOperationsManager.loadMap(mapPath);
             assert trafficMap != null;
             List<Shape> shapes = painter.paintRegionPreview(region, trafficMap);
             shapes.forEach(mainPane.getChildren()::add);
@@ -57,15 +61,24 @@ public class GlobalMapEditorViewUpdater {
           }
         }
       }
+      TrafficMap finalTrafficMap = trafficMap;
       map.foreachRegion(region -> {
+        List<Shape> shapes = new ArrayList<>();
         for (int i = 0; i < region.getConnectorsCount(); i++) {
           if (region.getConnector(i) == null) {
+            shapes.add(null);
             continue;
           }
           Shape connector = painter.paintConnector(region.getConnector(i), true);
+          shapes.add(connector);
           mainPane.getChildren().add(connector);
           connectorObserver.setConnectorObserver(map.getRegions().indexOf(region), i, connector);
         }
+        finalTrafficMap.forEachNode(node -> {
+          if (node.getConnector() != null) {
+            shapes.get(node.getConnector().getConnectorId()).setFill(Color.RED);
+          }
+        });
       });
     });
   }
