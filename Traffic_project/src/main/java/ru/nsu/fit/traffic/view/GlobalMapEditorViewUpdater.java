@@ -74,11 +74,15 @@ public class GlobalMapEditorViewUpdater {
           mainPane.getChildren().add(connector);
           connectorObserver.setConnectorObserver(map.getRegions().indexOf(region), i, connector);
         }
-        finalTrafficMap.forEachNode(node -> {
-          if (node.getConnector() != null) {
-            shapes.get(node.getConnector().getConnectorId()).setFill(Color.RED);
-          }
-        });
+        if (preview && finalTrafficMap != null) {
+          finalTrafficMap.forEachNode(node -> {
+            if (node.getConnector() != null) {
+              if (node.getRoadsInNum() == 0 && node.getRoadsOutNum() == 0) {
+                shapes.get(node.getConnector().getConnectorId()).setFill(Color.RED);
+              }
+            }
+          });
+        }
       });
     });
   }
