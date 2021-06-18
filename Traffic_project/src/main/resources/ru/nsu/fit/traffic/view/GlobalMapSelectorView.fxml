@@ -48,7 +48,7 @@
                 </ScrollPane>
             <Group AnchorPane.bottomAnchor="17.0" AnchorPane.leftAnchor="0.0">
                <children>
-                  <Polygon fill="DODGERBLUE" layoutX="-9.0" points="-34.00011444091797, 41.20000076293945, 133.79989624023438, 41.200016021728516, 94.59989166259766, -30.000171661376953, -34.0, -30.0" strokeType="INSIDE" strokeWidth="50.0">
+                  <Polygon fill="DODGERBLUE" layoutX="-9.0" points="-34.00011444091797, 41.20000076293945, 278.9998779296875, 41.20002365112305, 214.9998779296875, -30.0, -34.0, -30.0" strokeType="INSIDE" strokeWidth="50.0">
                      <stroke>
                         <LinearGradient cycleMethod="REPEAT" endX="1.0" endY="1.0" startX="1.0">
                            <stops>
@@ -59,7 +59,7 @@
                         </LinearGradient>
                      </stroke>
                   </Polygon>
-                  <Polygon fill="WHITE" layoutX="14.0" layoutY="2.0" points="-57.00011444091797, 39.20000457763672, 170.9998779296875, 39.20002365112305, 142.9998779296875, 3.600048065185547, -57.00011444091797, 3.6000304222106934" strokeType="INSIDE" strokeWidth="50.0">
+                  <Polygon fill="WHITE" layoutX="14.0" layoutY="2.0" points="-57.00011444091797, 39.20000457763672, 256.9998779296875, 39.20001220703125, 224.9998779296875, 3.60003662109375, -57.00011444091797, 3.6000304222106934" strokeType="INSIDE" strokeWidth="50.0">
                      <stroke>
                         <LinearGradient endX="0.7904761904761904" endY="0.3047619047619048" startY="1.0">
                            <stops>
@@ -76,13 +76,18 @@
                         <Font name="System Bold" size="14.0" />
                      </font>
                   </Text>
-                  <AnchorPane fx:id="adminPane" layoutX="-39.0" layoutY="6.0" prefHeight="33.0" prefWidth="160.0">
+                  <AnchorPane fx:id="adminPane" layoutX="98.0" layoutY="6.0" prefHeight="33.0" prefWidth="160.0">
                      <children>
                         <Button fx:id="kick" layoutX="14.0" layoutY="3.0" mnemonicParsing="false" onAction="#mergeMapClicked" prefWidth="33.0" style="-fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/kickButton.css" />
                         <Button fx:id="connectorButton" layoutX="60.0" layoutY="2.0" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#setConnector" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/ConnectorButton.css" />
                         <Button layoutX="110.0" layoutY="3.0" maxHeight="30.0" maxWidth="30.0" minHeight="30.0" minWidth="30.0" mnemonicParsing="false" onAction="#deleteConnector" prefHeight="30.0" prefWidth="30.0" style="-fx-background-radius: 10; -fx-background-color: transparent;" stylesheets="@GlobalMapStylesheets/deleteConnectorButton.css" />
                      </children>
                   </AnchorPane>
+                  <Text fx:id="currentOperation" fill="WHITE" layoutX="-23.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" text="none" wrappingWidth="137.99999237060547">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Text>
                </children>
             </Group>
               <VBox layoutX="566.4000244140625" layoutY="299.6000061035156" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="20.0">

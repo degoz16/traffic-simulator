@@ -108,9 +108,11 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   public void onSetConnector() {
     if (editOpManager.getCurrentOp() != GlobalMapEditOp.SET_CONNECTOR) {
       editOpManager.setCurrOp(GlobalMapEditOp.SET_CONNECTOR);
+      sceneElementsControl.setCurrentOperation("set connector");
       sceneElementsControl.setConnectorIconVisible(true);
     }else{
       editOpManager.setCurrOp(GlobalMapEditOp.NONE);
+      sceneElementsControl.setCurrentOperation("none");
       stopOperation();
     }
   }
@@ -119,8 +121,10 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   public void onDeleteConnector() {
     if (editOpManager.getCurrentOp() != GlobalMapEditOp.DELETE_CONNECTOR) {
       editOpManager.setCurrOp(GlobalMapEditOp.DELETE_CONNECTOR);
+      sceneElementsControl.setCurrentOperation("delete connector");
     }else{
       editOpManager.setCurrOp(GlobalMapEditOp.NONE);
+      sceneElementsControl.setCurrentOperation("none");
     }
   }
 
@@ -128,8 +132,10 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   public void onKick() {
     if (editOpManager.getCurrentOp() != GlobalMapEditOp.KICK_USER) {
       editOpManager.setCurrOp(GlobalMapEditOp.KICK_USER);
+      sceneElementsControl.setCurrentOperation("kick user");
     }else{
       editOpManager.setCurrOp(GlobalMapEditOp.NONE);
+      sceneElementsControl.setCurrentOperation("none");
     }
   }
 
@@ -167,6 +173,7 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
 
   private void stopOperation() {
     editOpManager.setCurrOp(GlobalMapEditOp.NONE);
+    sceneElementsControl.setCurrentOperation("none");
     sceneElementsControl.setConnectorIconVisible(false);
   }
 }

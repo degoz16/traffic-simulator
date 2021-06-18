@@ -13,6 +13,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
@@ -35,6 +36,7 @@ public class GlobalSelectorController {
   @FXML private AnchorPane basePane;
   @FXML private VBox centeredField;
   @FXML private AnchorPane adminPane;
+  @FXML private Text currentOperation;
   private final Circle connectorIcon = UiPainter.getConnectorIcon();
   private boolean isConnectorIconVisible = false;
   private GlobalMapObjectPainter painter;
@@ -78,6 +80,11 @@ public class GlobalSelectorController {
     @Override
     public void setConnectorIconVisible(boolean visible) {
       isConnectorIconVisible = visible;
+    }
+
+    @Override
+    public void setCurrentOperation(String currOperation){
+      currentOperation.setText(currOperation);
     }
   };
 
