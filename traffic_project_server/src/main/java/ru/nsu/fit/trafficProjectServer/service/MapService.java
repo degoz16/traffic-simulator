@@ -16,4 +16,5 @@ public interface MapService {
   Map getGlobalMapNew(Long roomId);
   void dropBlock(Long roomId, Long mapId);
   List<Long> getBlocks(Long roomId);
+  boolean admin(Long roomId);
 }

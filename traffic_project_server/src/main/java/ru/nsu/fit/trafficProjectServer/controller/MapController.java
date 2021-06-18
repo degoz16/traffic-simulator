@@ -92,4 +92,11 @@ public class MapController {
     return service.getBlocks(roomId);
   }
 
+  @GetMapping("adminCheck")
+  public ResponseEntity<String> admin(@RequestParam Long roomId) {
+    if (service.admin(roomId)) {
+      return ResponseEntity.ok().build();
+    }
+    return ResponseEntity.badRequest().build();
+  }
 }

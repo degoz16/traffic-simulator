@@ -10,7 +10,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import ru.nsu.fit.traffic.App;
+import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.controller.network.LoginControl;
+import ru.nsu.fit.traffic.network.ConnectionImpl;
 
 public class LoginController {
   @FXML TextField usernameText;
@@ -27,8 +29,22 @@ public class LoginController {
   @FXML
   private void logIn() {
     loginControl = new LoginControl();
-    loginControl.login(usernameText.getText(), passwordText.getText());
-    //TODO
+    if (loginControl.login(usernameText.getText(), passwordText.getText())) {
+      try {
+        ConnectionConfig.getConnectionConfig().setUsername(usernameText.getText());
+        ConnectionConfig.getConnectionConfig().setPassword(passwordText.getText());
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("view/RoomButtonsView.fxml"));
+        Parent root;
+        root = loader.load();
+        stage.getScene().setRoot(root);
+        RoomController roomController = loader.getController();
+        roomController.setStage(stage);
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    } else {
+      //TODO ОКОШЕЧКО ОШИБКИ
+    }
   }
 
   @FXML

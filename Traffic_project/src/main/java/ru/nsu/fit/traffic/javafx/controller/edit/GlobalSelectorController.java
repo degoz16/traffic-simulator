@@ -1,6 +1,7 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
 import java.io.IOException;
+import java.util.List;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Group;
@@ -66,6 +67,7 @@ public class GlobalSelectorController {
           e.printStackTrace();
         }
       } catch (Exception e) {
+        e.printStackTrace();
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setHeaderText("Connection error");
         errorAlert.setContentText("Error while trying to get map from server");
@@ -107,8 +109,12 @@ public class GlobalSelectorController {
     painter = new GlobalMapObjectPainter();
     GlobalMapSelectorInitializerInterface initializer = new GlobalMapSelectorInitializer(sceneElementsControl);
     selectorControl = initializer.getSelectorControl();
-    //todo: showAdminPane() if user is admin
-    showAdminPane();
+    ConnectionConfig connectionConfig = ConnectionConfig.getConnectionConfig();
+    List<Long> blocks = connectionConfig.getConnection().blockedMaps(connectionConfig.getRoomId());
+    if (!connectionConfig.getConnection().isAdmin(connectionConfig.getRoomId())) {
+      setVisibleFalse();
+    }
+    //TODO ПОКРАСКУ ФРАГМЕНТ ИЗ blocks(id == id)
     GlobalMapEditorViewUpdater viewUpdater =
         new GlobalMapEditorViewUpdater(
             ((rect, id, regW, regH) -> {
@@ -133,13 +139,16 @@ public class GlobalSelectorController {
                       selectorControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
                     } catch (Exception e) {
                       e.printStackTrace();
+                      Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                      errorAlert.setHeaderText("Connection error");
+                      errorAlert.setContentText("Error while trying to get map from server");
+                      errorAlert.showAndWait();
                     }
                   });
             }),
             (regId, conId, shape) -> {
               shape.setOnMouseClicked(
                   event -> {
-                    //TODO: и ТУТ ОБРАБОТКААААААААААА
                     try {
                       selectorControl.onConnectorClicked(regId, conId);
                     } catch (Exception e) {
@@ -202,8 +211,8 @@ public class GlobalSelectorController {
     }
   }
 
-  private void showAdminPane(){
-    adminPane.setVisible(true);
+  private void setVisibleFalse(){
+    adminPane.setVisible(false);
   }
 
   public void setMap(String map) {

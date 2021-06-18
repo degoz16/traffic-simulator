@@ -15,7 +15,7 @@
       </Text>
       <TextField fx:id="usernameText" layoutX="25.0" layoutY="63.0" maxWidth="250.0" prefHeight="31.0" prefWidth="250.0" promptText="Username" />
       <TextField fx:id="passwordText" layoutX="25.0" layoutY="108.0" maxWidth="250.0" prefHeight="31.0" prefWidth="250.0" promptText="Password" />
-      <Button fx:id="signUp" layoutX="115.0" layoutY="203.0" mnemonicParsing="false" text="Sign up" />
+      <Button fx:id="signUpButton" layoutX="115.0" layoutY="203.0" mnemonicParsing="false" text="Sign up" onAction="#signUp"/>
       <TextField fx:id="passwordText2" layoutX="25.0" layoutY="154.0" maxWidth="250.0" prefHeight="31.0" prefWidth="250.0" promptText="Password" />
    </children>
 </Pane>

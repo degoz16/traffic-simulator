@@ -12,4 +12,5 @@ public interface Connection {
   List<Long> blockedMaps(int roomid);
   boolean login();
   boolean registration(String username, String password, String passConfirm);
+  boolean isAdmin(int roomId);
 }

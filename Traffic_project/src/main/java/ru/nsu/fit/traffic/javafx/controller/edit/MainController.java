@@ -751,7 +751,7 @@ public class MainController {
 
   @FXML
   public void goBack(){
-    FXMLLoader loader = new FXMLLoader(getClass().getResource("../../../view/GlobalMapSelectorView.fxml"));
+    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
     try {
       Parent root = loader.load();
       Scene scene = new Scene(root);
@@ -759,9 +759,10 @@ public class MainController {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    stage.show();
 
+    stage.show();
     GlobalSelectorController controller = loader.getController();
+    controller.setStage(stage);
     ConnectionConfig connectionConfig = ConnectionConfig.getConnectionConfig();
     Connection connection = connectionConfig.getConnection();
     controller.setMap(connection.getGlobalMapFromServer(connectionConfig.getRoomId()));

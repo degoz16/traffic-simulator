@@ -45,6 +45,7 @@ public class ConnectionImpl implements Connection {
   private final ConnectionConfig connectionConfig;
   private final String LOGIN;
   private final String SIGN_UP;
+  private final String ADMIN;
 
   public ConnectionImpl(String url) {
     if (!url.endsWith("/")) url += "/";
@@ -60,6 +61,7 @@ public class ConnectionImpl implements Connection {
     LOGIN = URL + "login";
     SIGN_UP = URL + "registration";
     connectionConfig = ConnectionConfig.getConnectionConfig();
+    ADMIN = URL + "api/adminCheck";
   }
 
   @Override
@@ -173,23 +175,7 @@ public class ConnectionImpl implements Connection {
 
   @Override
   public boolean login() {
-    HttpGet request = new HttpGet(LOGIN);
-    CredentialsProvider provider = new BasicCredentialsProvider();
-    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
-      connectionConfig.getUsername(),
-      connectionConfig.getPassword()
-    );
-    provider.setCredentials(AuthScope.ANY, credentials);
-    HttpClient client = HttpClientBuilder.create()
-      .setDefaultCredentialsProvider(provider)
-      .build();
-    try {
-      HttpResponse response = client.execute(request);
-      return response.getStatusLine().getStatusCode() == 200;
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return false;
+    return check200(LOGIN);
   }
 
   @Override
@@ -208,6 +194,31 @@ public class ConnectionImpl implements Connection {
       .setDefaultCredentialsProvider(provider)
       .build();
 
+    try {
+      HttpResponse response = client.execute(request);
+      return response.getStatusLine().getStatusCode() == 200;
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return false;
+  }
+
+  @Override
+  public boolean isAdmin(int roomId) {
+    return check200(ADMIN + "?roomId="+roomId);
+  }
+
+  private boolean check200(String admin) {
+    HttpGet request = new HttpGet(admin);
+    CredentialsProvider provider = new BasicCredentialsProvider();
+    UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(
+      connectionConfig.getUsername(),
+      connectionConfig.getPassword()
+    );
+    provider.setCredentials(AuthScope.ANY, credentials);
+    HttpClient client = HttpClientBuilder.create()
+      .setDefaultCredentialsProvider(provider)
+      .build();
     try {
       HttpResponse response = client.execute(request);
       return response.getStatusLine().getStatusCode() == 200;
