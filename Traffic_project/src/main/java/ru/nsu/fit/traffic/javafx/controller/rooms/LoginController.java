@@ -43,7 +43,7 @@ public class LoginController {
         e.printStackTrace();
       }
     } else {
-      //TODO ОКОШЕЧКО ОШИБКИ
+      
     }
   }
 

@@ -92,11 +92,11 @@ public class GlobalMapController {
   }
 
   private void removeConnectorIcon() {
-    UiPainter.removeConnectorIcon(connectorIcon, basePane);
+    UiPainter.removeConnectorIcon(connectorIcon, mainPane);
   }
 
   private void addConnectorIcon(double x, double y) {
-    UiPainter.addConnectorIcon(x, y, connectorIcon, basePane);
+    UiPainter.addConnectorIcon(x, y, connectorIcon, mainPane);
   }
 
   private void rePosConnectorIcon(double x, double y) {

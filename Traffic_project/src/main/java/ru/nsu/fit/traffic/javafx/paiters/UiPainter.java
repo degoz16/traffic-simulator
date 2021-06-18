@@ -73,17 +73,17 @@ public class UiPainter {
 
 
 
-  public static void removeConnectorIcon(Shape icon, AnchorPane mainPane) {
+  public static void removeConnectorIcon(Shape icon, Pane mainPane) {
     mainPane.getChildren().remove(icon);
   }
 
-  public static void addConnectorIcon(double x, double y, Circle icon, AnchorPane mainPane) {
+  public static void addConnectorIcon(double x, double y, Circle icon, Pane mainPane) {
     rePosConnectorIcon(x, y, icon);
     mainPane.getChildren().add(icon);
   }
 
   public static void rePosConnectorIcon(double x, double y, Circle icon) {
     icon.setCenterX(x);
-    icon.setCenterY(y);
+    icon.setCenterX(y);
   }
 }
