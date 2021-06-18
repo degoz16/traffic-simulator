@@ -49,6 +49,11 @@ public class RoomController {
       public void setCurrentOperation(String operation){
 
       }
+
+      @Override
+      public void redrawConnectorIcon() {
+
+      }
     };
 
 

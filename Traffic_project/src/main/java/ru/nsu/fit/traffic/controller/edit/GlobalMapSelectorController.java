@@ -39,12 +39,14 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
     else if (editOpManager.getCurrentOp() == GlobalMapEditOp.KICK_USER) {
       //todo: Сюда нужно вставить вообще всё
     }
+    sceneElementsControl.redrawConnectorIcon();
   }
 
   @Override
   public void setRegionMap(String map) {
     editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap(map));
     updateObserver.update(editOpManager, true);
+    sceneElementsControl.redrawConnectorIcon();
   }
 
   @Override
@@ -101,11 +103,13 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
       ConnectionConfig.getConnectionConfig().getConnection().pushGlobalMap(
           "tmpRegMap.tsp", ConnectionConfig.getConnectionConfig().getRoomId());
       updateObserver.update(editOpManager, true);
+      sceneElementsControl.redrawConnectorIcon();
     }
   }
 
   @Override
   public void onSetConnector() {
+    sceneElementsControl.redrawConnectorIcon();
     if (editOpManager.getCurrentOp() != GlobalMapEditOp.SET_CONNECTOR) {
       editOpManager.setCurrOp(GlobalMapEditOp.SET_CONNECTOR);
       sceneElementsControl.setConnectorIconVisible(true);

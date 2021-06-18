@@ -68,6 +68,12 @@ public class GlobalMapController {
         public void setCurrentOperation(String currOperation) {
           currentOperation.setText(currOperation);
         }
+
+        @Override
+        public void redrawConnectorIcon() {
+          mainPane.getChildren().remove(connectorIcon);
+          mainPane.getChildren().add(connectorIcon);
+        }
       };
 
   private void removeSelectRect() {

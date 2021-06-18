@@ -84,6 +84,6 @@ public class UiPainter {
 
   public static void rePosConnectorIcon(double x, double y, Circle icon) {
     icon.setCenterX(x);
-    icon.setCenterX(y);
+    icon.setCenterY(y);
   }
 }

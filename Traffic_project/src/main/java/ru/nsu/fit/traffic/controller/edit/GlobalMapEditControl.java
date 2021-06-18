@@ -183,6 +183,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
         }
       }
     }
+    sceneElementsControl.redrawConnectorIcon();
   }
 
   @Override
@@ -201,6 +202,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
 
   @Override
   public void onSetConnectorButton() {
+    sceneElementsControl.redrawConnectorIcon();
     if (editOpManager.getCurrentOp() != SET_CONNECTOR){
       stopOperation();
       editOpManager.setCurrOp(SET_CONNECTOR);
@@ -235,6 +237,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
   public void onNewGet() {
     editOpManager.setCurrRegMap(GlobalMapEditOpManager.loadRegMap("/save.json"));
     updateObserver.update(editOpManager, false);
+    sceneElementsControl.redrawConnectorIcon();
   }
 
   @Override
@@ -245,6 +248,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     } else {
       stopOperation();
     }
+    sceneElementsControl.redrawConnectorIcon();
   }
 
   @Override
@@ -256,6 +260,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
     } else {
       stopOperation();
     }
+    sceneElementsControl.redrawConnectorIcon();
   }
 
   private void stopOperation() {
@@ -273,6 +278,7 @@ public class GlobalMapEditControl implements GlobalMapEditControlInterface {
       con1.getRegion().deleteConnector(con1);
       con2.getRegion().deleteConnector(con2);
       updateObserver.update(editOpManager, false);
+      sceneElementsControl.redrawConnectorIcon();
     }
   }
 }

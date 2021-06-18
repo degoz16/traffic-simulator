@@ -79,6 +79,12 @@ public class GlobalSelectorController {
     public void setConnectorIconVisible(boolean visible) {
       isConnectorIconVisible = visible;
     }
+
+    @Override
+    public void redrawConnectorIcon() {
+      mainPane.getChildren().remove(connectorIcon);
+      mainPane.getChildren().add(connectorIcon);
+    }
   };
 
   public void setStage(Stage stage) {
@@ -87,6 +93,10 @@ public class GlobalSelectorController {
 
   private void rePosConnectorIcon(double x, double y) {
     UiPainter.rePosConnectorIcon(x, y, connectorIcon);
+  }
+
+  private void addConnectorIcon(double x, double y) {
+    UiPainter.addConnectorIcon(x, y, connectorIcon, mainPane);
   }
 
   @FXML
@@ -109,6 +119,7 @@ public class GlobalSelectorController {
     painter = new GlobalMapObjectPainter();
     GlobalMapSelectorInitializerInterface initializer = new GlobalMapSelectorInitializer(sceneElementsControl);
     selectorControl = initializer.getSelectorControl();
+    addConnectorIcon(0, 0);
     ConnectionConfig connectionConfig = ConnectionConfig.getConnectionConfig();
     List<Long> blocks = connectionConfig.getConnection().blockedMaps(connectionConfig.getRoomId());
     if (!connectionConfig.getConnection().isAdmin(connectionConfig.getRoomId())) {
@@ -121,7 +132,6 @@ public class GlobalSelectorController {
             ((rect, id, regW, regH) -> {
               rect.setOnMouseMoved(
                   event -> {
-
                     Pair<Double, Double> coords =
                         selectorControl.getSideCoordinates(
                             event.getX(), event.getY(), rect.getX(), rect.getY(), regW, regH);
