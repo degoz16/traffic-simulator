@@ -37,7 +37,6 @@ public class GlobalMapEditorViewUpdater {
     RegionsMap map = editOperationsManager.getCurrRegMap();
     mainPane.getChildren().clear();
     Platform.runLater(() -> {
-      TrafficMap trafficMap = null;
       for (int i = 0; i < map.getRegionCount(); i++) {
         RectRegion region = map.getRegion(i);
         Rectangle regionShape = painter.paintRegion(region);
@@ -52,7 +51,7 @@ public class GlobalMapEditorViewUpdater {
                 ConnectionConfig.getConnectionConfig().getRoomId(),
                 false
               );
-            trafficMap = EditOperationsManager.loadMap(mapPath);
+            TrafficMap trafficMap = EditOperationsManager.loadMap(mapPath);
             assert trafficMap != null;
             List<Shape> shapes = painter.paintRegionPreview(region, trafficMap);
             shapes.forEach(mainPane.getChildren()::add);
@@ -61,7 +60,6 @@ public class GlobalMapEditorViewUpdater {
           }
         }
       }
-      TrafficMap finalTrafficMap = trafficMap;
       map.foreachRegion(region -> {
         List<Shape> shapes = new ArrayList<>();
         for (int i = 0; i < region.getConnectorsCount(); i++) {
@@ -74,14 +72,27 @@ public class GlobalMapEditorViewUpdater {
           mainPane.getChildren().add(connector);
           connectorObserver.setConnectorObserver(map.getRegions().indexOf(region), i, connector);
         }
-        if (preview && finalTrafficMap != null) {
-          finalTrafficMap.forEachNode(node -> {
-            if (node.getConnector() != null) {
-              if (node.getRoadsInNum() == 0 && node.getRoadsOutNum() == 0) {
-                shapes.get(node.getConnector().getConnectorId()).setFill(Color.RED);
+        if (preview) {
+          try {
+            String mapPath = ConnectionConfig.getConnectionConfig()
+                .getConnection()
+                .getMapFromServer(
+                    editOperationsManager.getCurrRegMap().getRegions().indexOf(region),
+                    ConnectionConfig.getConnectionConfig().getRoomId(),
+                    false
+                );
+            TrafficMap trafficMap = EditOperationsManager.loadMap(mapPath);
+            assert trafficMap != null;
+            trafficMap.forEachNode(node -> {
+              if (node.getConnector() != null) {
+                if (node.getRoadsInNum() == 0 && node.getRoadsOutNum() == 0) {
+                  shapes.get(node.getConnector().getConnectorId()).setFill(new Color(1, 0, 0, 0.3));
+                }
               }
-            }
-          });
+            });
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
         }
       });
     });
