@@ -45,7 +45,7 @@ public class ConnectionStub implements Connection {
   }
 
   @Override
-  public void pushGlobalMap(String filePath, Long roomId) {
+  public void pushGlobalMap(String filePath, Integer roomId) {
 
   }
 

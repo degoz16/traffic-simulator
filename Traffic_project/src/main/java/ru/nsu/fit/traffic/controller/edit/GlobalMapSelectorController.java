@@ -97,6 +97,9 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
       EditOperationsManager.saveMap("tmpMap.tsp", map2);
       ConnectionConfig.getConnectionConfig()
           .getConnection().pushMap(regId2, ConnectionConfig.getConnectionConfig().getRoomId(), "tmpMap.tsp");
+      GlobalMapEditOpManager.saveRegMap("tmpRegMap.tsp", editOpManager.getCurrRegMap());
+      ConnectionConfig.getConnectionConfig().getConnection().pushGlobalMap(
+          "tmpRegMap.tsp", ConnectionConfig.getConnectionConfig().getRoomId());
       updateObserver.update(editOpManager, true);
     }
   }
