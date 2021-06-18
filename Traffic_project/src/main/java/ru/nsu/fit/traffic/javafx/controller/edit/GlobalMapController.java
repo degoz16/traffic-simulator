@@ -1,5 +1,6 @@
 package ru.nsu.fit.traffic.javafx.controller.edit;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -71,8 +72,11 @@ public class GlobalMapController {
 
         @Override
         public void redrawConnectorIcon() {
-          mainPane.getChildren().remove(connectorIcon);
-          mainPane.getChildren().add(connectorIcon);
+          Platform.runLater(
+              () -> {
+                mainPane.getChildren().remove(connectorIcon);
+                mainPane.getChildren().add(connectorIcon);
+              });
         }
       };
 
