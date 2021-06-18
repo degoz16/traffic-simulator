@@ -44,7 +44,9 @@ public class MapJsonStruct {
             List<TrafficLightConfigJsonStruct> configToTraffic = new ArrayList<>();
             trafficLight.getConfig().forEach(x -> {
               List<Integer> roads = new ArrayList<>();
-              x.getRoads().forEach(road -> roads.add(map.indexOfRoad(road)));
+              for (Road road: x.getRoads()){
+                roads.add(map.getRoads().indexOf(road));
+              }
               configToTraffic.add(new TrafficLightConfigJsonStruct(x.getDelay(), roads));
             });
             nodes.add(
