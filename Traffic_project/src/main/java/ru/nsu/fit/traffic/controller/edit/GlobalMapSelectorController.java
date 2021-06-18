@@ -181,4 +181,9 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
     sceneElementsControl.setCurrentOperation("none");
     sceneElementsControl.setConnectorIconVisible(false);
   }
+
+  @Override
+  public void update() {
+    updateObserver.update(editOpManager, true);
+  }
 }
