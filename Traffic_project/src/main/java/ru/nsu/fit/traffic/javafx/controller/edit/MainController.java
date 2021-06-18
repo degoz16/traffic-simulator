@@ -124,28 +124,12 @@ public class MainController {
   private double scaleValue = 1;
   private Rectangle selectRect;
   private boolean drawSelectRect = false;
-  private final SceneElementsControl sceneElementsControl = new SceneElementsControl() {
-    @Override
-    public void updateStatistic(int carSpawnersCnt, int streetsCnt, int roadsCnt, int buildingCnt, int connectivity, List<String> streets) {
-      statisticsController.getCarSpawners().setText(String.valueOf(carSpawnersCnt));
-      statisticsController.getStreets().setText(String.valueOf(streetsCnt));
-      statisticsController.getRoads().setText(String.valueOf(roadsCnt));
-      statisticsController.getBuildings().setText(String.valueOf(buildingCnt));
-      statisticsController.getConnectivity().setText(String.valueOf(connectivity));
-      streets.forEach(s -> {
-        Text text = new Text(s);
-        text.setFill(Paint.valueOf("#ffffff"));
-        statisticsController.getStreetsView().getChildren().add(text);
-      });
-    }
+  private final SceneElementsControl sceneElementsControl =
+      new SceneElementsControl() {
 
     @Override
     public void setSelectRectVisible(boolean visible) {
       drawSelectRect = visible;
-    }
-
-    public SceneElementsControl getSceneElementControl() {
-      return sceneElementsControl;
     }
 
     @Override
@@ -214,6 +198,20 @@ public class MainController {
     @Override
     public void trafficLightSettingsSetVisible(boolean status) {
       trafficLightController.getTrafficLightPane().setVisible(status);
+    }
+
+    @Override
+    public void updateStatistic(int carSpawnersCnt, int streetsCnt, int roadsCnt, int buildingCnt, int connectivity, List<String> streets) {
+      statisticsController.getCarSpawners().setText(String.valueOf(carSpawnersCnt));
+      statisticsController.getStreets().setText(String.valueOf(streetsCnt));
+      statisticsController.getRoads().setText(String.valueOf(roadsCnt));
+      statisticsController.getBuildings().setText(String.valueOf(buildingCnt));
+      statisticsController.getConnectivity().setText(String.valueOf(connectivity));
+      streets.forEach(s -> {
+        Text text = new Text(s);
+        text.setFill(Paint.valueOf("#ffffff"));
+        statisticsController.getStreetsView().getChildren().add(text);
+      });
     }
 
     @Override

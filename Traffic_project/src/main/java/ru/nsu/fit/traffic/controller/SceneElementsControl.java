@@ -7,13 +7,6 @@ import java.util.List;
 import java.util.function.Function;
 
 public interface SceneElementsControl {
-  void updateStatistic(
-      int carSpawnersCnt,
-      int streetsCnt,
-      int roadsCnt,
-      int buildingCnt,
-      int connectivity,
-      List<String> streets);
 
   void setSelectRectVisible(boolean visible);
 
@@ -74,4 +67,12 @@ public interface SceneElementsControl {
   void reportModeEnable();
 
   void playBackModeEnable();
+
+  void updateStatistic(
+      int carSpawnersCnt,
+      int streetsCnt,
+      int roadsCnt,
+      int buildingCnt,
+      int connectivity,
+      List<String> streets);
 }

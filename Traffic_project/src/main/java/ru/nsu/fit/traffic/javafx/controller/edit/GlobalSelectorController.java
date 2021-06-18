@@ -120,6 +120,7 @@ public class GlobalSelectorController {
             ((rect, id, regW, regH) -> {
               rect.setOnMouseMoved(
                   event -> {
+
                     Pair<Double, Double> coords =
                         selectorControl.getSideCoordinates(
                             event.getX(), event.getY(), rect.getX(), rect.getY(), regW, regH);
