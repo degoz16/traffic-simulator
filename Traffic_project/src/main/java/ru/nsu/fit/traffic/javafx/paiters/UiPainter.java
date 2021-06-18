@@ -9,8 +9,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
-import ru.nsu.fit.traffic.model.globalmap.RectRegion;
-import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
+
 
 public class UiPainter {
   private static final Color correctFragment = Color.valueOf("#656565");
@@ -72,26 +71,7 @@ public class UiPainter {
     }
   }
 
-  public static void checkResizeSelectedRect(
-      double x, double y, Rectangle selectRect, RegionsMap map) {
-    selectRect.setStroke(correctFragment);
-    //System.out.println(x + " " + y);
-    for (int i = 0; i < map.getRegionCount(); ++i) {
-      RectRegion reg = map.getRegion(i);
-      Rectangle next =
-          new Rectangle(
-              selectRect.getX(), selectRect.getY(), selectRect.getWidth(), selectRect.getHeight());
-      resizeSelectRect(x, y, next);
-      if (next.intersects(
-          reg.getX() - next.getTranslateX(),
-          reg.getY() - next.getTranslateY(),
-          reg.getWidth(),
-          reg.getHeight())) {
-        return;
-      }
-    }
-    resizeSelectRect(x, y, selectRect);
-  }
+
 
   public static void removeConnectorIcon(Shape icon, AnchorPane mainPane) {
     mainPane.getChildren().remove(icon);

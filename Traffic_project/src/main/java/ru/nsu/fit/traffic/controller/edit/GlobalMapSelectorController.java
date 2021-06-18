@@ -105,8 +105,10 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
   public void onSetConnector() {
     if (editOpManager.getCurrentOp() != GlobalMapEditOp.SET_CONNECTOR) {
       editOpManager.setCurrOp(GlobalMapEditOp.SET_CONNECTOR);
+      sceneElementsControl.setConnectorIconVisible(true);
     }else{
       editOpManager.setCurrOp(GlobalMapEditOp.NONE);
+      stopOperation();
     }
   }
 
@@ -160,5 +162,8 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
     this.connection = connection;
   }
 
-
+  private void stopOperation() {
+    editOpManager.setCurrOp(GlobalMapEditOp.NONE);
+    sceneElementsControl.setConnectorIconVisible(false);
+  }
 }
