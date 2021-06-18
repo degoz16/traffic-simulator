@@ -42,10 +42,10 @@ public class GlobalMapController {
   private boolean isConnectorIconVisible = false;
 
   public void setMapParams(double width, double height, String name) {
-    mainPane.setPrefWidth(width/6);
-    mainPane.setMaxWidth(width/6);
-    mainPane.setPrefHeight(height/6);
-    mainPane.setMaxHeight(height/6);
+    mainPane.setPrefWidth(width);
+    mainPane.setMaxWidth(width);
+    mainPane.setPrefHeight(height);
+    mainPane.setMaxHeight(height);
 
     editControl.getCurrRegionsMap().setName(name);
     editControl.getCurrRegionsMap().setWidth(width);

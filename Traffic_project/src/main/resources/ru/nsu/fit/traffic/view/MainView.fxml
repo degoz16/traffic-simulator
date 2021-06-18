@@ -30,7 +30,7 @@
          <children>
             <ScrollPane fx:id="mainScrollPane" layoutX="10.0" layoutY="10.0" pannable="true" prefHeight="375.0" prefWidth="646.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <VBox fx:id="centeredField" alignment="CENTER" prefHeight="0" prefWidth="0">
+                  <VBox fx:id="centeredField" alignment="CENTER" prefHeight="2000.0" prefWidth="2000.0">
                      <children>
                         <Group fx:id="scrollPaneContent" VBox.vgrow="ALWAYS">
                            <children>
