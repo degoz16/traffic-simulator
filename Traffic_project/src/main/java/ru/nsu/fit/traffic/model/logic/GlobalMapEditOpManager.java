@@ -136,14 +136,16 @@ public class GlobalMapEditOpManager {
       });
     });
     connectorPairs.forEach(pair -> {
-      pair.getSecond().getRoadsOut().forEach(road -> {
-        road.setFrom(pair.getFirst());
-        pair.getFirst().addRoadOut(road);
-      });
-      pair.getSecond().getRoadsIn().forEach(road -> {
-        road.setTo(pair.getFirst());
-        pair.getFirst().addRoadIn(road);
-      });
+      if (pair.getSecond() != null && pair.getFirst() != null) {
+        pair.getSecond().getRoadsOut().forEach(road -> {
+          road.setFrom(pair.getFirst());
+          pair.getFirst().addRoadOut(road);
+        });
+        pair.getSecond().getRoadsIn().forEach(road -> {
+          road.setTo(pair.getFirst());
+          pair.getFirst().addRoadIn(road);
+        });
+      }
     });
 
     TrafficMap map = new TrafficMap();
