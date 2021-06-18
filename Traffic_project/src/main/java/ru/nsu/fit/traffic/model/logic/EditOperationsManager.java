@@ -17,9 +17,7 @@ import ru.nsu.fit.traffic.model.map.MainRoadSign;
 import ru.nsu.fit.traffic.model.map.RoadSign;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class EditOperationsManager {
   private final int ROAD_LIMIT = 4;
@@ -351,6 +349,20 @@ public class EditOperationsManager {
 
     TrafficLightConfig greenConfig = new TrafficLightConfig(greenDelay, roadsGreen);
     TrafficLightConfig redConfig = new TrafficLightConfig(redDelay, roadsRed);
+    System.out.print("green: ");
+    for (Road road: roadsGreen){
+      System.out.print(map.getRoads().indexOf(road) + "   ");
+    }
+    System.out.println();
+    System.out.print("red: ");
+    for (Road road: roadsRed){
+      System.out.print(map.getRoads().indexOf(road) + "   ");
+    }
+    System.out.println();
+    System.out.print("roads in: ");
+    for (Road road: node.getRoadsIn()){
+      System.out.print(map.getRoads().indexOf(road) + "   ");
+    }
     TrafficLight trafficLight = new TrafficLight(greenConfig, redConfig);
     node.setTrafficLight(trafficLight);
     setCurrentOperation(EditOperation.NONE);
