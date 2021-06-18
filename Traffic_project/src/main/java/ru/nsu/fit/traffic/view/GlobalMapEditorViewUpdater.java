@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javafx.application.Platform;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
@@ -86,7 +88,7 @@ public class GlobalMapEditorViewUpdater {
             trafficMap.forEachNode(node -> {
               if (node.getConnector() != null) {
                 if (node.getRoadsInNum() == 0 && node.getRoadsOutNum() == 0) {
-                  shapes.get(node.getConnector().getConnectorId()).setFill(new Color(1, 0, 0, 0.3));
+                  shapes.get(node.getConnector().getConnectorId()).setFill(new ImagePattern(new Image("ru/nsu/fit/traffic/view/Images/incorrect_connector_on_map.png")));
                 }
               }
             });
