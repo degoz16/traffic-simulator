@@ -24,11 +24,11 @@ public class RoadSettingsControl extends BaseControl implements RoadSettingsCont
   public void deleteRoad() {
     Road lastRoadClicked = editControl.getLastRoadClicked();
     if (lastRoadClicked.getBackRoad().getLanesNum() == 0) {
-      if (lastRoadClicked.getFrom().getRoadsOutNum() <= 1) {
+      if (lastRoadClicked.getFrom().getRoadsOutNum() <= 1 && lastRoadClicked.getFrom().getConnector() == null) {
         lastRoadClicked.getFrom().removeFromPlaceOfInterest();
         editOperationsManager.getMap().removeNode(lastRoadClicked.getFrom());
       }
-      if (lastRoadClicked.getTo().getRoadsInNum() <= 1) {
+      if (lastRoadClicked.getTo().getRoadsInNum() <= 1 && lastRoadClicked.getTo().getConnector() == null) {
         lastRoadClicked.getTo().removeFromPlaceOfInterest();
         editOperationsManager.getMap().removeNode(lastRoadClicked.getTo());
       }
