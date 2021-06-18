@@ -67,6 +67,11 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
+  public void pushGlobalMap(String filePath, Integer roomId) {
+    pushAnyMap(filePath, SAVE_URL + "?roomId=" + roomId);
+  }
+
+  @Override
   public Integer createRoom(String filePath, String roomName) {
     HttpEntity entity = pushAnyMap(
       filePath,

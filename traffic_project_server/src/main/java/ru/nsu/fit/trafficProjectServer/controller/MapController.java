@@ -45,7 +45,7 @@ public class MapController {
   @PostMapping("saveMap")
   public ResponseEntity<Resource> saveMap(
     @RequestParam("file") MultipartFile file,
-    @RequestParam Long id,
+    @RequestParam(required = false) Long id,
     @RequestParam Long roomId
   ) {
     service.storeFile(file, id, roomId);

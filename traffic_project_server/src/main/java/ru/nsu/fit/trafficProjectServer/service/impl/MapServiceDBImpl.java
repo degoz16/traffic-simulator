@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -35,32 +34,27 @@ public class MapServiceDBImpl implements MapService {
   private UserService userService;
 
   @Override
-  @Deprecated
-  public String getDocumentName(Long id, Long roomId) {
-    return null;
-  }
-
-  @Override
-  public Resource loadFileAsResource(String fileName, Long roomId) {
-    return null;
-  }
-
-  @Override
   public String storeFile(MultipartFile file, Long id, Long roomId) {
     Room room = roomRepository.getOne(roomId);
+
     Map map = mapRepository.findByRoomIdAndFollowUpNumber(roomId, id);
     if (map == null) {
       map = new Map();
     }
     enrichMap(map, file, room);
-    map.setGrabbedByUser(null);
-    userService.getCurrentUser().removeMap(map);
-    mapRepository.save(map);
-    if (map.getFollowUpNumber() == null) {
-      room.addMap(map);
-      roomRepository.save(room);
+    if (id != null) {
+      mapRepository.save(map);
+      map.setGrabbedByUser(null);
+      userService.getCurrentUser().removeMap(map);
+      if (map.getFollowUpNumber() == null) {
+        room.addMap(map);
+        roomRepository.save(room);
+      }
+    } else {
+      mapRepository.save(map);
     }
     return file.getOriginalFilename();
+
   }
 
   private void enrichMap(Map map, MultipartFile file, Room room) {
@@ -101,15 +95,6 @@ public class MapServiceDBImpl implements MapService {
     mapRepository.save(map);
     room.setGlobalMap(map);
     return roomRepository.save(room).getId();
-  }
-
-  @Override
-  @Deprecated
-  public String getGlobalMap(Long roomId) {
-    return roomRepository.findById(roomId)
-      .map(Room::getGlobalMap)
-      .map(Map::getFilename)
-      .orElse(null);
   }
 
   @Override
