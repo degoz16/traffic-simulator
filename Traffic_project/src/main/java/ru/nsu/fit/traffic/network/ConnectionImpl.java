@@ -76,7 +76,7 @@ public class ConnectionImpl implements Connection {
     HttpEntity entity = pushAnyMap(
       filePath,
       CREATE_ROOM + "?roomName=" + roomName.replace(' ', '+')
-    );
+    ).getEntity();
     try {
       Scanner scanner = new Scanner(entity.getContent());
       return scanner.nextInt();
@@ -128,8 +128,10 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
-  public void pushMap(int num, int roomId, String filepath) {
-    pushAnyMap(filepath, SAVE_URL + "?id=" + num + "&roomId=" + roomId);
+  public boolean pushMap(int num, int roomId, String filepath) {
+    return pushAnyMap(filepath, SAVE_URL + "?id=" + num + "&roomId=" + roomId)
+      .getStatusLine()
+      .getStatusCode() == 200;
   }
 
   @Override
@@ -244,7 +246,7 @@ public class ConnectionImpl implements Connection {
     return false;
   }
 
-  private HttpEntity pushAnyMap(String filepath, String url) {
+  private HttpResponse pushAnyMap(String filepath, String url) {
     try {
       HttpEntity entity = MultipartEntityBuilder.create()
         .addPart("file", new FileBody(new File(filepath)))
@@ -262,8 +264,7 @@ public class ConnectionImpl implements Connection {
       HttpClient client = HttpClientBuilder.create()
         .setDefaultCredentialsProvider(provider)
         .build();
-      HttpResponse response = client.execute(request);
-      return response.getEntity();
+      return client.execute(request);
     } catch (IOException e) {
       throw new RuntimeException("Can't push map: '" + url, e);
     }

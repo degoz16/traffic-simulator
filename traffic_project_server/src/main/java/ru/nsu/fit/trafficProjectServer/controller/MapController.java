@@ -48,8 +48,11 @@ public class MapController {
     @RequestParam(required = false) Long id,
     @RequestParam Long roomId
   ) {
-    service.storeFile(file, id, roomId);
-    return ResponseEntity.ok().build();
+    if (service.storeFile(file, id, roomId) != null) {
+      return ResponseEntity.ok().build();
+    } else {
+      return ResponseEntity.badRequest().build();
+    }
   }
 
   @GetMapping("rooms")

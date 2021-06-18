@@ -6,7 +6,7 @@ public interface Connection {
   Integer createRoom(String filePath, String roomName);
   void pushGlobalMap(String filePath, Integer roomId);
   List<Long> getRooms();
-  void pushMap(int num, int roomId,  String filepath);
+  boolean pushMap(int num, int roomId,  String filepath);
   String getMapFromServer(int num, int roomId, boolean block) throws Exception;
   String getGlobalMapFromServer(int roomId);
   boolean dropBlock(int roomId, int mapId);

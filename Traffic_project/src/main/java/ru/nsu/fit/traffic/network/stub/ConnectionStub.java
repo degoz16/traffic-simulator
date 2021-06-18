@@ -79,7 +79,7 @@ public class ConnectionStub implements Connection {
   }
 
   @Override
-  public void pushMap(int num, int roomId, String filepath) {
+  public boolean pushMap(int num, int roomId, String filepath) {
     TrafficMap map = EditOperationsManager.loadMap(filepath);
     EditOperationsManager.saveMap(serverFolder + "room_" + roomId + "/map_" + num + ".tsp", map);
   }

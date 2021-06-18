@@ -37,7 +37,11 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
       editOpManager.addConnector(editOpManager.getCurrRegMap().getRegion(id), event.getX(), event.getY(), true);
     }
     else if (editOpManager.getCurrentOp() == GlobalMapEditOp.KICK_USER) {
-      //todo: Сюда нужно вставить вообще всё
+      ConnectionConfig.getConnectionConfig().getConnection().dropBlock(
+        ConnectionConfig.getConnectionConfig().getRoomId(),
+        id
+      );
+      update();
     }
     sceneElementsControl.redrawConnectorIcon();
   }

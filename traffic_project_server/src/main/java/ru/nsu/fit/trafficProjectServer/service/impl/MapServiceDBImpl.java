@@ -42,23 +42,33 @@ public class MapServiceDBImpl implements MapService {
       map = new Map();
     }
     enrichMap(map, file, room);
-    if (id != null) {
-      if (map.getGrabbedByUser() != null) {
-        userService.getCurrentUser().removeMap(map);
-        userService.saveUser(userService.getCurrentUser());
-        map.setGrabbedByUser(null);
-      }
+    if (
+      id != null
+        && map.getGrabbedByUser() != null
+        && map.getGrabbedByUser().equals(userService.getCurrentUser())
+    ) {
+      userService.getCurrentUser().removeMap(map);
+      userService.saveUser(userService.getCurrentUser());
+      map.setGrabbedByUser(null);
       mapRepository.save(map);
       if (map.getFollowUpNumber() == null) {
         room.addMap(map);
         roomRepository.save(room);
       }
+    } else if (
+      id != null
+        &&
+        (
+          map.getGrabbedByUser() == null
+            || !map.getGrabbedByUser().equals(userService.getCurrentUser())
+        )
+    ) {
+      return null;
     } else {
       map.setGrabbedByUser(null);
       mapRepository.save(map);
     }
     return file.getOriginalFilename();
-
   }
 
   private void enrichMap(Map map, MultipartFile file, Room room) {
@@ -129,8 +139,8 @@ public class MapServiceDBImpl implements MapService {
     if (isCurrentUserAdminOfRoom(roomId)) {
       Map map = mapRepository.findByRoomIdAndFollowUpNumber(roomId, mapId);
       if (map.getGrabbedByUser() != null) {
-        userService.getCurrentUser().removeMap(map);
-        userService.saveUser(userService.getCurrentUser());
+        map.getGrabbedByUser().removeMap(map);
+        userService.saveUser(map.getGrabbedByUser());
         map.setGrabbedByUser(null);
         mapRepository.save(map);
       }

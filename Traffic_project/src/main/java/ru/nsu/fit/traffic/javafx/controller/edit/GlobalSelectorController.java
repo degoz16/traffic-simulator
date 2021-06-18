@@ -164,6 +164,7 @@ public class GlobalSelectorController {
                       selectorControl.onRegionClick(id, MouseEventWrapper.getMouseEventWrapper(event));
                     } catch (Exception e) {
                       e.printStackTrace();
+                      selectorControl.update();
                       Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                       errorAlert.setHeaderText("Connection error");
                       errorAlert.setContentText("Error while trying to get map from server");
