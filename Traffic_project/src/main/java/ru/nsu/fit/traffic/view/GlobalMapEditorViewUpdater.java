@@ -1,6 +1,7 @@
 package ru.nsu.fit.traffic.view;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javafx.application.Platform;
@@ -24,62 +25,79 @@ public class GlobalMapEditorViewUpdater {
   private final ConnectorObserver connectorObserver;
   private final Pane mainPane;
 
-  public GlobalMapEditorViewUpdater(RegionObserver regionObserver, ConnectorObserver connectorObserver, Pane mainPane) {
+  public GlobalMapEditorViewUpdater(
+      RegionObserver regionObserver, ConnectorObserver connectorObserver, Pane mainPane) {
     this.mainPane = mainPane;
     this.regionObserver = regionObserver;
     this.connectorObserver = connectorObserver;
   }
 
-  /**
-   * Метод отрисовки текущего состояния карты
-   */
+  /** Метод отрисовки текущего состояния карты */
   public void updateMapView(GlobalMapEditOpManager editOperationsManager, boolean preview) {
     RegionsMap map = editOperationsManager.getCurrRegMap();
-    mainPane.getChildren().clear();
-    Platform.runLater(() -> {
-      TrafficMap trafficMap = null;
-      for (int i = 0; i < map.getRegionCount(); i++) {
-        RectRegion region = map.getRegion(i);
-        Rectangle regionShape = painter.paintRegion(region);
-        regionObserver.setRegionMouseHandlers(regionShape, i, region.getWidth(), region.getHeight());
-        mainPane.getChildren().add(regionShape);
-        if (preview) {
-          try {
-            String mapPath = ConnectionConfig.getConnectionConfig()
-              .getConnection()
-              .getMapFromServer(
-                i,
-                ConnectionConfig.getConnectionConfig().getRoomId(),
-                false
-              );
-            trafficMap = EditOperationsManager.loadMap(mapPath);
-            assert trafficMap != null;
-            List<Shape> shapes = painter.paintRegionPreview(region, trafficMap);
-            shapes.forEach(mainPane.getChildren()::add);
-          } catch (Exception e) {
-            e.printStackTrace();
+    List<Shape> mainPaneChild = new ArrayList<>();
+    ConnectionConfig.getConnectionConfig()
+        .getConnection()
+        .blockedMaps(ConnectionConfig.getConnectionConfig().getRoomId());
+    System.out.println(
+            Arrays.toString(ConnectionConfig.getConnectionConfig()
+        .getConnection()
+        .getLastBlockedMaps(ConnectionConfig.getConnectionConfig().getRoomId()).toArray()));
+    Platform.runLater(
+        () -> {
+          TrafficMap trafficMap = null;
+          for (int i = 0; i < map.getRegionCount(); i++) {
+            RectRegion region = map.getRegion(i);
+            Rectangle regionShape = painter.paintRegion(region);
+            regionObserver.setRegionMouseHandlers(
+                regionShape, i, region.getWidth(), region.getHeight());
+            mainPaneChild.add(regionShape);
+            if (preview) {
+              try {
+                String mapPath =
+                    ConnectionConfig.getConnectionConfig()
+                        .getConnection()
+                        .getMapFromServer(
+                            i, ConnectionConfig.getConnectionConfig().getRoomId(), false);
+                if (ConnectionConfig.getConnectionConfig()
+                    .getConnection()
+                    .getLastBlockedMaps(ConnectionConfig.getConnectionConfig().getRoomId())
+                    .contains(i)) {
+                  regionShape.setFill(Color.valueOf("f08080"));
+                }
+                trafficMap = EditOperationsManager.loadMap(mapPath);
+                assert trafficMap != null;
+                List<Shape> shapes = painter.paintRegionPreview(region, trafficMap);
+                mainPaneChild.addAll(shapes);
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+            }
           }
-        }
-      }
-      TrafficMap finalTrafficMap = trafficMap;
-      map.foreachRegion(region -> {
-        List<Shape> shapes = new ArrayList<>();
-        for (int i = 0; i < region.getConnectorsCount(); i++) {
-          if (region.getConnector(i) == null) {
-            shapes.add(null);
-            continue;
-          }
-          Shape connector = painter.paintConnector(region.getConnector(i), true);
-          shapes.add(connector);
-          mainPane.getChildren().add(connector);
-          connectorObserver.setConnectorObserver(map.getRegions().indexOf(region), i, connector);
-        }
-        finalTrafficMap.forEachNode(node -> {
-          if (node.getConnector() != null) {
-            shapes.get(node.getConnector().getConnectorId()).setFill(Color.RED);
-          }
+          TrafficMap finalTrafficMap = trafficMap;
+          map.foreachRegion(
+              region -> {
+                List<Shape> shapes = new ArrayList<>();
+                for (int i = 0; i < region.getConnectorsCount(); i++) {
+                  if (region.getConnector(i) == null) {
+                    shapes.add(null);
+                    continue;
+                  }
+                  Shape connector = painter.paintConnector(region.getConnector(i), true);
+                  shapes.add(connector);
+                  mainPaneChild.add(connector);
+                  connectorObserver.setConnectorObserver(
+                      map.getRegions().indexOf(region), i, connector);
+                }
+                finalTrafficMap.forEachNode(
+                    node -> {
+                      if (node.getConnector() != null) {
+                        shapes.get(node.getConnector().getConnectorId()).setFill(Color.RED);
+                      }
+                    });
+              });
         });
-      });
-    });
+    mainPane.getChildren().clear();
+    mainPane.getChildren().addAll(mainPaneChild);
   }
 }

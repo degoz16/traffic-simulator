@@ -114,7 +114,6 @@ public class GlobalSelectorController {
     if (!connectionConfig.getConnection().isAdmin(connectionConfig.getRoomId())) {
       setVisibleFalse();
     }
-    //TODO ПОКРАСКУ ФРАГМЕНТ ИЗ blocks(id == id)
     GlobalMapEditorViewUpdater viewUpdater =
         new GlobalMapEditorViewUpdater(
             ((rect, id, regW, regH) -> {

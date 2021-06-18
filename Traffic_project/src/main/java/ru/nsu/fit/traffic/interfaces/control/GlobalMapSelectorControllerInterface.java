@@ -1,8 +1,6 @@
 package ru.nsu.fit.traffic.interfaces.control;
 
 import ru.nsu.fit.traffic.event.wrappers.MouseEventWrapper;
-import ru.nsu.fit.traffic.model.globalmap.RegionsMap;
-import ru.nsu.fit.traffic.model.globalmap.RoadConnector;
 import ru.nsu.fit.traffic.utils.Pair;
 
 public interface GlobalMapSelectorControllerInterface {

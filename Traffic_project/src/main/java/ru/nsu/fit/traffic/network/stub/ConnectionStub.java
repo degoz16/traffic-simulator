@@ -64,6 +64,11 @@ public class ConnectionStub implements Connection {
   }
 
   @Override
+  public List<Long> getLastBlockedMaps(int roomId) {
+    return null;
+  }
+
+  @Override
   public boolean registration(String username, String password, String passConfirm) {
     return false;
   }

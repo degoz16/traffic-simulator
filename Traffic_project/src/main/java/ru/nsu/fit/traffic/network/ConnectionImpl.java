@@ -47,6 +47,8 @@ public class ConnectionImpl implements Connection {
   private final String SIGN_UP;
   private final String ADMIN;
 
+  private List<Long> blockedMaps;
+
   public ConnectionImpl(String url) {
     if (!url.endsWith("/")) url += "/";
     if (!url.startsWith("http://")) url = "http://" + url;
@@ -149,6 +151,14 @@ public class ConnectionImpl implements Connection {
   }
 
   @Override
+  public List<Long> getLastBlockedMaps(int roomId){
+    if (blockedMaps == null) {
+      blockedMaps(roomId);
+    }
+    return blockedMaps;
+  }
+
+  @Override
   public List<Long> blockedMaps(int roomId) {
     HttpGet request = new HttpGet(BLOCKS+"?roomId="+roomId);
     CredentialsProvider provider = new BasicCredentialsProvider();
@@ -163,10 +173,11 @@ public class ConnectionImpl implements Connection {
     try {
       HttpResponse response = client.execute(request);
       Gson gson = new Gson();
-      return gson.fromJson(
-        new BufferedReader(new InputStreamReader(response.getEntity().getContent())),
-        new TypeToken<List<Long>>(){}.getType()
+      blockedMaps = gson.fromJson(
+              new BufferedReader(new InputStreamReader(response.getEntity().getContent())),
+              new TypeToken<List<Long>>(){}.getType()
       );
+      return blockedMaps;
     } catch (IOException e) {
       e.printStackTrace();
     }
