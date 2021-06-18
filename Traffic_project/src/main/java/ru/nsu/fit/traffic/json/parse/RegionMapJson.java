@@ -35,6 +35,9 @@ public class RegionMapJson {
       });
     });
     for (int i = 0; i < connectorList.size(); i++) {
+      if (connectors.get(i) == null) {
+        continue;
+      }
       connectors.get(i).setConnectorLink(
           connectorList.indexOf(connectorList.get(i).getConnectorLink()));
       connectors.get(i).setRegion(
