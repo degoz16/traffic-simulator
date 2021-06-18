@@ -110,11 +110,10 @@ public class EditControl extends BaseControl implements EditControlInterface {
     engineController.setOptimizedMapPath(
       dirPath.substring(0,dirPath.lastIndexOf(".")) + "optimized.tsp"
     );
-    engineController.startEngine();
-    sceneElementsControl.simulationProcessModeEnable();
+    engineController.startOptimizing();
+    sceneElementsControl.optimizationProcessModeEnabled();
     editOperationsManager.setCurrentOperation(EditOperation.OPTIMIZATION);
     sceneElementsControl.setSelectRectVisible(false);
-
   }
 
   public void stopSimulation() {

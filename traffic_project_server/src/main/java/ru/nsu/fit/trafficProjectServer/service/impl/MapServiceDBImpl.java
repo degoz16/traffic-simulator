@@ -43,9 +43,12 @@ public class MapServiceDBImpl implements MapService {
     }
     enrichMap(map, file, room);
     if (id != null) {
-      map.setGrabbedByUser(null);
+      if (map.getGrabbedByUser() != null) {
+        userService.getCurrentUser().removeMap(map);
+        userService.saveUser(userService.getCurrentUser());
+        map.setGrabbedByUser(null);
+      }
       mapRepository.save(map);
-      userService.getCurrentUser().removeMap(map);
       if (map.getFollowUpNumber() == null) {
         room.addMap(map);
         roomRepository.save(room);
@@ -125,8 +128,12 @@ public class MapServiceDBImpl implements MapService {
   public void dropBlock(Long roomId, Long mapId) {
     if (isCurrentUserAdminOfRoom(roomId)) {
       Map map = mapRepository.findByRoomIdAndFollowUpNumber(roomId, mapId);
-      map.setGrabbedByUser(null);
-      mapRepository.save(map);
+      if (map.getGrabbedByUser() != null) {
+        userService.getCurrentUser().removeMap(map);
+        userService.saveUser(userService.getCurrentUser());
+        map.setGrabbedByUser(null);
+        mapRepository.save(map);
+      }
     }
   }
 

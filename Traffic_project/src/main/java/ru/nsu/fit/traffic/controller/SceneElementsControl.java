@@ -58,6 +58,8 @@ public interface SceneElementsControl {
 
   void simulationProcessModeEnable();
 
+  void optimizationProcessModeEnabled();
+
   void simulationEndModeEnable();
 
   void simulationStopModeEnable();

@@ -80,7 +80,7 @@ public class EngineController extends BaseControl {
         engineProcess = Runtime.getRuntime().exec(
           "java -jar \""
             + enginePath
-            + "\" \""
+            + "\" sim \""
             + mapPath
             + "\" \""
             + heatMapPath
@@ -116,11 +116,13 @@ public class EngineController extends BaseControl {
         engineProcess = Runtime.getRuntime().exec(
           "java -jar \""
             + enginePath
-            + "\" \""
+            + "\" opt \""
             + mapPath
             + "\" \""
             + optimizedMapPath + "\""
         );
+        System.out.println(mapPath);
+        System.out.println(optimizedMapPath);
         System.out.println("START OPTIMIZATION");
         getCommands();
         engineProcess.waitFor();
@@ -132,6 +134,7 @@ public class EngineController extends BaseControl {
         rThread.join();
         System.out.println("END");
         //sceneElementsControl.simulationEndModeEnable();
+        sceneElementsControl.editModeEnable();
       } catch (InterruptedException | IOException e) {
         System.err.println(e.getMessage());
         assert false;

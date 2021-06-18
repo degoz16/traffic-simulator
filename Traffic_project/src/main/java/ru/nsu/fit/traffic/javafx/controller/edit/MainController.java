@@ -338,7 +338,25 @@ public class MainController {
       progressIndicator.setVisible(true);
     }
 
-    @Override
+        @Override
+        public void optimizationProcessModeEnabled() {
+          //simulationStopButton.setDisable(false);
+          simulationStartButton.setDisable(true);
+          editButton.setDisable(true);
+          playbackButton.setDisable(true);
+          reportButton.setDisable(true);
+          buttonForward.setDisable(true);
+          buttonBack.setDisable(true);
+          mainScrollPane.setDisable(true);
+          timeLinePlaybackSlider.setDisable(true);
+          timeLineReportSlider.setDisable(true);
+          timeLinePlaybackSlider.setVisible(false);
+          timeLineReportSlider.setVisible(false);
+          editButtonsPane.setDisable(true);
+          progressIndicator.setVisible(true);
+        }
+
+        @Override
     public void simulationEndModeEnable() {
       simulationStopButton.setDisable(true);
       simulationStartButton.setDisable(false);
@@ -746,6 +764,7 @@ public class MainController {
 
   @FXML
   public void startOptimization(){
+    editControl.startOptimization();
     //todo send
   }
 
