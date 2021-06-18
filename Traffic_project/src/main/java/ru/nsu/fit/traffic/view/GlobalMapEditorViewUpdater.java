@@ -118,6 +118,7 @@ public class GlobalMapEditorViewUpdater {
                   }
                 }
               });
+          mainPane.getChildren().addAll(mainPaneChild);
         });
   }
 }
