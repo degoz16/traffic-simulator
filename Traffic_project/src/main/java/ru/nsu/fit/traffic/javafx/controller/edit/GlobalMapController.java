@@ -42,10 +42,10 @@ public class GlobalMapController {
   private boolean isConnectorIconVisible = false;
 
   public void setMapParams(double width, double height, String name) {
-    mainPane.setPrefWidth(width);
-    mainPane.setMaxWidth(width);
-    mainPane.setPrefHeight(height);
-    mainPane.setMaxHeight(height);
+    mainPane.setPrefWidth(width/6);
+    mainPane.setMaxWidth(width/6);
+    mainPane.setPrefHeight(height/6);
+    mainPane.setMaxHeight(height/6);
 
     editControl.getCurrRegionsMap().setName(name);
     editControl.getCurrRegionsMap().setWidth(width);
@@ -181,6 +181,8 @@ public class GlobalMapController {
     connectorIcon.setVisible(false);
     connectorIcon.setMouseTransparent(true);
     fragmentParamsPane.setVisible(false);
+    mainScrollPane.setHvalue(0.5);
+    mainScrollPane.setVvalue(0.5);
     GlobalMapEditorViewUpdater viewUpdater =
         new GlobalMapEditorViewUpdater(
             ((rect, id, regW, regH) -> {

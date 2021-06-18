@@ -484,6 +484,8 @@ public class MainController {
   public void initialize() {
     ControlInitializerInterface controlsInitializer = new FragmentEditControlsInitializer(sceneElementsControl);
     editControl = controlsInitializer.getEditControl();
+    mainScrollPane.setHvalue(0.5);
+    mainScrollPane.setVvalue(0.5);
 
     MapEditorViewUpdater viewUpdater = new MapEditorViewUpdater(
         (shape, placeOfInterestId) ->

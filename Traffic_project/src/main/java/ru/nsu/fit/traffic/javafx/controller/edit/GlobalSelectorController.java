@@ -114,6 +114,8 @@ public class GlobalSelectorController {
     if (!connectionConfig.getConnection().isAdmin(connectionConfig.getRoomId())) {
       setVisibleFalse();
     }
+    mainScrollPane.setHvalue(0.5);
+    mainScrollPane.setVvalue(0.5);
     GlobalMapEditorViewUpdater viewUpdater =
         new GlobalMapEditorViewUpdater(
             ((rect, id, regW, regH) -> {
@@ -216,9 +218,9 @@ public class GlobalSelectorController {
 
   public void setMap(String map) {
     selectorControl.setRegionMap(map);
-    mainPane.setPrefWidth(selectorControl.getMapWidth());
-    mainPane.setMaxWidth(selectorControl.getMapWidth());
-    mainPane.setPrefHeight(selectorControl.getMapHeight());
-    mainPane.setMaxHeight(selectorControl.getMapHeight());
+    mainPane.setPrefWidth(selectorControl.getMapWidth()/6);
+    mainPane.setMaxWidth(selectorControl.getMapWidth()/6);
+    mainPane.setPrefHeight(selectorControl.getMapHeight()/6);
+    mainPane.setMaxHeight(selectorControl.getMapHeight()/6);
   }
 }
