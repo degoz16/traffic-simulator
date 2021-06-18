@@ -43,14 +43,15 @@ public class MapServiceDBImpl implements MapService {
     }
     enrichMap(map, file, room);
     if (id != null) {
-      mapRepository.save(map);
       map.setGrabbedByUser(null);
+      mapRepository.save(map);
       userService.getCurrentUser().removeMap(map);
       if (map.getFollowUpNumber() == null) {
         room.addMap(map);
         roomRepository.save(room);
       }
     } else {
+      map.setGrabbedByUser(null);
       mapRepository.save(map);
     }
     return file.getOriginalFilename();

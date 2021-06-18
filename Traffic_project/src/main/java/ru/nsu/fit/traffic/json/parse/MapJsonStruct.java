@@ -17,6 +17,12 @@ public class MapJsonStruct {
 
   public MapJsonStruct(TrafficMap map) {
     start = map.getStart();
+    if (start == null) {
+      start="06:00";
+    }
+    if (end == null) {
+      end ="08:00";
+    }
     end = map.getEnd();
     width = map.getWidth();
     height = map.getHeight();
