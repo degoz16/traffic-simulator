@@ -59,6 +59,11 @@ public class ConnectionStub implements Connection {
   }
 
   @Override
+  public boolean isAdmin(int roomId) {
+    return false;
+  }
+
+  @Override
   public boolean registration(String username, String password, String passConfirm) {
     return false;
   }

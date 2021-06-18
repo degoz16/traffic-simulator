@@ -16,6 +16,7 @@ import ru.nsu.fit.traffic.App;
 import ru.nsu.fit.traffic.config.ConnectionConfig;
 import ru.nsu.fit.traffic.interfaces.control.MenuControlInterface;
 import ru.nsu.fit.traffic.interfaces.network.Connection;
+import ru.nsu.fit.traffic.javafx.controller.rooms.LoginController;
 import ru.nsu.fit.traffic.javafx.controller.rooms.RoomController;
 import ru.nsu.fit.traffic.network.ConnectionImpl;
 
@@ -84,13 +85,13 @@ public class MenuBarController {
 
     result.ifPresent(name -> {
       connectionConfig.setConnection(new ConnectionImpl(name));
-      FXMLLoader loader = new FXMLLoader(App.class.getResource("view/RoomButtonsView.fxml"));
+      FXMLLoader loader = new FXMLLoader(App.class.getResource("view/Login.fxml"));
       Parent root;
       try {
         root = loader.load();
         stage.getScene().setRoot(root);
-        RoomController roomController = loader.getController();
-        roomController.setStage(stage);
+        LoginController loginController = loader.getController();
+        loginController.setStage(stage);
       } catch (IOException e) {
         e.printStackTrace();
       }

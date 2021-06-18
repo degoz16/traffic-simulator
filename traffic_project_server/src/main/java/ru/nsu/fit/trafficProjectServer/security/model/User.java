@@ -44,46 +44,6 @@ public class User implements UserDetails {
   @OneToMany
   private Set<Room> createdRooms  = new HashSet<>();
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
-
-  public Set<Map> getGrabbedMaps() {
-    return grabbedMaps;
-  }
-
-  public void setGrabbedMaps(Set<Map> grabbedMaps) {
-    this.grabbedMaps = grabbedMaps;
-  }
-
-  public Set<Room> getCreatedRooms() {
-    return createdRooms;
-  }
-
-  public void setCreatedRooms(Set<Room> createdRooms) {
-    this.createdRooms = createdRooms;
-  }
-
   public void addMap(Map map) {
     grabbedMaps.add(map);
   }
@@ -91,6 +51,8 @@ public class User implements UserDetails {
   public void addRoom(Room room) {
     createdRooms.add(room);
   }
+
+  public void removeMap(Map mao) {grabbedMaps.remove(mao);}
 
   public void addRole(Role role) {
     roles.add(role);
@@ -129,30 +91,6 @@ public class User implements UserDetails {
   @Override
   public String getPassword() {
     return password;
-  }
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public void setUsername(String username) {
-    this.username = username;
-  }
-
-  public void setPassword(String password) {
-    this.password = password;
-  }
-
-  public Set<Role> getRoles() {
-    return roles;
-  }
-
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
   }
 
   public Set<Map> getGrabbedMaps() {

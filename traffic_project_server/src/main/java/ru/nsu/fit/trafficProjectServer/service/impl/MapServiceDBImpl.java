@@ -54,6 +54,7 @@ public class MapServiceDBImpl implements MapService {
     }
     enrichMap(map, file, room);
     map.setGrabbedByUser(null);
+    userService.getCurrentUser().removeMap(map);
     mapRepository.save(map);
     if (map.getFollowUpNumber() == null) {
       room.addMap(map);
@@ -146,13 +147,15 @@ public class MapServiceDBImpl implements MapService {
   @Override
   @Nullable
   public List<Long> getBlocks(Long roomId) {
-    if (isCurrentUserAdminOfRoom(roomId)) {
-      return mapRepository.findAlLByRoomId(roomId).stream()
-        .filter(map -> map.getGrabbedByUser() != null)
-        .map(Map::getFollowUpNumber)
-        .collect(Collectors.toList());
-    }
-    return null;
+    return mapRepository.findAlLByRoomId(roomId).stream()
+      .filter(map -> map.getGrabbedByUser() != null)
+      .map(Map::getFollowUpNumber)
+      .collect(Collectors.toList());
+  }
+
+  @Override
+  public boolean admin(Long roomId) {
+    return isCurrentUserAdminOfRoom(roomId);
   }
 
   private boolean isCurrentUserAdminOfRoom(Long roomId) {
