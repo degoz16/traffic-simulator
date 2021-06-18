@@ -82,12 +82,14 @@ public class MapEditorViewUpdater {
       List<CarState> carStates = editOperationsManager.getCarStates();
       carStates.forEach(carState -> {
         //if (carState.isDraw()) {
-        System.out.println(currMap.getRoad(carState.getCurrentRoad()) + " " + carState.getCurrentRoad());
+        //System.out.println(currMap.getRoad(carState.getCurrentRoad()) + " " + carState.getCurrentRoad());
           Shape carShape = objectPainter.paintCar(
             carState,
             currMap.getRoad(carState.getCurrentRoad()),
             currMap.getRoad(carState.getCurrentRoad()).getLane(carState.getCurrentLane()));
-          mainPane.getChildren().add(carShape);
+          if (carState.getPosition() >= 0) {
+            mainPane.getChildren().add(carShape);
+          }
         //}
       });
     });

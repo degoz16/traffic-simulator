@@ -365,7 +365,7 @@ public class ObjectPainter {
         double y = endY - startY;
         double cos = x / Math.sqrt(x * x + y * y);
         double angle = Math.acos(cos);
-// Вернем arccos полученного значения (в радианах!)
+        // Вернем arccos полученного значения (в радианах!)
         if (endY < startY) {
             angle = 2 * Math.PI - angle;
         }
