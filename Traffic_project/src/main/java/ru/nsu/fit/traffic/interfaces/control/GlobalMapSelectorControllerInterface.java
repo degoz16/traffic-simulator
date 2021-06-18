@@ -25,4 +25,6 @@ public interface GlobalMapSelectorControllerInterface {
   void onDeleteConnector();
 
   void onKick();
+
+  void update();
 }

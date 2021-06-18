@@ -72,6 +72,7 @@ public class GlobalSelectorController {
         }
       } catch (Exception e) {
         e.printStackTrace();
+        selectorControl.update();
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setHeaderText("Connection error");
         errorAlert.setContentText("Error while trying to get map from server");
@@ -86,11 +87,11 @@ public class GlobalSelectorController {
 
     @Override
     public void redrawConnectorIcon() {
-      Platform.runLater(
-          () -> {
+      //Platform.runLater(
+      //    () -> {
             mainPane.getChildren().remove(connectorIcon);
             mainPane.getChildren().add(connectorIcon);
-          });
+      //    });
     }
 
     @Override
