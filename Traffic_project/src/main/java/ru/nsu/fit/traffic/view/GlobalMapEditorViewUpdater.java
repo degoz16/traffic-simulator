@@ -39,8 +39,8 @@ public class GlobalMapEditorViewUpdater {
     RegionsMap map = editOperationsManager.getCurrRegMap();
     List<Shape> mainPaneChild = new ArrayList<>();
 
-    Platform.runLater(
-      () -> {
+//    Platform.runLater(
+//      () -> {
         List<Long> blockedMaps = null;
         if (preview) {
           blockedMaps =
@@ -116,6 +116,6 @@ public class GlobalMapEditorViewUpdater {
             }
           });
         mainPane.getChildren().addAll(mainPaneChild);
-      });
+      //});
   }
 }

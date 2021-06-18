@@ -86,11 +86,11 @@ public class GlobalSelectorController {
 
     @Override
     public void redrawConnectorIcon() {
-      Platform.runLater(
-          () -> {
+      //Platform.runLater(
+      //    () -> {
             mainPane.getChildren().remove(connectorIcon);
             mainPane.getChildren().add(connectorIcon);
-          });
+      //    });
     }
 
     @Override
