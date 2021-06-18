@@ -27,7 +27,11 @@ public class RegionMapJson {
       regions.add(new RegionJson(region));
       region.foreachConnector(connector -> {
         connectorList.add(connector);
-        connectors.add(new ConnectorJson(connector.getId(), connector.getX(), connector.getY()));
+        if (connector != null) {
+          connectors.add(new ConnectorJson(connector.getId(), connector.getX(), connector.getY()));
+        } else {
+          connectors.add(null);
+        }
       });
     });
     for (int i = 0; i < connectorList.size(); i++) {
@@ -51,8 +55,11 @@ public class RegionMapJson {
     List<RoadConnector> connectorList = new ArrayList<>();
     List<RectRegion> rectRegionList = new ArrayList<>();
     connectors.forEach(connectorJson -> {
-      RoadConnector connector = new RoadConnector(connectorJson.getX(), connectorJson.getY());
-      connector.setId(connectorJson.getId());
+      RoadConnector connector = null;
+      if (connectorJson != null) {
+        connector = new RoadConnector(connectorJson.getX(), connectorJson.getY());
+        connector.setId(connectorJson.getId());
+      }
       connectorList.add(connector);
     });
     regions.forEach(regionJson -> {
