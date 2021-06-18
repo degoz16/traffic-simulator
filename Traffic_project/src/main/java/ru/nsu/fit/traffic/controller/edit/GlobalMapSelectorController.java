@@ -130,6 +130,7 @@ public class GlobalMapSelectorController implements GlobalMapSelectorControllerI
       editOpManager.setCurrOp(GlobalMapEditOp.NONE);
       sceneElementsControl.setCurrentOperation("none");
     }
+    sceneElementsControl.setConnectorIconVisible(false);
   }
 
   @Override
