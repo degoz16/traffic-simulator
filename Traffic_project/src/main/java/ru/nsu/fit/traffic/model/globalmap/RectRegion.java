@@ -31,6 +31,13 @@ public class RectRegion {
     this.height = height;
   }
 
+  public void initConnectors(int size) {
+    connectorList = new ArrayList<>();
+    for (int i = 0; i < size; i++) {
+      connectorList.add(null);
+    }
+  }
+
   public void deleteConnector(RoadConnector connector) {
     connectorList.set(connectorList.indexOf(connector), null);
     dirty = true;

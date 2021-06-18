@@ -46,7 +46,11 @@ public class RegionMapJson {
     for (int i = 0; i < rectRegionList.size(); i++) {
       int fI = i;
       rectRegionList.get(i).foreachConnector(connector -> {
-        regions.get(fI).getConnectorList().add(connectorList.indexOf(connector));
+        Integer id = null;
+        if (connector != null) {
+          id = connectorList.indexOf(connector);
+        }
+        regions.get(fI).getConnectorList().add(id);
       });
     }
   }
@@ -69,13 +73,16 @@ public class RegionMapJson {
       RectRegion reg = new RectRegion(
           regionJson.getX(), regionJson.getY(),
           regionJson.getWidth(), regionJson.getHeight());
+      reg.initConnectors(regionJson.getConnectorList().size());
       reg.setRegionMapLink(regionJson.getRegionMapLink());
       rectRegionList.add(reg);
     });
     for (int i = 0; i < connectors.size(); i++) {
       connectorList.get(i).setRegion(rectRegionList.get(connectors.get(i).getRegion()));
       connectorList.get(i).setConnectorLink(connectorList.get(connectors.get(i).getConnectorLink()));
-      rectRegionList.get(connectors.get(i).getRegion()).addConnector(connectorList.get(i));
+      if (connectors.get(i) != null) {
+        rectRegionList.get(connectors.get(i).getRegion()).addConnector(connectorList.get(i));
+      }
     }
     rectRegionList.forEach(map::addRegion);
     return map;
