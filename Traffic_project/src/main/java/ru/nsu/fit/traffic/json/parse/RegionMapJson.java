@@ -78,9 +78,9 @@ public class RegionMapJson {
       rectRegionList.add(reg);
     });
     for (int i = 0; i < connectors.size(); i++) {
-      connectorList.get(i).setRegion(rectRegionList.get(connectors.get(i).getRegion()));
-      connectorList.get(i).setConnectorLink(connectorList.get(connectors.get(i).getConnectorLink()));
       if (connectors.get(i) != null) {
+        connectorList.get(i).setRegion(rectRegionList.get(connectors.get(i).getRegion()));
+        connectorList.get(i).setConnectorLink(connectorList.get(connectors.get(i).getConnectorLink()));
         rectRegionList.get(connectors.get(i).getRegion()).addConnector(connectorList.get(i));
       }
     }
