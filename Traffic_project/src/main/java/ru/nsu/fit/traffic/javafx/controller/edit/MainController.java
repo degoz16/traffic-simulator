@@ -710,26 +710,50 @@ public class MainController {
   @FXML
   public void saveMap() {
     saveLoadControl.onSave();
-    editControl.saveMap();
-    Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
-    FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
-    try {
-      Parent root = loader.load();
-      Scene scene = new Scene(root);
+    if (editControl.saveMap()) {
+      Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
+      FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
+      try {
+        Parent root = loader.load();
+        Scene scene = new Scene(root);
 
-      stage.setTitle("Traffic simulator");
-      stage.setScene(scene);
-      GlobalSelectorController controller = loader.getController();
-      controller.setStage(stage);
-      controller.setMap(
-        connection.getGlobalMapFromServer(ConnectionConfig.getConnectionConfig().getRoomId())
-      );
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (Exception e) {
-      e.printStackTrace();
+        stage.setTitle("Traffic simulator");
+        stage.setScene(scene);
+        GlobalSelectorController controller = loader.getController();
+        controller.setStage(stage);
+        controller.setMap(
+            connection.getGlobalMapFromServer(ConnectionConfig.getConnectionConfig().getRoomId()));
+      } catch (IOException e) {
+        e.printStackTrace();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      stage.show();
+    } else {
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setHeaderText("Connection error");
+        errorAlert.setContentText("You has no access to edit this map.");
+        errorAlert.showAndWait();
+
+        FXMLLoader loader = new FXMLLoader(App.class.getResource("view/GlobalMapSelectorView.fxml"));
+        try {
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+
+            Connection connection = ConnectionConfig.getConnectionConfig().getConnection();
+            stage.setTitle("Traffic simulator");
+            stage.setScene(scene);
+            GlobalSelectorController controller = loader.getController();
+            controller.setStage(stage);
+            controller.setMap(
+                    connection.getGlobalMapFromServer(ConnectionConfig.getConnectionConfig().getRoomId()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        stage.show();
     }
-    stage.show();
   }
 
   @FXML
